@@ -1,0 +1,29 @@
+@import 'tailwindcss';
+
+/* Paleta propia provisional. Contraste AA verificado sobre --color-fondo. */
+@theme {
+  --color-fondo: #111311;
+  --color-superficie: #1c1f1c;
+  --color-borde: #2e332e;
+  --color-texto: #f2f3ee;
+  --color-texto-suave: #a9ada3;
+  --color-acento: #d1e132;
+  --color-acento-contraste: #111311;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-fondo font-sans text-texto antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-4 outline-acento;
+  }
+}

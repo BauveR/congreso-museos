@@ -7,8 +7,9 @@ export function Hero() {
   const { hero } = site
   return (
     <Section id="hero" className="flex min-h-svh flex-col">
-      {/* En móvil el texto va abajo para dejar el centro libre al objeto 3D. */}
-      <div className="wrap flex flex-1 flex-col justify-end pt-24 pb-28 sm:justify-center sm:pb-24">
+      {/* Hasta lg (mismo breakpoint que el 3D, useBreakpoint) el texto va abajo
+          para dejar libre la parte superior al objeto centrado. */}
+      <div className="wrap flex flex-1 flex-col justify-end pt-24 pb-28 lg:justify-center lg:pb-24">
         <RevealText
           as="h1"
           className="text-5xl leading-none font-bold tracking-tight text-balance sm:text-7xl lg:text-8xl"

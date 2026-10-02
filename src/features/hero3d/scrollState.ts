@@ -5,18 +5,38 @@ import type { SectionId } from '../../content/types'
  * (useSectionTriggers) y lo lee la capa 3D en useFrame, sin re-renders.
  */
 export interface ScrollState {
-  /** Progreso global de la página (0–1). */
-  progress: number
+  /** Secciones en orden de aparición en el DOM. */
+  sections: SectionId[]
   /** Sección activa (la que cruza el centro del viewport). */
   section: SectionId
+  sectionIndex: number
   /** Progreso dentro de la sección activa (0–1). */
   sectionProgress: number
+  /**
+   * Progreso normalizado por secciones (0–1): cada sección ocupa 1/n del
+   * recorrido, independientemente de su altura. Es lo que consume el 3D.
+   */
+  progress: number
 }
 
 export const scrollState: ScrollState = {
-  progress: 0,
+  sections: [],
   section: 'hero',
-  sectionProgress: 0,
+  sectionIndex: 0,
+  sectionProgress: 0.5,
+  progress: 0,
+}
+
+const listeners = new Set<() => void>()
+
+/** Suscripción a cambios de scroll (p. ej. para invalidar el frameloop "demand"). */
+export function subscribeScroll(listener: () => void): () => void {
+  listeners.add(listener)
+  return () => listeners.delete(listener)
+}
+
+export function notifyScroll() {
+  listeners.forEach((listener) => listener())
 }
 
 if (import.meta.env.DEV) {

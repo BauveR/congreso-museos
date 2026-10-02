@@ -1,4 +1,5 @@
 import { site } from '../content/site'
+import { Background } from '../features/hero3d/Background'
 import { Agenda } from '../features/sections/agenda/Agenda'
 import { Carousel } from '../features/sections/carousel/Carousel'
 import { Description } from '../features/sections/description/Description'
@@ -22,6 +23,7 @@ export function Landing() {
       >
         {site.a11y.skipLink}
       </a>
+      <Background />
       <Nav />
       <main id="main">
         <Hero />

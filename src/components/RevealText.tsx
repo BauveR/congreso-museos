@@ -1,9 +1,9 @@
-import { useRef, type ElementType, type ReactNode } from 'react'
+import { useRef, type ReactNode } from 'react'
 import { useMotionEffect } from '../app/motion'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
 interface RevealTextProps {
-  as?: ElementType
+  as?: 'h1' | 'h2' | 'h3' | 'p' | 'div'
   className?: string
   children: ReactNode
 }
@@ -41,7 +41,14 @@ export function RevealText({ as: Tag = 'div', className, children }: RevealTextP
   )
 
   return (
-    <Tag ref={ref} data-reveal="" className={className}>
+    <Tag
+      // Ref por callback: válida para cualquiera de las etiquetas de `as`.
+      ref={(node: HTMLElement | null) => {
+        ref.current = node
+      }}
+      data-reveal=""
+      className={className}
+    >
       {children}
     </Tag>
   )

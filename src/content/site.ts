@@ -25,7 +25,20 @@ export const site: SiteContent = {
     lang: 'es',
   },
 
+  a11y: {
+    skipLink: 'Saltar al contenido',
+  },
+
+  underConstruction: {
+    enabled: false,
+    title: 'Sitio en construcción',
+    body: 'Muy pronto estaremos en línea.',
+  },
+
   nav: {
+    ariaLabel: 'Principal',
+    menuLabel: 'Abrir menú',
+    closeLabel: 'Cerrar menú',
     logo: { label: 'Congreso', href: '#hero' },
     links: [
       { label: 'El congreso', href: '#presentacion' },
@@ -120,8 +133,10 @@ export const site: SiteContent = {
 
   footer: {
     title: 'Contacto',
+    emailLabel: 'Escríbenos',
     email: 'contacto@example.com',
     address: 'Dirección de relleno, 00000 Ciudad',
+    socialLabel: 'Redes sociales',
     social: [
       { label: 'Instagram', href: '#' },
       { label: 'LinkedIn', href: '#' },

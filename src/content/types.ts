@@ -26,7 +26,10 @@ export interface ImageAsset {
 }
 
 export interface NavContent {
-  logo: { label: string; href: string }
+  ariaLabel: string
+  menuLabel: string
+  closeLabel: string
+  logo: Link
   links: Link[]
 }
 
@@ -105,14 +108,25 @@ export interface RegistrationContent {
 
 export interface FooterContent {
   title: string
+  emailLabel: string
   email: string
   address: string
+  socialLabel: string
   social: Link[]
   legal: string
 }
 
+export interface UnderConstructionContent {
+  /** Flag: con `true` se muestra la página en construcción en lugar de la landing. */
+  enabled: boolean
+  title: string
+  body: string
+}
+
 export interface SiteContent {
   meta: { title: string; description: string; lang: string }
+  a11y: { skipLink: string }
+  underConstruction: UnderConstructionContent
   nav: NavContent
   hero: HeroContent
   intro: IntroContent

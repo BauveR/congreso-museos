@@ -126,6 +126,7 @@ export interface UnderConstructionContent {
 export interface SiteContent {
   meta: { title: string; description: string; lang: string }
   a11y: { skipLink: string }
+  preloader: { label: string }
   underConstruction: UnderConstructionContent
   nav: NavContent
   hero: HeroContent

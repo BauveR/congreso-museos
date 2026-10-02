@@ -24,7 +24,7 @@ export function Hero() {
       </div>
       <p className="absolute inset-x-0 bottom-6 flex flex-col items-center gap-2 text-sm text-texto-suave">
         {hero.scrollHint}
-        <ArrowDown aria-hidden className="size-4" />
+        <ArrowDown aria-hidden className="size-4 motion-safe:animate-bounce" />
       </p>
     </Section>
   )

@@ -29,6 +29,10 @@ export const site: SiteContent = {
     skipLink: 'Saltar al contenido',
   },
 
+  preloader: {
+    label: 'Cargando experiencia 3D',
+  },
+
   underConstruction: {
     enabled: false,
     title: 'Sitio en construcción',

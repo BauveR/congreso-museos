@@ -1,4 +1,4 @@
-import { Environment, Lightformer } from '@react-three/drei'
+import { Environment, Lightformer, useProgress } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { Suspense, useEffect, useState, type ComponentType, type Ref } from 'react'
 import { usePageVisible } from '../../hooks/usePageVisible'
@@ -26,10 +26,18 @@ function Ready({ onReady }: { onReady: () => void }) {
 interface Hero3DProps {
   quality: Quality
   onReady: () => void
+  /** Progreso real de carga de assets (0–100) o `null` si no hay nada que cargar. */
+  onProgress: (progress: number | null) => void
 }
 
-export default function Hero3D({ quality, onReady }: Hero3DProps) {
+export default function Hero3D({ quality, onReady, onProgress }: Hero3DProps) {
   const visible = usePageVisible()
+  const { progress, active } = useProgress()
+
+  useEffect(() => {
+    onProgress(active || progress > 0 ? progress : null)
+  }, [active, progress, onProgress])
+
   const [min, max] = quality.dpr
   const [dpr, setDpr] = useState(max)
 

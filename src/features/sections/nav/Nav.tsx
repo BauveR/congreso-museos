@@ -1,12 +1,14 @@
 import { Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { site } from '../../../content/site'
+import { useActiveSection } from '../../../hooks/useActiveSection'
 
 const MENU_ID = 'nav-menu'
 
 export function Nav() {
   const { nav } = site
   const [open, setOpen] = useState(false)
+  const active = useActiveSection()
   const close = () => setOpen(false)
 
   useEffect(() => {
@@ -43,7 +45,8 @@ export function Nav() {
               <a
                 href={link.href}
                 onClick={close}
-                className="block py-3 text-texto-suave transition-colors hover:text-texto md:py-0 md:text-sm"
+                aria-current={link.href === `#${active}` ? 'location' : undefined}
+                className="block py-3 text-texto-suave transition-colors hover:text-texto aria-[current]:text-acento md:py-0 md:text-sm"
               >
                 {link.label}
               </a>

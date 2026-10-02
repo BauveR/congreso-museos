@@ -1,3 +1,4 @@
+import { RevealText } from '../../../components/RevealText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { imageUrl } from '../../../services/imagekit'
@@ -8,7 +9,9 @@ export function Carousel() {
   return (
     <Section id="ponentes" className="py-24 sm:py-32">
       <div className="wrap">
-        <p className="max-w-3xl text-2xl font-semibold text-balance sm:text-3xl">{carousel.bridge}</p>
+        <RevealText as="p" className="max-w-3xl text-2xl font-semibold text-balance sm:text-3xl">
+          {carousel.bridge}
+        </RevealText>
       </div>
       <div className="mt-12 overflow-x-auto pb-4">
         <ul aria-label={carousel.ariaLabel} className="flex w-max gap-4 px-4 sm:px-6 lg:px-8">

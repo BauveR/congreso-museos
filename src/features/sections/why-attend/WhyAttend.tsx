@@ -1,4 +1,5 @@
 import { Card } from '../../../components/Card'
+import { RevealText } from '../../../components/RevealText'
 import { Section } from '../../../components/Section'
 import { SectionHeading } from '../../../components/SectionHeading'
 import { site } from '../../../content/site'
@@ -10,7 +11,9 @@ export function WhyAttend() {
       <div className="wrap">
         <div className="max-w-2xl">
           <SectionHeading>{whyAttend.title}</SectionHeading>
-          <p className="mt-6 text-lg text-texto-suave">{whyAttend.intro}</p>
+          <RevealText as="p" className="mt-6 text-lg text-texto-suave">
+            {whyAttend.intro}
+          </RevealText>
         </div>
         <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {whyAttend.cards.map((card) => (

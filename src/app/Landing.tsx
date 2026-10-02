@@ -9,8 +9,11 @@ import { KineticHeadline } from '../features/sections/kinetic/KineticHeadline'
 import { Nav } from '../features/sections/nav/Nav'
 import { Registration } from '../features/sections/registration/Registration'
 import { WhyAttend } from '../features/sections/why-attend/WhyAttend'
+import { useSectionTriggers } from '../hooks/useSectionTriggers'
 
 export function Landing() {
+  useSectionTriggers()
+
   return (
     <>
       <a

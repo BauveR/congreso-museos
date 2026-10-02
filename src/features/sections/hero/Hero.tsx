@@ -1,4 +1,5 @@
 import { ArrowDown } from 'lucide-react'
+import { RevealText } from '../../../components/RevealText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 
@@ -8,9 +9,12 @@ export function Hero() {
     <Section id="hero" className="flex min-h-svh flex-col">
       {/* En móvil el texto va abajo para dejar el centro libre al objeto 3D. */}
       <div className="wrap flex flex-1 flex-col justify-end pt-24 pb-28 sm:justify-center sm:pb-24">
-        <h1 className="text-5xl leading-none font-bold tracking-tight text-balance sm:text-7xl lg:text-8xl">
+        <RevealText
+          as="h1"
+          className="text-5xl leading-none font-bold tracking-tight text-balance sm:text-7xl lg:text-8xl"
+        >
           {hero.eventName}
-        </h1>
+        </RevealText>
         <p className="mt-6 text-lg text-texto-suave sm:text-xl">
           <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
           <span aria-hidden> · </span>

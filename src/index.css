@@ -25,6 +25,11 @@
     @apply bg-fondo font-sans text-texto antialiased;
   }
 
+  /* Ver index.html y src/app/motion.ts. */
+  .motion-pending [data-reveal] {
+    visibility: hidden;
+  }
+
   :focus-visible {
     @apply outline-2 outline-offset-4 outline-acento;
   }

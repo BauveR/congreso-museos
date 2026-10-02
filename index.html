@@ -7,6 +7,15 @@
     <title>Congreso de Museos</title>
     <meta name="description" content="Encuentro profesional sobre museos, patrimonio y públicos." />
     <meta name="theme-color" content="#111311" />
+    <script>
+      // Oculta los textos con revelado hasta que cargue GSAP (src/app/motion.ts).
+      // Sin reduced motion y con un límite de 3 s por si el chunk falla.
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var root = document.documentElement
+        root.classList.add('motion-pending')
+        setTimeout(function () { root.classList.remove('motion-pending') }, 3000)
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -14,6 +14,16 @@
   --color-claro: #f2f1ec;
 
   --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-scroll-line: scroll-line 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+
+  @keyframes scroll-line {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(200%);
+    }
+  }
 
   @keyframes marquee {
     to {

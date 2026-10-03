@@ -13,7 +13,7 @@ export function Registration() {
           {registration.open ? (
             <>
               <p className="mt-6 max-w-2xl text-lg text-texto-suave">{registration.body}</p>
-              <ButtonLink href={registration.cta.href} className="mt-8">
+              <ButtonLink href={registration.cta.href} icon={registration.cta.icon} className="mt-8">
                 {registration.cta.label}
               </ButtonLink>
             </>

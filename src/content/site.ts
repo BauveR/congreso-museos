@@ -43,11 +43,13 @@ export const site: SiteContent = {
     ariaLabel: 'Principal',
     menuLabel: 'Abrir menú',
     closeLabel: 'Cerrar menú',
-    logo: { label: 'Congreso', href: '#hero' },
-    links: [
+    logo: { label: 'Congreso de Museos, inicio', href: '#hero', mark: 'CM' },
+    linksLeft: [
       { label: 'El congreso', href: '#presentacion' },
       { label: 'Por qué asistir', href: '#por-que' },
       { label: 'Ponentes', href: '#ponentes' },
+    ],
+    linksRight: [
       { label: 'Agenda', href: '#agenda' },
       { label: 'Inscripciones', href: '#inscripciones' },
     ],
@@ -58,7 +60,7 @@ export const site: SiteContent = {
     dateLabel: '00–00 de mes de 2027',
     dateTime: '2027-01-01',
     location: 'Ciudad, País',
-    scrollHint: 'Desliza para explorar',
+    scrollHint: ['Desliza', 'para explorar'],
     poster: {
       src: '/media/poster.svg',
       alt: '',
@@ -71,8 +73,8 @@ export const site: SiteContent = {
     title: 'Un titular de presentación que resume la propuesta del evento',
     subtitle:
       'Un subtítulo de apoyo de una o dos líneas que amplía el titular y explica a quién va dirigido el encuentro.',
-    primaryCta: { label: 'Reserva tu plaza', href: '#inscripciones' },
-    secondaryCta: { label: 'Ver agenda', href: '#agenda' },
+    primaryCta: { label: 'Reserva tu plaza', href: '#inscripciones', icon: 'ticket' },
+    secondaryCta: { label: 'Ver agenda', href: '#agenda', icon: 'calendar' },
   },
 
   whyAttend: {
@@ -140,7 +142,7 @@ export const site: SiteContent = {
     open: false,
     headline: ['Reserva', 'tu plaza'],
     body: 'Texto de relleno que invita a inscribirse y resume condiciones y plazos.',
-    cta: { label: 'Inscribirme', href: '#' },
+    cta: { label: 'Inscribirme', href: '#', icon: 'ticket' },
     comingSoonLabel: 'Próximamente',
     comingSoonBody: 'Las inscripciones se abrirán en breve. Vuelve pronto.',
   },

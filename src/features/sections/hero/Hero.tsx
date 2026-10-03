@@ -1,7 +1,7 @@
-import { ArrowDown } from 'lucide-react'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { ScatterTitle } from './ScatterTitle'
+import { ScrollHint } from './ScrollHint'
 
 export function Hero() {
   const { hero } = site
@@ -19,10 +19,11 @@ export function Hero() {
           {hero.location}
         </p>
       </div>
-      <p data-hero-after="" className="absolute inset-x-0 bottom-6 flex flex-col items-center gap-2 text-sm text-texto-suave">
-        {hero.scrollHint}
-        <ArrowDown aria-hidden className="size-4 motion-safe:animate-bounce" />
-      </p>
+      <div data-hero-after="" className="absolute inset-x-0 bottom-8">
+        <div className="wrap">
+          <ScrollHint lines={hero.scrollHint} />
+        </div>
+      </div>
     </Section>
   )
 }

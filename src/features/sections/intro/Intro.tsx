@@ -15,8 +15,8 @@ export function Intro() {
             {intro.subtitle}
           </RevealText>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href={intro.primaryCta.href}>{intro.primaryCta.label}</ButtonLink>
-            <ButtonLink href={intro.secondaryCta.href} variant="secondary">
+            <ButtonLink href={intro.primaryCta.href} icon={intro.primaryCta.icon}>{intro.primaryCta.label}</ButtonLink>
+            <ButtonLink href={intro.secondaryCta.href} icon={intro.secondaryCta.icon} variant="secondary">
               {intro.secondaryCta.label}
             </ButtonLink>
           </div>

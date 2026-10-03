@@ -14,9 +14,13 @@ export type SectionId =
   | 'inscripciones'
   | 'contacto'
 
+/** Icono del botón (ver el mapa en components/ButtonLink.tsx). */
+export type LinkIcon = 'arrow' | 'ticket' | 'calendar' | 'mail'
+
 export interface Link {
   label: string
   href: string
+  icon?: LinkIcon
 }
 
 export interface ImageAsset {
@@ -30,8 +34,11 @@ export interface NavContent {
   ariaLabel: string
   menuLabel: string
   closeLabel: string
-  logo: Link
-  links: Link[]
+  /** `mark` es el monograma del logo; `label` su nombre accesible. */
+  logo: Link & { mark: string }
+  /** En escritorio: enlaces a la izquierda y a la derecha del logo centrado. */
+  linksLeft: Link[]
+  linksRight: Link[]
 }
 
 export interface HeroContent {
@@ -41,7 +48,8 @@ export interface HeroContent {
   /** Fecha ISO para el elemento <time>. */
   dateTime: string
   location: string
-  scrollHint: string
+  /** Indicador de scroll en dos líneas. */
+  scrollHint: [string, string]
   poster: ImageAsset
 }
 

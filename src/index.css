@@ -57,6 +57,37 @@
   }
 }
 
+/*
+ * Intro del hero: pantalla lima que se retira hacia arriba al cargar y
+ * descubre el hero oscuro. Solo CSS: está en index.html y no espera al JS,
+ * así no hay parpadeo oscuro antes del lima. Sin interacción posible.
+ */
+.hero-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  background: var(--color-acento);
+  animation: hero-intro 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.5s both;
+}
+
+/* El `from` explícito es necesario: `none` no se interpola con `inset()`. */
+@keyframes hero-intro {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-intro {
+    display: none;
+  }
+}
+
 /* Contenedor de página: ancho máximo y márgenes laterales mobile first. */
 @utility wrap {
   width: 100%;

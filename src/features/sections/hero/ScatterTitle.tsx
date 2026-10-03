@@ -2,6 +2,9 @@ import { useRef } from 'react'
 import { useMotionEffect } from '../../../app/motion'
 import { useReducedMotion } from '../../../hooks/useReducedMotion'
 
+/** Segundo (desde la carga) en que la cortina lima del hero ya casi ha salido. */
+const INTRO_END = 1.1
+
 /** Pseudoaleatorio estable por índice (misma dispersión en cada carga). */
 const noise = (i: number) => {
   const x = Math.sin(i * 12.9898) * 43758.5453
@@ -24,7 +27,16 @@ export function ScatterTitle({ children, className }: { children: string; classN
       if (!el || !section) return
       const { chars } = SplitText.create(el, { type: 'words,chars' })
 
-      gsap.from(chars, { yPercent: 100, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.03 })
+      // Entrada sincronizada con la cortina lima de index.html (termina a ~1,4 s
+      // de la carga); si GSAP llega más tarde, entra sin esperar.
+      gsap.from(chars, {
+        yPercent: 100,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.03,
+        delay: Math.max(0, INTRO_END - performance.now() / 1000),
+      })
 
       const scroll = { trigger: section, start: 'top top', end: 'bottom top', scrub: true }
       gsap.to(chars, {

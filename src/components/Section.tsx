@@ -1,9 +1,10 @@
-import type { HTMLAttributes } from 'react'
+import type { HTMLAttributes, Ref } from 'react'
 import type { SectionId } from '../content/types'
 
 interface SectionProps extends HTMLAttributes<HTMLElement> {
   id: SectionId
   as?: 'section' | 'footer'
+  ref?: Ref<HTMLElement>
 }
 
 /**

@@ -1,7 +1,7 @@
 import { ArrowDown } from 'lucide-react'
-import { RevealText } from '../../../components/RevealText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
+import { ScatterTitle } from './ScatterTitle'
 
 export function Hero() {
   const { hero } = site
@@ -10,12 +10,9 @@ export function Hero() {
       {/* Hasta lg (mismo breakpoint que el 3D, useBreakpoint) el texto va abajo
           para dejar libre la parte superior al objeto centrado. */}
       <div className="wrap flex flex-1 flex-col justify-end pt-24 pb-28 lg:justify-center lg:pb-24">
-        <RevealText
-          as="h1"
-          className="text-5xl leading-none font-bold tracking-tight text-balance sm:text-7xl lg:text-8xl"
-        >
+        <ScatterTitle className="text-5xl leading-none font-bold tracking-tight text-balance sm:text-7xl lg:text-8xl">
           {hero.eventName}
-        </RevealText>
+        </ScatterTitle>
         <p className="mt-6 text-lg text-texto-suave sm:text-xl">
           <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
           <span aria-hidden> · </span>

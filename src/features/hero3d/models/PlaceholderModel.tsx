@@ -3,6 +3,7 @@ import { useThree } from '@react-three/fiber'
 import { useEffect, useImperativeHandle, useRef, type Ref } from 'react'
 import type { Group } from 'three'
 import { useBreakpoint } from '../../../hooks/useBreakpoint'
+import { useTheme } from '../../../hooks/useTheme'
 import type { ModelController } from '../ModelController'
 import { scrollState } from '../scrollState'
 import { sampleSections } from '../timeline'
@@ -17,6 +18,7 @@ export function PlaceholderModel({ ref }: { ref: Ref<ModelController> }) {
   const view = useFitCamera(RADIUS)
   const keyframes = timeline[useBreakpoint()]
   const invalidate = useThree((s) => s.invalidate)
+  const theme = useTheme()
 
   useImperativeHandle(
     ref,
@@ -45,7 +47,7 @@ export function PlaceholderModel({ ref }: { ref: Ref<ModelController> }) {
         <mesh>
           <icosahedronGeometry args={[RADIUS, 0]} />
           <meshPhysicalMaterial
-            color="#6b7262"
+            color={theme === 'light' ? '#3a3f36' : '#6b7262'}
             metalness={0.2}
             roughness={0.35}
             clearcoat={1}

@@ -4,7 +4,13 @@ import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { useReducedMotion } from '../../../hooks/useReducedMotion'
 
-/** Cada fragmento se ilumina en secuencia, ligado al scroll (scrub). */
+/** Desplazamiento inicial de cada fragmento, en fracción del ancho de ventana. */
+const OFFSET = 0.35
+
+/**
+ * Los fragmentos se alternan a izquierda y derecha y entran desde su lado,
+ * en sentidos opuestos, ligados al scroll (scrub).
+ */
 export function KineticHeadline() {
   const { kinetic } = site
   const ref = useRef<HTMLHeadingElement>(null)
@@ -14,12 +20,24 @@ export function KineticHeadline() {
     ({ gsap }) => {
       const el = ref.current
       if (!el) return
-      gsap.from(el.children, {
-        opacity: 0.12,
-        yPercent: 20,
-        ease: 'none',
-        stagger: 0.5,
-        scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: true },
+      gsap.utils.toArray<HTMLElement>(el.children).forEach((fragment, i) => {
+        const direction = i % 2 === 0 ? -1 : 1
+        gsap.fromTo(
+          fragment,
+          { x: () => direction * window.innerWidth * OFFSET, opacity: 0.12 },
+          {
+            x: 0,
+            opacity: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: fragment,
+              start: 'top bottom',
+              end: 'top 45%',
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          },
+        )
       })
     },
     [],
@@ -27,10 +45,13 @@ export function KineticHeadline() {
   )
 
   return (
-    <Section id="cinetico" className="py-24 sm:py-32">
-      <h2 ref={ref} className="wrap text-4xl leading-[1.05] font-bold tracking-tight sm:text-6xl lg:text-7xl">
+    <Section id="cinetico" className="overflow-x-clip py-24 sm:py-32">
+      <h2
+        ref={ref}
+        className="wrap text-[clamp(2.25rem,8vw,6.5rem)] leading-[0.95] font-black tracking-tight uppercase"
+      >
         {kinetic.fragments.map((fragment, i) => (
-          <span key={i} className="block">
+          <span key={i} className="block even:text-right even:text-acento-texto">
             {fragment}{' '}
           </span>
         ))}

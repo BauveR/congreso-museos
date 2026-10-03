@@ -4,7 +4,7 @@ type Variant = 'primary' | 'secondary'
 
 const variants: Record<Variant, string> = {
   primary: 'bg-acento text-acento-contraste hover:bg-acento/85',
-  secondary: 'border border-borde text-texto hover:border-acento hover:text-acento',
+  secondary: 'border border-borde text-texto hover:border-acento-texto hover:text-acento-texto',
 }
 
 interface ButtonLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {

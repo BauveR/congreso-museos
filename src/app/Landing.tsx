@@ -9,10 +9,13 @@ import { Intro } from '../features/sections/intro/Intro'
 import { KineticHeadline } from '../features/sections/kinetic/KineticHeadline'
 import { Nav } from '../features/sections/nav/Nav'
 import { Registration } from '../features/sections/registration/Registration'
+import { Threshold } from '../features/sections/threshold/Threshold'
 import { WhyAttend } from '../features/sections/why-attend/WhyAttend'
+import { useExitFade } from '../hooks/useExitFade'
 import { useSectionTriggers } from '../hooks/useSectionTriggers'
 
 export function Landing() {
+  useExitFade()
   useSectionTriggers()
 
   return (
@@ -31,6 +34,7 @@ export function Landing() {
         <WhyAttend />
         <Carousel />
         <KineticHeadline />
+        <Threshold />
         <Description />
         <Agenda />
         <Registration />

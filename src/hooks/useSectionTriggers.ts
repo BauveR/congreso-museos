@@ -29,5 +29,10 @@ export function useSectionTriggers() {
         onUpdate: (self) => self.isActive && activate(self),
       })
     })
+
+    // Se crea el último (tras los pins de las secciones): ordenar y recalcular
+    // todos los triggers en orden de página.
+    ScrollTrigger.sort()
+    ScrollTrigger.refresh()
   }, [])
 }

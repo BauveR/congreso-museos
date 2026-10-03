@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useState } from 'react'
 import { site } from '../../content/site'
 import { useGpuTier } from '../../hooks/useGpuTier'
+import { useTheme } from '../../hooks/useTheme'
 import { Preloader } from './Preloader'
 import { qualityFor } from './quality'
 
@@ -15,8 +16,11 @@ const Hero3D = lazy(() => import('./Hero3D'))
 export function Background() {
   const { poster } = site.hero
   const gpu = useGpuTier()
+  const theme = useTheme()
   const quality = gpu && qualityFor(gpu)
   const [ready, setReady] = useState(false)
+  // El póster es oscuro: en tema claro se oculta (también en tier 0).
+  const showPoster = !ready && theme === 'dark'
   const [progress, setProgress] = useState<number | null>(null)
   const onReady = useCallback(() => setReady(true), [])
 
@@ -31,7 +35,7 @@ export function Background() {
           width={poster.width}
           height={poster.height}
           fetchPriority="high"
-          className={`${fade} size-full object-cover ${ready ? 'opacity-0' : 'opacity-100'}`}
+          className={`${fade} size-full object-cover ${showPoster ? 'opacity-100' : 'opacity-0'}`}
         />
         {quality && (
           <div className={`${fade} ${ready ? 'opacity-100' : 'opacity-0'}`}>

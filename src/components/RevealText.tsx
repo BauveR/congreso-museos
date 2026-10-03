@@ -3,7 +3,7 @@ import { useMotionEffect } from '../app/motion'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
 interface RevealTextProps {
-  as?: 'h1' | 'h2' | 'h3' | 'p' | 'div'
+  as?: 'h1' | 'h2' | 'h3' | 'p' | 'div' | 'span'
   className?: string
   children: ReactNode
 }

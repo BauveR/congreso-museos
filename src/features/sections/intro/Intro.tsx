@@ -9,7 +9,7 @@ export function Intro() {
   return (
     <Section id="presentacion" className="py-24 sm:py-32">
       <div className="wrap">
-        <div className="max-w-3xl">
+        <div data-exit-fade="" className="max-w-3xl">
           <SectionHeading>{intro.title}</SectionHeading>
           <RevealText as="p" className="mt-6 text-lg text-texto-suave sm:text-xl">
             {intro.subtitle}

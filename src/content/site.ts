@@ -109,8 +109,18 @@ export const site: SiteContent = {
     fragments: ['Una frase', 'partida en', 'fragmentos que', 'se revelan', 'con el scroll.'],
   },
 
+  threshold: {
+    word: 'Entra',
+  },
+
   description: {
-    body: 'Párrafo descriptivo de relleno. Aquí irá una explicación más extensa sobre el enfoque del congreso, su historia, los ejes temáticos y el tipo de público al que se dirige. Debe ocupar entre tres y seis líneas en escritorio.',
+    body: [
+      { text: 'Párrafo descriptivo de relleno sobre el ' },
+      { text: 'enfoque del congreso', highlight: true },
+      { text: ', su historia y los ' },
+      { text: 'ejes temáticos', highlight: true },
+      { text: '. Explica a qué público se dirige y qué se llevará cada persona que asista. Debe ocupar entre tres y seis líneas en escritorio.' },
+    ],
   },
 
   agenda: {
@@ -128,7 +138,7 @@ export const site: SiteContent = {
 
   registration: {
     open: false,
-    title: 'Inscripciones',
+    headline: ['Reserva', 'tu plaza'],
     body: 'Texto de relleno que invita a inscribirse y resume condiciones y plazos.',
     cta: { label: 'Inscribirme', href: '#' },
     comingSoonLabel: 'Próximamente',
@@ -136,6 +146,10 @@ export const site: SiteContent = {
   },
 
   footer: {
+    headlines: [
+      { lines: ['Nos vemos', 'muy pronto'], align: 'left' },
+      { lines: ['Abierto a ponentes', 'y patrocinadores'], align: 'right' },
+    ],
     title: 'Contacto',
     emailLabel: 'Escríbenos',
     email: 'contacto@example.com',

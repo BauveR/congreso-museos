@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ComponentType, type Ref } from 'react
 import { MathUtils } from 'three'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import type { ModelController } from './ModelController'
+import { Particles } from './Particles'
 import type { Quality } from './quality'
 import { scrollState, subscribeScroll } from './scrollState'
 
@@ -27,6 +28,7 @@ interface SceneProps {
  */
 export function Scene({ model: Model, quality, onPerformanceFactor }: SceneProps) {
   const controller = useRef<ModelController>(null)
+  const particles = useRef<ModelController>(null)
   const current = useRef(scrollState.progress)
   const movingRef = useRef(false)
   const [moving, setMoving] = useState(false)
@@ -46,6 +48,7 @@ export function Scene({ model: Model, quality, onPerformanceFactor }: SceneProps
       : MathUtils.damp(current.current, target, DAMPING, Math.min(delta, MAX_DELTA))
     if (Math.abs(target - current.current) < EPSILON) current.current = target
     controller.current?.setProgress(current.current)
+    particles.current?.setProgress(current.current)
 
     const isMoving = current.current !== target
     if (isMoving) {
@@ -74,6 +77,7 @@ export function Scene({ model: Model, quality, onPerformanceFactor }: SceneProps
         />
       )}
       {quality.tier === 1 && <AdaptiveDpr />}
+      {quality.tier === 2 && <Particles ref={particles} />}
       <Model ref={controller} />
     </>
   )

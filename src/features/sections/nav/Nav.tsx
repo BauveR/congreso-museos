@@ -1,5 +1,6 @@
 import { Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { ScrollProgress } from '../../../components/ScrollProgress'
 import { site } from '../../../content/site'
 import { useActiveSection } from '../../../hooks/useActiveSection'
 
@@ -19,9 +20,9 @@ export function Nav() {
   }, [open])
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-borde/60 bg-fondo/90">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-borde/60 bg-fondo/90 transition-colors duration-300">
       <nav aria-label={nav.ariaLabel} className="wrap flex h-16 items-center justify-between">
-        <a href={nav.logo.href} className="text-lg font-bold tracking-tight text-acento">
+        <a href={nav.logo.href} className="text-lg font-bold tracking-tight text-acento-texto">
           {nav.logo.label}
         </a>
 
@@ -46,7 +47,7 @@ export function Nav() {
                 href={link.href}
                 onClick={close}
                 aria-current={link.href === `#${active}` ? 'location' : undefined}
-                className="block py-3 text-texto-suave transition-colors hover:text-texto aria-[current]:text-acento md:py-0 md:text-sm"
+                className="block py-3 text-texto-suave transition-colors hover:text-texto aria-[current]:text-acento-texto md:py-0 md:text-sm"
               >
                 {link.label}
               </a>
@@ -54,6 +55,7 @@ export function Nav() {
           ))}
         </ul>
       </nav>
+      <ScrollProgress />
     </header>
   )
 }

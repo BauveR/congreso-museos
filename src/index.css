@@ -9,6 +9,9 @@
   --color-texto-suave: #a9ada3;
   --color-acento: #d1e132;
   --color-acento-contraste: #111311;
+  /* Acento usado como texto o línea: en tema claro se oscurece para cumplir AA. */
+  --color-acento-texto: #d1e132;
+  --color-claro: #f2f1ec;
 
   --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
 
@@ -21,6 +24,17 @@
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
+/* Tema claro (lo activa la sección "umbral", ver src/app/theme.ts). Contraste AA. */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --color-fondo: var(--color-claro);
+  --color-superficie: #e7e6df;
+  --color-borde: #cfcec6;
+  --color-texto: #111311;
+  --color-texto-suave: #4a4f45;
+  --color-acento-texto: #4d5800;
+}
+
 @layer base {
   html {
     color-scheme: dark;
@@ -30,7 +44,7 @@
   }
 
   body {
-    @apply bg-fondo font-sans text-texto antialiased;
+    @apply bg-fondo font-sans text-texto antialiased transition-colors duration-300 motion-reduce:transition-none;
   }
 
   /* Ver index.html y src/app/motion.ts. */
@@ -39,7 +53,7 @@
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-4 outline-acento;
+    @apply outline-2 outline-offset-4 outline-acento-texto;
   }
 }
 

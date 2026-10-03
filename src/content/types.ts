@@ -8,6 +8,7 @@ export type SectionId =
   | 'por-que'
   | 'ponentes'
   | 'cinetico'
+  | 'umbral'
   | 'descripcion'
   | 'agenda'
   | 'inscripciones'
@@ -81,9 +82,24 @@ export interface KineticContent {
   fragments: string[]
 }
 
-export interface DescriptionContent {
-  body: string
+export interface TextSegment {
+  text: string
+  /** Se muestra en color de acento. */
+  highlight?: boolean
 }
+
+/** Transición con zoom a través de la palabra y paso a tema claro. */
+export interface ThresholdContent {
+  word: string
+}
+
+export interface DescriptionContent {
+  /** Párrafo por segmentos para poder destacar palabras. */
+  body: TextSegment[]
+}
+
+/** Titular de dos líneas; la segunda va en color de acento. */
+export type TwoLineHeadline = [string, string]
 
 export interface AgendaItem {
   title: string
@@ -99,7 +115,7 @@ export interface AgendaContent {
 export interface RegistrationContent {
   /** Flag: con `false` se muestra el estado "Próximamente". */
   open: boolean
-  title: string
+  headline: TwoLineHeadline
   body: string
   cta: Link
   comingSoonLabel: string
@@ -107,6 +123,7 @@ export interface RegistrationContent {
 }
 
 export interface FooterContent {
+  headlines: { lines: TwoLineHeadline; align: 'left' | 'right' }[]
   title: string
   emailLabel: string
   email: string
@@ -134,6 +151,7 @@ export interface SiteContent {
   whyAttend: WhyAttendContent
   carousel: CarouselContent
   kinetic: KineticContent
+  threshold: ThresholdContent
   description: DescriptionContent
   agenda: AgendaContent
   registration: RegistrationContent

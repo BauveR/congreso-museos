@@ -2,6 +2,7 @@ import { AdaptiveDpr, PerformanceMonitor } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useRef, useState, type ComponentType, type Ref } from 'react'
 import { MathUtils } from 'three'
+import { usePageVisible } from '../../hooks/usePageVisible'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import type { ModelController } from './ModelController'
 import { Particles } from './Particles'
@@ -35,9 +36,11 @@ export function Scene({ model: Model, quality, onPerformanceFactor }: SceneProps
   const [factor, setFactor] = useState(1)
   const reducedMotion = useReducedMotion()
   const invalidate = useThree((s) => s.invalidate)
+  const visible = usePageVisible()
 
   useEffect(() => subscribeScroll(invalidate), [invalidate])
-  useEffect(() => invalidate(), [reducedMotion, invalidate])
+  // Al volver a la pestaña (frameloop pasa de "never" a "demand") hay que pedir un frame.
+  useEffect(() => invalidate(), [reducedMotion, visible, invalidate])
 
   useFrame((state, delta) => {
     const { sectionIndex, sections, progress } = scrollState

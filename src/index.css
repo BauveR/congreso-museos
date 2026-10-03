@@ -58,9 +58,10 @@
 }
 
 /*
- * Intro del hero: pantalla lima que se retira hacia arriba al cargar y
- * descubre el hero oscuro. Solo CSS: está en index.html y no espera al JS,
- * así no hay parpadeo oscuro antes del lima. Sin interacción posible.
+ * Intro del hero: pantalla lima desde el primer pintado (está en index.html,
+ * sin parpadeo oscuro). Cuando carga GSAP, ScatterTitle toma el control y
+ * coordina cortina y letras. Esta animación CSS es solo el fallback si el
+ * JS no llega a tiempo (retardo 2,5 s). Sin interacción posible.
  */
 .hero-intro {
   position: fixed;
@@ -68,7 +69,7 @@
   z-index: 70;
   pointer-events: none;
   background: var(--color-acento);
-  animation: hero-intro 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.5s both;
+  animation: hero-intro 0.9s cubic-bezier(0.76, 0, 0.24, 1) 2.5s both;
 }
 
 /* El `from` explícito es necesario: `none` no se interpola con `inset()`. */

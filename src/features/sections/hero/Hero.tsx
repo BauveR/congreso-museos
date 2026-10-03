@@ -13,13 +13,13 @@ export function Hero() {
         <ScatterTitle className="text-5xl leading-none font-bold tracking-tight text-balance text-acento sm:text-7xl lg:text-8xl">
           {hero.eventName}
         </ScatterTitle>
-        <p className="mt-6 text-lg text-texto-suave sm:text-xl">
+        <p data-hero-after="" className="mt-6 text-lg text-texto-suave sm:text-xl">
           <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
           <span aria-hidden> · </span>
           {hero.location}
         </p>
       </div>
-      <p className="absolute inset-x-0 bottom-6 flex flex-col items-center gap-2 text-sm text-texto-suave">
+      <p data-hero-after="" className="absolute inset-x-0 bottom-6 flex flex-col items-center gap-2 text-sm text-texto-suave">
         {hero.scrollHint}
         <ArrowDown aria-hidden className="size-4 motion-safe:animate-bounce" />
       </p>

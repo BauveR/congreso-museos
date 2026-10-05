@@ -56,7 +56,7 @@ export const sectionColors: Record<SectionId, string> = {
   ponentes: '#e8eadf', // blanco cálido
   cinetico: '#d1e132', // lima: momento fuerte
   umbral: '#f2f1ec', // se funde con el velo claro de la transición
-  descripcion: '#4d5800', // oliva (acento del tema claro)
+  descripcion: '#c8d832', // lima
   agenda: '#2f6f5e', // verde profundo
   inscripciones: '#8a9a00', // lima oscuro
   contacto: '#111311', // casi negro

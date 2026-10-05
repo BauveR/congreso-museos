@@ -34,7 +34,14 @@ export function Threshold() {
         .timeline({
           scrollTrigger: { trigger: section.current, start: 'top top', end: 'bottom bottom', scrub: true },
         })
-        .fromTo(word.current, { scale: 1 }, { scale: 30, ease: 'power2.in', duration: 1 })
+        // Origen del zoom dentro del trazo (vértice de la V, medido en Chillax:
+        // tinta entre el 65 % y el 84 % de la altura en la columna central),
+        // así la letra llena la pantalla. Recalcular si cambia la palabra.
+        .fromTo(
+          word.current,
+          { scale: 1 },
+          { scale: 30, ease: 'power2.in', duration: 1, transformOrigin: '50% 75%' },
+        )
         .fromTo(
           veil.current,
           { clipPath: 'circle(0% at 50% 50%)' },
@@ -52,7 +59,7 @@ export function Threshold() {
         <p
           ref={word}
           aria-hidden
-          className="text-[24vw] leading-none font-black tracking-tighter text-texto uppercase"
+          className="font-display text-[min(70svh,60vw)] leading-none font-bold text-texto uppercase"
         >
           {threshold.word}
         </p>

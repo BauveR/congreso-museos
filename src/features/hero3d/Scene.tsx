@@ -1,11 +1,9 @@
 import { AdaptiveDpr, PerformanceMonitor } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useRef, useState, type ComponentType, type Ref } from 'react'
-import { MathUtils, type FogExp2 } from 'three'
+import { MathUtils } from 'three'
 import { usePageVisible } from '../../hooks/usePageVisible'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
-import { useTheme } from '../../hooks/useTheme'
-import { FOG_COLOR, FOG_DENSITY } from './atmosphere'
 import type { ModelController } from './ModelController'
 import { Particles } from './Particles'
 import type { Quality } from './quality'
@@ -39,17 +37,12 @@ export function Scene({ model: Model, quality, onPerformanceFactor }: SceneProps
   const reducedMotion = useReducedMotion()
   const invalidate = useThree((s) => s.invalidate)
   const visible = usePageVisible()
-  const theme = useTheme()
 
   useEffect(() => subscribeScroll(invalidate), [invalidate])
   // Al volver a la pestaña (frameloop pasa de "never" a "demand") hay que pedir un frame.
   useEffect(() => invalidate(), [reducedMotion, visible, invalidate])
 
   useFrame((state, delta) => {
-    // Densidad relativa a la distancia de cámara (que depende del viewport).
-    const fog = state.scene.fog as FogExp2 | null
-    if (fog) fog.density = FOG_DENSITY / state.camera.position.z
-
     const { sectionIndex, sections, progress } = scrollState
     const target = reducedMotion ? (sectionIndex + 0.5) / Math.max(sections.length, 1) : progress
 
@@ -74,7 +67,6 @@ export function Scene({ model: Model, quality, onPerformanceFactor }: SceneProps
 
   return (
     <>
-      <fogExp2 attach="fog" args={[FOG_COLOR[theme], 0]} />
       {/* Con frameloop "demand" las pausas entre frames falsearían los fps:
           el monitor solo se monta mientras hay movimiento continuo. */}
       {quality.tier === 2 && moving && (

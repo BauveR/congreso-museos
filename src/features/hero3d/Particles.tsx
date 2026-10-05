@@ -3,7 +3,7 @@ import { useEffect, useImperativeHandle, useMemo, useRef, type Ref } from 'react
 import { BufferAttribute, BufferGeometry, Color, MathUtils, type Group, type PerspectiveCamera } from 'three'
 import { useBreakpoint } from '../../hooks/useBreakpoint'
 import { useTheme } from '../../hooks/useTheme'
-import { FOG_DENSITY, PARTICLE_COLOR } from './atmosphere'
+import { PARTICLE_COLOR, PARTICLE_DEPTH_FADE } from './atmosphere'
 import type { ModelController } from './ModelController'
 
 const COUNT = { mobile: 250, desktop: 600 } as const
@@ -31,7 +31,7 @@ function mulberry32(seed: number) {
 /*
  * Bokeh: el plano de foco está a la distancia del objeto. Fuera de foco, el
  * punto crece, se suaviza y pierde opacidad (el brillo total se mantiene).
- * La niebla se aplica como pérdida de opacidad con la misma fórmula que FogExp2.
+ * Las más lejanas se apagan con la profundidad (misma fórmula que FogExp2).
  */
 const vertexShader = /* glsl */ `
   uniform float uSize;
@@ -39,7 +39,7 @@ const vertexShader = /* glsl */ `
   uniform float uFocus;
   uniform float uRange;
   uniform float uMaxBlur;
-  uniform float uFogDensity;
+  uniform float uDepthFade;
   uniform float uBlurOpacity;
   attribute float aSeed;
   varying float vBlur;
@@ -49,8 +49,8 @@ const vertexShader = /* glsl */ `
     vec4 mv = modelViewMatrix * vec4(position, 1.0);
     float depth = -mv.z;
     vBlur = clamp(abs(depth - uFocus) / uRange, 0.0, 1.0);
-    float fog = 1.0 - exp(-pow(uFogDensity * depth, 2.0));
-    vAlpha = mix(1.0, uBlurOpacity, vBlur) * (1.0 - fog * 0.8) * (0.5 + 0.5 * aSeed);
+    float fade = 1.0 - exp(-pow(uDepthFade * depth, 2.0));
+    vAlpha = mix(1.0, uBlurOpacity, vBlur) * (1.0 - fade * 0.8) * (0.5 + 0.5 * aSeed);
     gl_PointSize = uSize * (1.0 + vBlur * (uMaxBlur - 1.0)) * uScale / depth;
     gl_Position = projectionMatrix * mv;
   }
@@ -107,7 +107,7 @@ export function Particles({ ref }: { ref: Ref<ModelController> }) {
       uRange: { value: 1 },
       uMaxBlur: { value: MAX_BLUR },
       uBlurOpacity: { value: BLUR_OPACITY },
-      uFogDensity: { value: 0 },
+      uDepthFade: { value: 0 },
       uColor: { value: new Color() },
       uOpacity: { value: 0.6 },
     }),
@@ -136,7 +136,7 @@ export function Particles({ ref }: { ref: Ref<ModelController> }) {
         uniforms.uScale.value = (size.height * viewport.dpr) / 2
         uniforms.uFocus.value = distance
         uniforms.uRange.value = distance * BLUR_RANGE
-        uniforms.uFogDensity.value = FOG_DENSITY / distance
+        uniforms.uDepthFade.value = PARTICLE_DEPTH_FADE / distance
       },
     }),
     [get, uniforms],

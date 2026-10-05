@@ -1,7 +1,6 @@
 import { lazy, Suspense, useCallback, useState } from 'react'
 import { site } from '../../content/site'
 import { useGpuTier } from '../../hooks/useGpuTier'
-import { Haze } from '../atmosphere/Haze'
 import { useTheme } from '../../hooks/useTheme'
 import { Preloader } from './Preloader'
 import { qualityFor } from './quality'
@@ -45,7 +44,6 @@ export function Background() {
             </Suspense>
           </div>
         )}
-        <Haze />
       </div>
       {quality && <Preloader progress={progress} done={ready} />}
     </>

@@ -1,9 +1,9 @@
-import { Environment, Lightformer, useProgress } from '@react-three/drei'
+import { useProgress } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { Suspense, useEffect, useState, type ComponentType, type Ref } from 'react'
 import { usePageVisible } from '../../hooks/usePageVisible'
 import { GltfModel } from './models/GltfModel'
-import { PlaceholderModel } from './models/PlaceholderModel'
+import { SphereModel } from './models/SphereModel'
 import type { ModelController } from './ModelController'
 import type { Quality } from './quality'
 import { Scene } from './Scene'
@@ -12,7 +12,7 @@ import { MODEL_URL } from './timeline.config'
 const modelUrl = MODEL_URL
 const Model: ComponentType<{ ref: Ref<ModelController> }> = modelUrl
   ? (props) => <GltfModel url={modelUrl} {...props} />
-  : PlaceholderModel
+  : SphereModel
 
 /** Avisa cuando el modelo ha cargado y se ha pintado el primer frame. */
 function Ready({ onReady }: { onReady: () => void }) {
@@ -51,14 +51,12 @@ export default function Hero3D({ quality, onReady, onProgress }: Hero3DProps) {
       resize={{ debounce: 200 }}
       performance={{ min: 0.5 }}
     >
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[3, 4, 5]} intensity={2.5} />
-      <directionalLight position={[-5, -1, 2]} intensity={2} color="#d1e132" />
-      {quality.environment && (
-        <Environment resolution={128}>
-          <Lightformer form="rect" intensity={2} position={[0, 3, 2]} scale={[6, 1, 1]} />
-          <Lightformer form="rect" intensity={1.5} color="#d1e132" position={[-3, 0, 1]} scale={[1, 4, 1]} />
-        </Environment>
+      {/* La esfera usa su propio shader; las luces solo hacen falta para un GLB. */}
+      {modelUrl && (
+        <>
+          <ambientLight intensity={0.6} />
+          <directionalLight position={[3, 4, 5]} intensity={2.5} />
+        </>
       )}
       <Suspense fallback={null}>
         <Scene

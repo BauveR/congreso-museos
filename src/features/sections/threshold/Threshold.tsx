@@ -4,6 +4,7 @@ import { setTheme } from '../../../app/theme'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { useReducedMotion } from '../../../hooks/useReducedMotion'
+import { strokeOrigin } from './strokeOrigin'
 
 /**
  * Transición: la palabra crece hasta llenar la pantalla mientras un velo del
@@ -30,18 +31,13 @@ export function Threshold() {
 
   useMotionEffect(
     ({ gsap }) => {
+      const el = word.current
+      if (!el) return
       gsap
         .timeline({
           scrollTrigger: { trigger: section.current, start: 'top top', end: 'bottom bottom', scrub: true },
         })
-        // Origen del zoom dentro del trazo (vértice de la V, medido en Chillax:
-        // tinta entre el 65 % y el 84 % de la altura en la columna central),
-        // así la letra llena la pantalla. Recalcular si cambia la palabra.
-        .fromTo(
-          word.current,
-          { scale: 1 },
-          { scale: 30, ease: 'power2.in', duration: 1, transformOrigin: '50% 75%' },
-        )
+        .fromTo(el, { scale: 1 }, { scale: 30, ease: 'power2.in', duration: 1, transformOrigin: strokeOrigin(el) })
         .fromTo(
           veil.current,
           { clipPath: 'circle(0% at 50% 50%)' },
@@ -59,7 +55,7 @@ export function Threshold() {
         <p
           ref={word}
           aria-hidden
-          className="font-display text-[min(70svh,60vw)] leading-none font-bold text-texto uppercase"
+          className="text-[24vw] leading-none font-black tracking-tighter text-texto uppercase"
         >
           {threshold.word}
         </p>

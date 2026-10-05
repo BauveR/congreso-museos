@@ -118,7 +118,7 @@ export const site: SiteContent = {
   },
 
   threshold: {
-    word: 'V',
+    word: 'SEDE',
   },
 
   description: {

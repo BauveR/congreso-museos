@@ -106,7 +106,7 @@ interface HeroWordmarkProps {
 /**
  * Wordmark del hero en una sola línea a todo el ancho (desde md; en móvil se
  * parte en varias líneas). El tamaño usa `cqw`: el contenedor padre debe
- * tener `@container`. 17 ≈ ancho del texto en em con Chillax Bold (16,84) más
+ * tener `@container`. 19,7 ≈ ancho del texto en mayúsculas en em con Chillax Bold (19,56) más
  * margen de seguridad; recalcular si cambia el texto.
  */
 export function HeroWordmark({ edition, name }: HeroWordmarkProps) {
@@ -173,7 +173,7 @@ export function HeroWordmark({ edition, name }: HeroWordmarkProps) {
       <h1
         ref={titleRef}
         data-reveal=""
-        className="font-display text-[clamp(2.5rem,12vw,5rem)] leading-[0.9] font-bold tracking-[-0.02em] text-balance text-acento md:text-[calc(100cqw/17)] md:whitespace-nowrap"
+        className="font-display text-[clamp(2.25rem,11vw,5rem)] leading-[0.9] font-bold tracking-[-0.02em] text-balance text-acento uppercase md:text-[calc(100cqw/19.7)] md:whitespace-nowrap"
       >
         {edition} {name}
       </h1>

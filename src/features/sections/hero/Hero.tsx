@@ -17,7 +17,7 @@ export function Hero() {
         <HeroWordmark edition={hero.edition} name={hero.eventName} />
         <p
           data-hero-after=""
-          className="mt-[6svh] text-right font-display text-[clamp(1.25rem,3.6vw,4.5rem)] leading-none font-bold uppercase"
+          className="mt-[6svh] text-right font-display text-[clamp(1rem,2vw,2.25rem)] leading-none font-bold uppercase"
         >
           <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
           <span aria-hidden> · </span>

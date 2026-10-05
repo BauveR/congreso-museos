@@ -42,6 +42,8 @@ export interface NavContent {
 }
 
 export interface HeroContent {
+  /** Edición del congreso: se muestra en tamaño gigante (p. ej. "V"). */
+  edition: string
   eventName: string
   /** Fecha legible para humanos. */
   dateLabel: string

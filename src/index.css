@@ -1,5 +1,14 @@
 @import 'tailwindcss';
 
+/* Chillax (Indian Type Foundry, Fontshare). Solo el peso Bold, para el hero. */
+@font-face {
+  font-family: 'Chillax';
+  src: url('/fonts/Chillax-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Paleta propia provisional. Contraste AA verificado sobre --color-fondo. */
 @theme {
   --color-fondo: #111311;
@@ -54,6 +63,7 @@
     }
   }
 
+  --font-display: 'Chillax', ui-sans-serif, system-ui, sans-serif;
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 

@@ -1,6 +1,6 @@
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
-import { ScatterTitle } from './ScatterTitle'
+import { HeroTitle } from './HeroTitle'
 import { ScrollHint } from './ScrollHint'
 
 export function Hero() {
@@ -10,9 +10,7 @@ export function Hero() {
       {/* Hasta lg (mismo breakpoint que el 3D, useBreakpoint) el texto va abajo
           para dejar libre la parte superior al objeto centrado. */}
       <div className="wrap flex flex-1 flex-col justify-end pt-24 pb-28 lg:justify-center lg:pb-24">
-        <ScatterTitle className="text-5xl leading-none font-bold tracking-tight text-balance text-acento sm:text-7xl lg:text-8xl">
-          {hero.eventName}
-        </ScatterTitle>
+        <HeroTitle edition={hero.edition} name={hero.eventName} />
         <p data-hero-after="" className="mt-6 text-lg text-texto-suave sm:text-xl">
           <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
           <span aria-hidden> · </span>

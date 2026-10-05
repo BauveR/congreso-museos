@@ -20,7 +20,7 @@ const carouselItems: CarouselItem[] = Array.from({ length: 8 }, (_, i) => ({
 
 export const site: SiteContent = {
   meta: {
-    title: 'Congreso de Museos',
+    title: 'V Congreso de Museos de Canarias',
     description: 'Encuentro profesional sobre museos, patrimonio y públicos.',
     lang: 'es',
   },
@@ -43,7 +43,7 @@ export const site: SiteContent = {
     ariaLabel: 'Principal',
     menuLabel: 'Abrir menú',
     closeLabel: 'Cerrar menú',
-    logo: { label: 'Congreso de Museos, inicio', href: '#hero', mark: 'CM' },
+    logo: { label: 'V Congreso de Museos de Canarias, inicio', href: '#hero', mark: 'CM' },
     linksLeft: [
       { label: 'El congreso', href: '#presentacion' },
       { label: 'Por qué asistir', href: '#por-que' },
@@ -56,7 +56,8 @@ export const site: SiteContent = {
   },
 
   hero: {
-    eventName: 'Congreso de Museos',
+    edition: 'V',
+    eventName: 'Congreso de Museos de Canarias',
     dateLabel: '00–00 de mes de 2027',
     dateTime: '2027-01-01',
     location: 'Ciudad, País',
@@ -162,6 +163,6 @@ export const site: SiteContent = {
       { label: 'LinkedIn', href: '#' },
       { label: 'YouTube', href: '#' },
     ],
-    legal: '© 2027 Congreso de Museos. Contenido provisional.',
+    legal: '© 2027 V Congreso de Museos de Canarias. Contenido provisional.',
   },
 }

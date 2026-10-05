@@ -40,7 +40,7 @@ export function Nav() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-borde/60 bg-fondo/90 transition-colors duration-300">
-      <nav aria-label={nav.ariaLabel} className="wrap grid h-16 grid-cols-[1fr_auto_1fr] items-center">
+      <nav aria-label={nav.ariaLabel} className="edge grid h-16 grid-cols-[1fr_auto_1fr] items-center">
         <ul className="hidden gap-8 lg:flex">{linkItems(nav.linksLeft)}</ul>
 
         <a

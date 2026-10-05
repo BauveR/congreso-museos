@@ -81,7 +81,7 @@
  * Intro del hero: pantalla lima desde el primer pintado (está en index.html,
  * sin parpadeo oscuro). Cuando carga GSAP, ScatterTitle toma el control y
  * coordina cortina y letras. Esta animación CSS es solo el fallback si el
- * JS no llega a tiempo (retardo 2,5 s). Sin interacción posible.
+ * JS no llega a tiempo (retardo 4 s). Sin interacción posible.
  */
 .hero-intro {
   position: fixed;
@@ -89,7 +89,7 @@
   z-index: 70;
   pointer-events: none;
   background: var(--color-acento);
-  animation: hero-intro 0.9s cubic-bezier(0.76, 0, 0.24, 1) 2.5s both;
+  animation: hero-intro 0.9s cubic-bezier(0.76, 0, 0.24, 1) 4s both;
 }
 
 /* El `from` explícito es necesario: `none` no se interpola con `inset()`. */
@@ -107,6 +107,12 @@
   .hero-intro {
     display: none;
   }
+}
+
+/* Ancho completo con margen lateral fluido (nav y hero, como en lenis.dev). */
+@utility edge {
+  width: 100%;
+  padding-inline: max(1rem, 2.2vw);
 }
 
 /* Contenedor de página: ancho máximo y márgenes laterales mobile first. */

@@ -62,6 +62,11 @@ export const site: SiteContent = {
     dateTime: '2027-01-01',
     location: 'Ciudad, País',
     scrollHint: ['Desliza', 'para explorar'],
+    descriptor: ['Encuentro profesional sobre museos,', 'patrimonio y públicos'],
+    ctas: [
+      { label: 'Inscripciones', href: '#inscripciones', icon: 'ticket' },
+      { label: 'Agenda', href: '#agenda', icon: 'calendar' },
+    ],
     poster: {
       src: '/media/poster.svg',
       alt: '',

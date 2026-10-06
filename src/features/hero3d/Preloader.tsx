@@ -9,8 +9,9 @@ interface PreloaderProps {
 /**
  * Indicador de carga del 3D. No bloquea la página: el contenido y el póster
  * ya están visibles (el póster es el LCP); solo informa de la carga del modelo.
- * Va en el centro de la pantalla, donde aparecerá la esfera: ahí no tapa el
- * wordmark ni la fila inferior del hero.
+ * Es una barra fina en el borde superior de la pantalla (encima del nav), así
+ * no tapa el wordmark ni la fila inferior del hero. El texto queda para
+ * lectores de pantalla.
  */
 export function Preloader({ progress, done }: PreloaderProps) {
   const label = site.preloader.label
@@ -24,16 +25,12 @@ export function Preloader({ progress, done }: PreloaderProps) {
       aria-valuemax={100}
       aria-valuenow={value ?? undefined}
       aria-hidden={done || undefined}
-      className={`pointer-events-none fixed top-1/2 left-1/2 z-40 -translate-x-1/2 -translate-y-1/2 flex items-center gap-3 rounded-full border border-borde bg-fondo/90 px-4 py-2 text-xs text-texto-suave transition-opacity duration-500 motion-reduce:transition-none ${done ? 'opacity-0' : 'opacity-100'}`}
+      className={`pointer-events-none fixed inset-x-0 top-0 z-[60] h-0.5 overflow-hidden transition-opacity duration-500 motion-reduce:transition-none ${done ? 'opacity-0' : 'opacity-100'}`}
     >
-      <span>{label}</span>
-      <span className="relative h-1 w-16 overflow-hidden rounded-full bg-borde">
-        <span
-          className={`absolute inset-y-0 left-0 rounded-full bg-acento transition-[width] duration-300 ${value === null ? 'w-1/3 animate-pulse' : ''}`}
-          style={value === null ? undefined : { width: `${value}%` }}
-        />
-      </span>
-      {value !== null && <span className="w-8 text-right tabular-nums">{value}%</span>}
+      <span
+        className={`absolute inset-y-0 left-0 bg-acento transition-[width] duration-300 ${value === null ? 'w-1/3 animate-pulse' : ''}`}
+        style={value === null ? undefined : { width: `${value}%` }}
+      />
     </div>
   )
 }

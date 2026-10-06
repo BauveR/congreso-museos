@@ -14,7 +14,7 @@ export function Hero() {
   return (
     <Section id="hero" className="flex min-h-svh flex-col pt-20 pb-8">
       <div className="edge @container">
-        <HeroWordmark edition={hero.edition} name={hero.eventName} />
+        <HeroWordmark edition={hero.edition} name={hero.eventName} lines={hero.eventNameLines} />
         <p
           data-hero-after=""
           className="mt-[6svh] text-right font-display text-[clamp(1rem,2vw,2.25rem)] leading-none font-bold uppercase"
@@ -41,7 +41,7 @@ export function Hero() {
               href={cta.href}
               icon={cta.icon}
               variant={i === 0 ? 'primary' : 'secondary'}
-              className="lg:min-w-72"
+              className="xl:min-w-72"
             >
               {cta.label}
             </ButtonLink>

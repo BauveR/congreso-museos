@@ -45,6 +45,8 @@ export interface HeroContent {
   /** Edición del congreso: se muestra en tamaño gigante (p. ej. "V"). */
   edition: string
   eventName: string
+  /** El nombre en tres líneas para el wordmark (la primera va tras la edición). */
+  eventNameLines: [string, string, string]
   /** Fecha legible para humanos. */
   dateLabel: string
   /** Fecha ISO para el elemento <time>. */

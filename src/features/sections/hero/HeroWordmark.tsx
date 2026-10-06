@@ -100,16 +100,21 @@ function scatterOnScroll({ gsap }: Motion, { section, chars }: Parts) {
 
 interface HeroWordmarkProps {
   edition: string
+  /** Nombre completo, para el nombre accesible del h1. */
   name: string
+  lines: [string, string, string]
 }
 
 /**
- * Wordmark del hero en una sola línea a todo el ancho (desde md; en móvil se
- * parte en varias líneas). El tamaño usa `cqw`: el contenedor padre debe
- * tener `@container`. 19,7 ≈ ancho del texto en mayúsculas en em con Chillax Bold (19,56) más
- * margen de seguridad; recalcular si cambia el texto.
+ * Wordmark del hero en tres líneas, igual en móvil y escritorio. El tamaño es
+ * el menor entre lo que cabe a lo ancho y a lo alto:
+ * - Ancho: `cqw` (el contenedor padre debe tener `@container`); 6,8 ≈ ancho
+ *   en em de la línea más larga, "DE CANARIAS", en Chillax Bold mayúsculas
+ *   (6,67) más margen. Recalcular si cambia el texto.
+ * - Alto: 21svh, para que las tres líneas, la fecha y la fila inferior
+ *   quepan en la primera pantalla.
  */
-export function HeroWordmark({ edition, name }: HeroWordmarkProps) {
+export function HeroWordmark({ edition, name, lines }: HeroWordmarkProps) {
   const titleRef = useRef<HTMLHeadingElement>(null)
   const layerRef = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
@@ -121,7 +126,7 @@ export function HeroWordmark({ edition, name }: HeroWordmarkProps) {
       const section = title?.closest('section')
       if (!title || !layer || !section) return
 
-      const split = motion.SplitText.create(title, { type: 'words,chars', mask: 'chars' })
+      const split = motion.SplitText.create(title, { type: 'words,chars', mask: 'chars', aria: 'hidden' })
       const parts: Parts = {
         section,
         layer,
@@ -173,9 +178,14 @@ export function HeroWordmark({ edition, name }: HeroWordmarkProps) {
       <h1
         ref={titleRef}
         data-reveal=""
-        className="font-display text-[clamp(2.25rem,11vw,5rem)] leading-[0.9] font-bold tracking-[-0.02em] text-balance text-acento uppercase md:text-[calc(100cqw/19.7)] md:whitespace-nowrap"
+        aria-label={`${edition} ${name}`}
+        className="font-display text-[min(calc(100cqw/6.8),21svh)] leading-[0.9] font-bold tracking-[-0.02em] whitespace-nowrap text-acento uppercase"
       >
-        {edition} {name}
+        {edition} {lines[0]}
+        <br />
+        {lines[1]}
+        <br />
+        {lines[2]}
       </h1>
     </>
   )

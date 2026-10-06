@@ -58,6 +58,7 @@ export const site: SiteContent = {
   hero: {
     edition: 'V',
     eventName: 'Congreso de Museos de Canarias',
+    eventNameLines: ['Congreso', 'de Museos', 'de Canarias'],
     dateLabel: '00–00 de mes de 2027',
     dateTime: '2027-01-01',
     location: 'Ciudad, País',

@@ -45,13 +45,15 @@ export const site: SiteContent = {
     closeLabel: 'Cerrar menú',
     logo: { label: 'V Congreso de Museos de Canarias, inicio', href: '#hero', mark: 'CM' },
     linksLeft: [
-      { label: 'El congreso', href: '#presentacion' },
-      { label: 'Por qué asistir', href: '#por-que' },
-      { label: 'Ponentes', href: '#ponentes' },
+      { label: 'El Congreso', href: '#presentacion' },
+      { label: 'Programa', href: '#agenda' },
+      { label: 'Participantes', href: '#ponentes' },
     ],
     linksRight: [
-      { label: 'Agenda', href: '#agenda' },
-      { label: 'Inscripciones', href: '#inscripciones' },
+      // Provisional: aún no hay sección de información práctica; apunta a la sede.
+      { label: 'Información práctica', href: '#umbral' },
+      { label: 'Inscripción', href: '#inscripciones' },
+      { label: 'Contacto', href: '#contacto' },
     ],
   },
 
@@ -59,9 +61,10 @@ export const site: SiteContent = {
     edition: 'V',
     eventName: 'Congreso de Museos de Canarias',
     eventNameLines: ['Congreso', 'de Museos', 'de Canarias'],
-    dateLabel: '00–00 de mes de 2027',
-    dateTime: '2027-01-01',
-    location: 'Ciudad, País',
+    dateLabel: '19 y 20 noviembre',
+    // Sin año todavía: fecha HTML válida sin año (--MM-DD).
+    dateTime: '--11-19',
+    location: 'La Gomera',
     scrollHint: ['Desliza', 'para explorar'],
     descriptor: ['Encuentro profesional sobre museos,', 'patrimonio y públicos'],
     ctas: [

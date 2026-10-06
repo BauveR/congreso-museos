@@ -87,15 +87,24 @@ function playIntro({ gsap }: Motion, { layer, title, chars, after }: Parts, curt
     .from(after, { opacity: 0, y: 20, duration: 0.6, ease: 'power2.out', stagger: 0.08 }, 3.3)
 }
 
-/** Con el scroll, cada letra del wordmark sube a su velocidad y desaparece. */
+/**
+ * Con el scroll, cada letra del wordmark sube a su velocidad y desaparece; al
+ * volver arriba reaparece. Se crea al terminar la entrada (la intro deja la
+ * primera letra a opacidad 0 hasta que aterriza la V) y con punto de partida
+ * explícito, para que su inicio sea siempre "letra en su sitio y visible".
+ */
 function scatterOnScroll({ gsap }: Motion, { section, chars }: Parts) {
-  gsap.to(chars, {
-    y: (i: number) => -(0.3 + noise(i) * 0.7) * window.innerHeight,
-    rotate: (i: number) => (noise(i + 99) - 0.5) * 40,
-    opacity: 0,
-    ease: 'none',
-    scrollTrigger: { trigger: section, start: 'top top', end: 'bottom top', scrub: true, invalidateOnRefresh: true },
-  })
+  gsap.fromTo(
+    chars,
+    { y: 0, rotate: 0, opacity: 1 },
+    {
+      y: (i: number) => -(0.3 + noise(i) * 0.7) * window.innerHeight,
+      rotate: (i: number) => (noise(i + 99) - 0.5) * 40,
+      opacity: 0,
+      ease: 'none',
+      scrollTrigger: { trigger: section, start: 'top top', end: 'bottom top', scrub: true, invalidateOnRefresh: true },
+    },
+  )
 }
 
 interface HeroWordmarkProps {
@@ -109,8 +118,8 @@ interface HeroWordmarkProps {
  * Wordmark del hero en tres líneas, igual en móvil y escritorio. El tamaño es
  * el menor entre lo que cabe a lo ancho y a lo alto:
  * - Ancho: `cqw` (el contenedor padre debe tener `@container`). La línea más
- *   larga, "DE CANARIAS", mide 6,67 em en Chillax Bold mayúsculas: con 13,6
- *   ocupa ~49 % del ancho. No bajar de ~6,8 o se saldría.
+ *   larga, "DE CANARIAS", mide 5,45 em en Kola Regular mayúsculas: con 13,6
+ *   ocupa ~40 % del ancho. No bajar de ~5,6 o se saldría.
  * - Alto: 10,5svh, para que el bloque no domine la primera pantalla.
  */
 export function HeroWordmark({ edition, name, lines }: HeroWordmarkProps) {
@@ -140,17 +149,22 @@ export function HeroWordmark({ edition, name, lines }: HeroWordmarkProps) {
       const curtain = document.querySelector<HTMLElement>('.hero-intro')
       const curtainPending = Number(curtain?.getAnimations()[0]?.currentTime ?? Infinity) < CURTAIN_FALLBACK_DELAY
 
+      // La dispersión se crea al terminar la entrada: así su estado inicial es
+      // el definitivo (todas las letras visibles) y al volver arriba se recupera.
+      const finish = () => {
+        releaseMasks()
+        scatterOnScroll(motion, parts)
+      }
+
       if (curtain && curtainPending) {
-        playIntro(motion, parts, curtain, releaseMasks)
+        playIntro(motion, parts, curtain, finish)
       } else {
         layer.style.display = 'none'
         motion.gsap
-          .timeline({ onComplete: releaseMasks })
+          .timeline({ onComplete: finish })
           .from(parts.chars, { yPercent: 100, duration: 0.7, ease: 'power3.out', stagger: 0.02 })
           .from(parts.after, { opacity: 0, y: 20, duration: 0.6, ease: 'power2.out', stagger: 0.08 }, 0.3)
       }
-
-      scatterOnScroll(motion, parts)
     },
     [],
     !reducedMotion,
@@ -167,7 +181,7 @@ export function HeroWordmark({ edition, name, lines }: HeroWordmarkProps) {
       >
         {INTRO_LETTERS.map((position) => (
           <span key={position.left} className="absolute block overflow-hidden" style={position}>
-            <span className="block font-display text-[min(42svh,30vw)] leading-[0.9] font-bold tracking-[-0.02em] text-intro-letra">
+            <span className="block font-wordmark text-[min(42svh,30vw)] leading-[0.9] font-normal tracking-[-0.02em] text-intro-letra">
               {edition}
             </span>
           </span>
@@ -178,7 +192,7 @@ export function HeroWordmark({ edition, name, lines }: HeroWordmarkProps) {
         ref={titleRef}
         data-reveal=""
         aria-label={`${edition} ${name}`}
-        className="font-display text-[min(calc(100cqw/13.6),10.5svh)] leading-[0.9] font-bold tracking-[-0.02em] whitespace-nowrap text-acento uppercase"
+        className="font-wordmark text-[min(calc(100cqw/13.6),10.5svh)] leading-[0.9] font-normal tracking-[-0.02em] whitespace-nowrap text-acento uppercase"
       >
         {edition} {lines[0]}
         <br />

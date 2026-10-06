@@ -46,7 +46,9 @@ export function Scene({ model: Model, quality, onPerformanceFactor }: SceneProps
     const { sectionIndex, sections, progress } = scrollState
     const target = reducedMotion ? (sectionIndex + 0.5) / Math.max(sections.length, 1) : progress
 
-    current.current = reducedMotion
+    const snap = scrollState.snap
+    scrollState.snap = false
+    current.current = reducedMotion || snap
       ? target
       : MathUtils.damp(current.current, target, DAMPING, Math.min(delta, MAX_DELTA))
     if (Math.abs(target - current.current) < EPSILON) current.current = target

@@ -17,6 +17,8 @@ export interface ScrollState {
    * recorrido, independientemente de su altura. Es lo que consume el 3D.
    */
   progress: number
+  /** Saltar sin amortiguación en el próximo frame (navegación con fundido). */
+  snap: boolean
 }
 
 export const scrollState: ScrollState = {
@@ -25,6 +27,7 @@ export const scrollState: ScrollState = {
   sectionIndex: 0,
   sectionProgress: 0.5,
   progress: 0,
+  snap: false,
 }
 
 const listeners = new Set<() => void>()
@@ -33,6 +36,12 @@ const listeners = new Set<() => void>()
 export function subscribeScroll(listener: () => void): () => void {
   listeners.add(listener)
   return () => listeners.delete(listener)
+}
+
+/** Pide que el 3D vaya directo al estado actual (sin recorrer las poses intermedias). */
+export function requestSnap() {
+  scrollState.snap = true
+  notifyScroll()
 }
 
 export function notifyScroll() {

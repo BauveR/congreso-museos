@@ -109,9 +109,9 @@ interface HeroWordmarkProps {
  * Wordmark del hero en tres líneas, igual en móvil y escritorio. El tamaño es
  * el menor entre lo que cabe a lo ancho y a lo alto:
  * - Ancho: `cqw` (el contenedor padre debe tener `@container`). La línea más
- *   larga, "DE CANARIAS", mide 6,67 em en Chillax Bold mayúsculas: con 9,5
- *   ocupa ~70 % del ancho. No bajar de ~6,8 o se saldría.
- * - Alto: 15svh, para que el bloque no domine la primera pantalla.
+ *   larga, "DE CANARIAS", mide 6,67 em en Chillax Bold mayúsculas: con 13,6
+ *   ocupa ~49 % del ancho. No bajar de ~6,8 o se saldría.
+ * - Alto: 10,5svh, para que el bloque no domine la primera pantalla.
  */
 export function HeroWordmark({ edition, name, lines }: HeroWordmarkProps) {
   const titleRef = useRef<HTMLHeadingElement>(null)
@@ -178,7 +178,7 @@ export function HeroWordmark({ edition, name, lines }: HeroWordmarkProps) {
         ref={titleRef}
         data-reveal=""
         aria-label={`${edition} ${name}`}
-        className="font-display text-[min(calc(100cqw/9.5),15svh)] leading-[0.9] font-bold tracking-[-0.02em] whitespace-nowrap text-acento uppercase"
+        className="font-display text-[min(calc(100cqw/13.6),10.5svh)] leading-[0.9] font-bold tracking-[-0.02em] whitespace-nowrap text-acento uppercase"
       >
         {edition} {lines[0]}
         <br />

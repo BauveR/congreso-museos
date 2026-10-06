@@ -32,13 +32,12 @@ interface Parts {
 
 /**
  * Intro estilo lenis.dev:
- * 1. Pantalla lima (cortina de index.html) y cuatro letras gigantes en
- *    distintas posiciones se revelan de abajo arriba. La capa usa
- *    `mix-blend-mode: difference`: lima sobre lima se ve oscuro.
- * 2. La cortina se retira y las letras pasan a lima sobre el fondo oscuro.
- * 3. Las cuatro convergen hacia la primera letra del wordmark (FLIP); tres se
- *    desvanecen y la cuarta aterriza en su sitio. Entra el resto del texto y
- *    después la línea de fecha y la fila inferior.
+ * 1. Cortina (index.html, color --color-intro) y cuatro letras gigantes en
+ *    distintas posiciones (--color-intro-letra) se revelan de abajo arriba.
+ * 2. La cortina se retira hacia arriba y descubre el hero oscuro.
+ * 3. Las cuatro convergen hacia la primera letra del wordmark (FLIP) mientras
+ *    pasan al color del wordmark; tres se desvanecen y la cuarta aterriza en
+ *    su sitio. Entra el resto del texto y después la fecha y la fila inferior.
  */
 function playIntro({ gsap }: Motion, { layer, title, chars, after }: Parts, curtain: HTMLElement, onDone: () => void) {
   const wrappers = [...layer.children] as HTMLElement[]
@@ -50,6 +49,7 @@ function playIntro({ gsap }: Motion, { layer, title, chars, after }: Parts, curt
   gsap.set(first, { opacity: 0 })
 
   const target = () => first.getBoundingClientRect()
+  const titleColor = getComputedStyle(title).color
   const ratio = () => parseFloat(getComputedStyle(title).fontSize) / parseFloat(getComputedStyle(glyphs[0]!).fontSize)
 
   gsap
@@ -66,8 +66,8 @@ function playIntro({ gsap }: Motion, { layer, title, chars, after }: Parts, curt
       { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.9, ease: 'power4.inOut' },
       1,
     )
-    // Sin cortina ya no hace falta el blend (así el color final es el lima exacto).
-    .set(layer, { mixBlendMode: 'normal' }, 1.9)
+    // Pasan al color del wordmark para que la que aterriza no cambie de golpe.
+    .to(glyphs, { color: titleColor, duration: 1.1, ease: 'power2.inOut' }, 1.9)
     .to(
       wrappers,
       {
@@ -159,11 +159,11 @@ export function HeroWordmark({ edition, name }: HeroWordmarkProps) {
         ref={layerRef}
         aria-hidden
         data-reveal=""
-        className="pointer-events-none fixed inset-0 z-[80] mix-blend-difference motion-reduce:hidden"
+        className="pointer-events-none fixed inset-0 z-[80] motion-reduce:hidden"
       >
         {INTRO_LETTERS.map((position) => (
           <span key={position.left} className="absolute block overflow-hidden" style={position}>
-            <span className="block font-display text-[min(42svh,30vw)] leading-[0.9] font-bold tracking-[-0.02em] text-acento">
+            <span className="block font-display text-[min(42svh,30vw)] leading-[0.9] font-bold tracking-[-0.02em] text-intro-letra">
               {edition}
             </span>
           </span>

@@ -21,6 +21,9 @@
   /* Acento usado como texto o línea: en tema claro se oscurece para cumplir AA. */
   --color-acento-texto: #d1e132;
   --color-claro: #f2f1ec;
+  /* Intro del hero: fondo de la cortina y color de las letras gigantes. */
+  --color-intro: #89976f;
+  --color-intro-letra: #d3cd67;
 
   --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
   --animate-scroll-line: scroll-line 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
@@ -88,7 +91,7 @@
   inset: 0;
   z-index: 70;
   pointer-events: none;
-  background: var(--color-acento);
+  background: var(--color-intro);
   animation: hero-intro 0.9s cubic-bezier(0.76, 0, 0.24, 1) 4s both;
 }
 

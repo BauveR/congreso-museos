@@ -50,7 +50,7 @@ export const timeline: Record<Breakpoint, Keyframes> = {
  * ahí se usan tonos más oscuros para que la esfera siga viéndose.
  */
 export const sectionColors: Record<SectionId, string> = {
-  hero: '#d1e132', // lima de marca
+  hero: '#e2ce84', // arena dorada
   presentacion: '#a8e06b', // verde claro
   'por-que': '#7fd8be', // menta
   ponentes: '#e8eadf', // blanco cálido

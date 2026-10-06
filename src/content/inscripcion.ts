@@ -1,0 +1,183 @@
+/*
+ * Textos de inscripción, panel de administración y privacidad.
+ * Los textos legales son GENÉRICOS: sustituir los marcadores [ENTRE
+ * CORCHETES] y revisarlos con la entidad organizadora antes de publicar.
+ */
+
+export const legal = {
+  controller: '[NOMBRE DE LA ENTIDAD ORGANIZADORA]',
+  taxId: '[CIF]',
+  address: '[DIRECCIÓN POSTAL]',
+  contactEmail: '[CORREO DE CONTACTO]',
+}
+
+export const registrationText = {
+  pageTitle: 'Inscripción',
+  intro:
+    'Inscríbete en el V Congreso de Museos de Canarias. Necesitamos que inicies sesión para asociar la inscripción a tu correo y que puedas consultarla, modificarla o cancelarla después.',
+  backHome: 'Volver a la web',
+
+  signIn: {
+    title: 'Inicia sesión para inscribirte',
+    google: 'Continuar con Google',
+    emailLabel: 'O recibe un enlace de acceso en tu correo',
+    emailPlaceholder: 'tu@correo.com',
+    emailSend: 'Enviar enlace',
+    emailSent: 'Te hemos enviado un enlace de acceso. Ábrelo desde este mismo navegador.',
+    emailConfirmLabel: 'Confirma tu correo para completar el acceso',
+    emailConfirm: 'Acceder',
+    mockTitle: 'Modo de pruebas (sin Firebase)',
+    mockHelp: 'Acceso simulado: los datos se guardan en memoria del servidor de desarrollo y se pierden al reiniciarlo.',
+    mockName: 'Nombre y apellidos',
+    mockEmail: 'Correo',
+    mockAdmin: 'Entrar como administración',
+    mockSubmit: 'Entrar',
+    signedInAs: 'Sesión iniciada como',
+    signOut: 'Cerrar sesión',
+  },
+
+  sections: {
+    personal: 'Datos personales',
+    professional: 'Datos profesionales',
+    participation: 'Tipo de participación en el congreso',
+    attendance: 'Asistencia',
+    activities: 'Actividades complementarias',
+    certificate: 'Certificado',
+    accessibility: 'Accesibilidad',
+    food: 'Alergias e intolerancias alimentarias',
+    observations: 'Observaciones',
+    privacy: 'Protección de datos',
+  },
+
+  fields: {
+    firstName: 'Nombre',
+    lastName: 'Apellidos',
+    email: 'Correo electrónico',
+    emailHelp: 'Es el de tu cuenta: ahí recibirás la confirmación.',
+    phone: 'Teléfono',
+    phoneHelp: 'Con prefijo si no es de España (p. ej. +44 …).',
+    city: 'Ciudad de procedencia',
+    organization: 'Entidad / institución / organización',
+    jobTitle: 'Cargo o profesión',
+    participationType: 'Tipo de participación',
+    participationHelp: 'Nos ayuda a identificar a ponentes, moderadores y organización.',
+    participationPlaceholder: 'Elige una opción',
+    attendanceHelp: 'Marca los días a los que asistirás.',
+    remaining: (n: number) => (n === 1 ? 'Queda 1 plaza' : `Quedan ${n} plazas`),
+    full: 'Completo',
+    certificate: '¿Deseas certificado de asistencia?',
+    yes: 'Sí',
+    no: 'No',
+    idType: 'Tipo de documento',
+    idNumber: 'Número de documento',
+    idHelp: 'Solo para emitir el certificado a tu nombre.',
+    accessibility: '¿Tienes alguna necesidad específica de accesibilidad que debamos conocer para facilitar tu participación?',
+    optional: 'Opcional',
+    allergens: 'Marca los alérgenos que debamos tener en cuenta',
+    otherAllergy: 'Otra alergia o intolerancia',
+    diet: 'Preferencia alimentaria',
+    observations: 'Observaciones',
+  },
+
+  privacyInfo: [
+    ['Responsable', `${legal.controller} (${legal.taxId}).`],
+    ['Finalidad', 'Gestionar tu inscripción y participación en el congreso, enviarte comunicaciones sobre el mismo y, si lo solicitas, emitir tu certificado de asistencia.'],
+    ['Legitimación', 'Tu consentimiento y la ejecución de la relación derivada de tu inscripción. Los datos de salud (accesibilidad y alergias) solo con tu consentimiento explícito.'],
+    ['Destinatarios', 'No se cederán datos a terceros salvo obligación legal. Proveedores tecnológicos (alojamiento y correo) actúan como encargados del tratamiento.'],
+    ['Derechos', `Acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a ${legal.contactEmail}. Puedes reclamar ante la Agencia Española de Protección de Datos.`],
+  ] as [string, string][],
+  privacyMore: 'Información adicional en la',
+  privacyLink: 'política de privacidad',
+
+  consents: {
+    privacy: 'He leído y acepto la política de privacidad y el tratamiento de mis datos para gestionar la inscripción.',
+    healthData:
+      'Consiento expresamente el tratamiento de los datos de accesibilidad y alergias que he indicado, solo para adaptar el congreso a mis necesidades.',
+    image: 'Autorizo el uso de mi imagen en fotografías y grabaciones del congreso para su difusión. (Opcional)',
+    communications: 'Quiero recibir información sobre futuras ediciones y actividades. (Opcional)',
+  },
+
+  submitCreate: 'Enviar inscripción',
+  submitUpdate: 'Guardar cambios',
+  submitting: 'Enviando…',
+  errorSummary: 'Revisa los campos marcados.',
+  genericError: 'No se ha podido completar la operación. Inténtalo de nuevo.',
+
+  success: {
+    created: 'Inscripción confirmada',
+    updated: 'Cambios guardados',
+    emailSent: (email: string) => `Te hemos enviado la confirmación a ${email}.`,
+    emailFailed: 'La inscripción está guardada, pero no hemos podido enviarte el correo de confirmación.',
+    summary: 'Resumen',
+    edit: 'Modificar inscripción',
+    cancel: 'Cancelar inscripción',
+    cancelConfirm: 'Sí, cancelar mi inscripción',
+    cancelKeep: 'No, mantenerla',
+    cancelQuestion: '¿Seguro? Tus plazas quedarán libres para otras personas.',
+    cancelled: 'Tu inscripción se ha cancelado.',
+    newRegistration: 'Volver a inscribirme',
+  },
+}
+
+export const adminText = {
+  pageTitle: 'Administración',
+  forbidden: 'Esta cuenta no tiene acceso de administración.',
+  tabs: { sessions: 'Días y aforo', registrations: 'Inscritos' },
+
+  sessions: {
+    title: 'Título',
+    date: 'Fecha',
+    capacity: 'Aforo',
+    registered: 'Inscritos',
+    active: 'Activa',
+    save: 'Guardar',
+    saved: 'Guardado',
+    recount: 'Recalcular contadores',
+    recountHelp: 'Vuelve a contar los inscritos de cada día a partir de las inscripciones (por si hubiera algún desajuste).',
+    capacityHelp: 'El aforo no puede ser menor que los inscritos actuales.',
+  },
+
+  registrations: {
+    filters: 'Filtros',
+    session: 'Día',
+    allSessions: 'Todos los días',
+    type: 'Tipo de participación',
+    allTypes: 'Todos',
+    city: 'Ciudad',
+    certificate: 'Certificado',
+    any: 'Indiferente',
+    search: 'Buscar (nombre, correo, entidad)',
+    total: (n: number) => (n === 1 ? '1 inscripción' : `${n} inscripciones`),
+    export: 'Exportar CSV',
+    exporting: 'Exportando…',
+    empty: 'No hay inscripciones con estos filtros.',
+    columns: ['Nombre', 'Correo', 'Teléfono', 'Ciudad', 'Entidad', 'Tipo', 'Días', 'Certif.'],
+    details: 'Ver detalle',
+    hideDetails: 'Ocultar',
+    detailLabels: {
+      jobTitle: 'Cargo',
+      idDocument: 'Documento',
+      accessibility: 'Accesibilidad',
+      allergens: 'Alérgenos',
+      otherAllergy: 'Otra alergia',
+      diet: 'Dieta',
+      observations: 'Observaciones',
+      consents: 'Consentimientos (imagen / comunicaciones)',
+      dates: 'Alta / última modificación',
+    },
+  },
+}
+
+export const privacyPage = {
+  title: 'Política de privacidad',
+  updated: 'Texto genérico provisional. Pendiente de revisión por la entidad organizadora.',
+  sections: [
+    ['Responsable del tratamiento', `${legal.controller}, ${legal.taxId}, ${legal.address}. Contacto: ${legal.contactEmail}.`],
+    ['Datos que tratamos', 'Datos identificativos y de contacto, datos profesionales, días de asistencia, preferencias de certificado y, solo si nos los facilitas con tu consentimiento explícito, datos de accesibilidad y alergias o intolerancias alimentarias.'],
+    ['Finalidades', 'Gestionar la inscripción y la organización del congreso (aforo, acreditaciones, catering y accesibilidad), comunicarnos contigo sobre el evento, emitir certificados de asistencia y, si lo autorizas, difundir imágenes del congreso e informarte de futuras ediciones.'],
+    ['Base jurídica', 'Tu consentimiento (art. 6.1.a RGPD) y, para los datos de salud, tu consentimiento explícito (art. 9.2.a RGPD). Puedes retirarlo en cualquier momento sin que afecte a la licitud del tratamiento previo.'],
+    ['Conservación', 'Durante la organización del congreso y el tiempo necesario para emitir certificados y atender posibles responsabilidades. Los datos de salud se suprimen al finalizar el evento.'],
+    ['Destinatarios', 'No se ceden datos a terceros salvo obligación legal. Utilizamos proveedores tecnológicos (alojamiento, base de datos y correo electrónico) que actúan como encargados del tratamiento con las garantías exigidas.'],
+    ['Tus derechos', `Puedes ejercer los derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a ${legal.contactEmail}, y presentar una reclamación ante la Agencia Española de Protección de Datos (www.aepd.es).`],
+  ] as [string, string][],
+}

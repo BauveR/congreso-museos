@@ -23,7 +23,8 @@ export const GET = handler(async (request) => {
     'Consentimiento imagen', 'Consentimiento comunicaciones', 'Fecha de inscripción', 'Última modificación',
   ]
   const rows = registrations.map(({ email, data: d, createdAt, updatedAt }) => [
-    d.firstName, d.lastName, email, d.phone, d.city, d.organization, d.jobTitle,
+    // "+" inicial → "00": Excel lo leería como fórmula (y el CSV lo neutralizaría con un apóstrofo visible).
+    d.firstName, d.lastName, email, d.phone.replace(/^\+/, '00'), d.city, d.organization, d.jobTitle,
     PARTICIPATION_LABELS[d.participationType],
     ...sessions.map((s) => yesNo(d.sessionIds.includes(s.id))),
     yesNo(d.certificate),

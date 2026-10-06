@@ -149,10 +149,10 @@ export const site: SiteContent = {
   },
 
   registration: {
-    open: false,
+    open: true,
     headline: ['Reserva', 'tu plaza'],
     body: 'Texto de relleno que invita a inscribirse y resume condiciones y plazos.',
-    cta: { label: 'Inscribirme', href: '#', icon: 'ticket' },
+    cta: { label: 'Inscribirme', href: '/inscripcion', icon: 'ticket' },
     comingSoonLabel: 'Próximamente',
     comingSoonBody: 'Las inscripciones se abrirán en breve. Vuelve pronto.',
   },
@@ -172,6 +172,7 @@ export const site: SiteContent = {
       { label: 'LinkedIn', href: '#' },
       { label: 'YouTube', href: '#' },
     ],
-    legal: '© 2027 V Congreso de Museos de Canarias. Contenido provisional.',
+    legal: '© 2026 V Congreso de Museos de Canarias. Contenido provisional.',
+    privacy: { label: 'Política de privacidad', href: '/privacidad' },
   },
 }

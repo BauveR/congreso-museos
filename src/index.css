@@ -29,6 +29,8 @@
   --color-acento-contraste: #111311;
   /* Acento usado como texto o línea: en tema claro se oscurece para cumplir AA. */
   --color-acento-texto: #d1e132;
+  /* Errores de formulario (AA sobre fondo y superficie). */
+  --color-error: #ff8a7a;
   --color-claro: #f2f1ec;
   /* Intro del hero: fondo de la cortina y color de las letras gigantes. */
   --color-intro: #89976f;
@@ -66,6 +68,7 @@
   --color-texto: #111311;
   --color-texto-suave: #4a4f45;
   --color-acento-texto: #4d5800;
+  --color-error: #a3261c;
 }
 
 @layer base {

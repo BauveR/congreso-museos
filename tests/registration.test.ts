@@ -96,3 +96,12 @@ describe('esquema de inscripción', () => {
     expect(data.city).toBe('La Gomera')
   })
 })
+
+describe('mensajes', () => {
+  it('los errores genéricos salen en español', () => {
+    const result = registrationSchema.safeParse({ firstName: 'Ana' })
+    expect(result.success).toBe(false)
+    const messages = result.success ? [] : Object.values(fieldErrors(result.error))
+    expect(messages.join(' ')).not.toMatch(/Invalid input|expected/)
+  })
+})

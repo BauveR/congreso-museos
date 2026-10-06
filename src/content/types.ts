@@ -147,6 +147,7 @@ export interface FooterContent {
   socialLabel: string
   social: Link[]
   legal: string
+  privacy: Link
 }
 
 export interface UnderConstructionContent {

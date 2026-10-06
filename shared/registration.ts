@@ -1,5 +1,8 @@
 import { z } from 'zod'
 
+// Mensajes de error genéricos de zod en español (los específicos se definen abajo).
+z.config(z.locales.es())
+
 /*
  * Esquema de inscripción compartido por el navegador (validación inmediata)
  * y el servidor (validación definitiva). Es la única fuente de verdad de los

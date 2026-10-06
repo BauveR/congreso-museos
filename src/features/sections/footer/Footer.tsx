@@ -34,7 +34,12 @@ export function Footer() {
           </ul>
         </nav>
       </div>
-      <p className="wrap mt-12 text-sm text-texto-suave">{footer.legal}</p>
+      <p className="wrap mt-12 flex flex-wrap gap-x-6 gap-y-2 text-sm text-texto-suave">
+        <span>{footer.legal}</span>
+        <a href={footer.privacy.href} className="underline underline-offset-4 hover:text-acento-texto">
+          {footer.privacy.label}
+        </a>
+      </p>
     </Section>
   )
 }

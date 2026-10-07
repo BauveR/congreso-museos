@@ -1,6 +1,6 @@
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useImperativeHandle, useMemo, useRef, type Ref } from 'react'
-import { Color, type Group, type ShaderMaterial } from 'three'
+import { Color, MathUtils, type Group, type ShaderMaterial } from 'three'
 import type { SectionId } from '../../../content/types'
 import { useBreakpoint } from '../../../hooks/useBreakpoint'
 import { usePageVisible } from '../../../hooks/usePageVisible'
@@ -8,7 +8,7 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion'
 import type { ModelController } from '../ModelController'
 import { scrollState } from '../scrollState'
 import { sampleSections } from '../timeline'
-import { lerpPose, PULSE, SPHERE_BLUR, sectionColors, timeline } from '../timeline.config'
+import { lerpPose, PULSE, SPHERE_BLUR, sectionColors, THRESHOLD_FILL, timeline } from '../timeline.config'
 import { useContinuousRender } from '../useContinuousRender'
 import { useFitCamera } from '../useFitCamera'
 
@@ -95,6 +95,7 @@ export function SphereModel({ ref }: { ref: Ref<ModelController> }) {
   const pulsing = !reducedMotion && visible
   useContinuousRender(PULSE.fps, pulsing)
 
+  const fillColor = useMemo(() => new Color(THRESHOLD_FILL.color), [])
   const colors = useMemo(
     () => Object.fromEntries(Object.entries(sectionColors).map(([id, hex]) => [id, new Color(hex)])) as Record<SectionId, Color>,
     [],
@@ -126,17 +127,29 @@ export function SphereModel({ ref }: { ref: Ref<ModelController> }) {
         const pose = sample
           ? lerpPose(keyframes[sample.from], keyframes[sample.to], sample.t)
           : keyframes[scrollState.section]
-        g.position.set(pose.x * view.halfWidth, pose.y * view.halfHeight, 0)
-        g.scale.setScalar(pose.scale)
+        // Umbral: hacia el centro, más grande, más opaca y del color claro.
+        const fill = scrollState.fill
+        const lerp = MathUtils.lerp
+        g.position.set(lerp(pose.x, 0, fill) * view.halfWidth, lerp(pose.y, 0, fill) * view.halfHeight, 0)
+        g.scale.setScalar(lerp(pose.scale, THRESHOLD_FILL.scale, fill))
+        uniforms.sphere.uEdge.value = lerp(SPHERE_BLUR.edge, THRESHOLD_FILL.edge, fill)
+        uniforms.sphere.uFalloff.value = lerp(SPHERE_BLUR.falloff, THRESHOLD_FILL.falloff, fill)
 
         const color = uniforms.sphere.uColor.value
         if (sample) color.lerpColors(colors[sample.from], colors[sample.to], sample.t)
         else color.copy(colors[scrollState.section])
+        color.lerp(fillColor, fill)
         uniforms.halo.uColor.value.copy(color)
       },
     }),
-    [keyframes, view, colors, uniforms],
+    [keyframes, view, colors, fillColor, uniforms],
   )
+
+  // Con la esfera activa, ella hace la transición del umbral (sin el velo CSS).
+  useEffect(() => {
+    document.documentElement.dataset.sphere = ''
+    return () => void delete document.documentElement.dataset.sphere
+  }, [])
 
   // Al cambiar de breakpoint o de tamaño hay que recolocar el modelo.
   useEffect(() => invalidate(), [keyframes, view, invalidate])

@@ -25,6 +25,7 @@ export const timeline: Record<Breakpoint, Keyframes> = {
     ponentes: pose({ y: 0.3, scale: 0.5 }),
     cinetico: pose({ scale: 0.9 }),
     umbral: pose({ scale: 0.3 }),
+    acceso: pose({ y: -0.3, scale: 0.6 }),
     descripcion: pose({ scale: 0.6 }),
     agenda: pose({ scale: 0.5 }),
     inscripciones: pose({ y: 0.2, scale: 0.8 }),
@@ -37,6 +38,7 @@ export const timeline: Record<Breakpoint, Keyframes> = {
     ponentes: pose({ x: -0.5, y: 0.2, scale: 0.6 }),
     cinetico: pose({ x: 0.5, scale: 1 }),
     umbral: pose({ scale: 0.3 }),
+    acceso: pose({ x: -0.55, y: 0.2, scale: 0.8 }),
     descripcion: pose({ x: 0.55, scale: 0.8 }),
     agenda: pose({ x: 0.6, scale: 0.7 }),
     inscripciones: pose({ y: 0.1, scale: 0.9 }),
@@ -56,6 +58,7 @@ export const sectionColors: Record<SectionId, string> = {
   ponentes: '#e8eadf', // blanco cálido
   cinetico: '#d1e132', // lima: momento fuerte
   umbral: '#f2f1ec', // se funde con el velo claro de la transición
+  acceso: '#c8d832', // lima: aparece al recogerse el relleno claro
   descripcion: '#c8d832', // lima
   agenda: '#2f6f5e', // verde profundo
   inscripciones: '#8a9a00', // lima oscuro
@@ -75,6 +78,14 @@ export const PULSE = { amplitude: 0.04, period: 2.6, fps: 30 }
  * - `haloIntensity`: opacidad base del halo (el pulso la hace respirar).
  */
 export const SPHERE_BLUR = { edge: 1, falloff: 2.6, haloSize: 4.2, haloSoftness: 0, haloIntensity: 0.6 }
+
+/**
+ * Umbral: la esfera crece desde el centro hasta cubrir la pantalla con el
+ * color claro (hace de transición al tema claro).
+ * - `scale`: tamaño final (cubre las esquinas también en móvil vertical).
+ * - `edge` / `falloff`: desenfoque final, casi opaco con un borde suave.
+ */
+export const THRESHOLD_FILL = { scale: 5, edge: 0.15, falloff: 1, color: '#f2f1ec' }
 
 /** Interpola entre las poses de dos secciones. */
 export function lerpPose(a: Pose, b: Pose, t: number): Pose {

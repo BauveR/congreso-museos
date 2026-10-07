@@ -19,6 +19,8 @@ export interface ScrollState {
   progress: number
   /** Saltar sin amortiguación en el próximo frame (navegación con fundido). */
   snap: boolean
+  /** Umbral: cuánto llena la esfera la pantalla (0–1). Lo escribe Threshold. */
+  fill: number
 }
 
 export const scrollState: ScrollState = {
@@ -28,6 +30,7 @@ export const scrollState: ScrollState = {
   sectionProgress: 0.5,
   progress: 0,
   snap: false,
+  fill: 0,
 }
 
 const listeners = new Set<() => void>()

@@ -14,15 +14,18 @@ export function Hero() {
   return (
     <Section id="hero" className="flex min-h-svh flex-col pt-20 pb-8">
       <div className="edge @container">
-        <HeroWordmark edition={hero.edition} name={hero.eventName} lines={hero.eventNameLines} />
-        <p
-          data-hero-after=""
-          className="mt-[6svh] text-right font-display text-[clamp(1rem,2vw,2.25rem)] leading-none font-bold uppercase"
-        >
-          <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
-          <span aria-hidden> · </span>
-          {hero.location}
-        </p>
+        <HeroWordmark edition={hero.edition} name={hero.eventName} headline={hero.headline} />
+        <div className="mt-[5svh] grid gap-8 lg:grid-cols-[1fr_40%] lg:items-start lg:gap-12">
+          <p data-hero-after="" className="font-display text-[clamp(1rem,1.6vw,1.75rem)] leading-tight font-bold uppercase">
+            {hero.location}, <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
+          </p>
+          {/* Caja de presentación: texto blanco sobre un velo del fondo (legible encima de la esfera). */}
+          <div data-hero-after="" className="flex flex-col gap-4 rounded-2xl border border-borde/70 bg-fondo/70 p-6 text-base leading-relaxed text-texto sm:p-8">
+            {hero.intro.map((paragraph) => (
+              <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="edge mt-auto grid gap-6 pt-12 lg:grid-cols-[auto_1fr_auto] lg:items-end lg:gap-16">

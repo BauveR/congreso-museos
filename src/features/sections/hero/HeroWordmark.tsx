@@ -42,11 +42,10 @@ interface Parts {
 function playIntro({ gsap }: Motion, { layer, title, chars, after }: Parts, curtain: HTMLElement, onDone: () => void) {
   const wrappers = [...layer.children] as HTMLElement[]
   const glyphs = wrappers.map((w) => w.firstElementChild as HTMLElement)
-  const [first, ...rest] = chars
+  const [first] = chars
   if (!first) return
 
   curtain.style.animation = 'none'
-  gsap.set(first, { opacity: 0 })
 
   const target = () => first.getBoundingClientRect()
   const titleColor = getComputedStyle(title).color
@@ -80,18 +79,18 @@ function playIntro({ gsap }: Motion, { layer, title, chars, after }: Parts, curt
       },
       1.9,
     )
+    // Tres se desvanecen por el camino; la última, al llegar, se funde con el titular que aparece.
     .to(wrappers.slice(1), { opacity: 0, duration: 0.6, ease: 'power1.in' }, 2.2)
-    .set(first, { opacity: 1 }, 3)
-    .set(layer, { display: 'none' }, 3)
-    .from(rest, { yPercent: 100, duration: 0.7, ease: 'power3.out', stagger: 0.02 }, 2.95)
+    .to(wrappers[0]!, { opacity: 0, duration: 0.4, ease: 'power1.out' }, 2.85)
+    .set(layer, { display: 'none' }, 3.25)
+    .from(chars, { yPercent: 100, duration: 0.7, ease: 'power3.out', stagger: 0.012 }, 2.85)
     .from(after, { opacity: 0, y: 20, duration: 0.6, ease: 'power2.out', stagger: 0.08 }, 3.3)
 }
 
 /**
- * Con el scroll, cada letra del wordmark sube a su velocidad y desaparece; al
- * volver arriba reaparece. Se crea al terminar la entrada (la intro deja la
- * primera letra a opacidad 0 hasta que aterriza la V) y con punto de partida
- * explícito, para que su inicio sea siempre "letra en su sitio y visible".
+ * Con el scroll, cada letra del titular sube a su velocidad y desaparece; al
+ * volver arriba reaparece. Se crea al terminar la entrada y con punto de
+ * partida explícito, para que su inicio sea siempre "letra en su sitio y visible".
  */
 function scatterOnScroll({ gsap }: Motion, { section, chars }: Parts) {
   gsap.fromTo(
@@ -108,21 +107,21 @@ function scatterOnScroll({ gsap }: Motion, { section, chars }: Parts) {
 }
 
 interface HeroWordmarkProps {
+  /** Edición ("V"): las letras gigantes de la intro. */
   edition: string
-  /** Nombre completo, para el nombre accesible del h1. */
+  /** Nombre del congreso, para el nombre accesible del h1. */
   name: string
-  lines: [string, string, string]
+  headline: string
 }
 
 /**
- * Wordmark del hero en tres líneas, igual en móvil y escritorio. El tamaño es
- * el menor entre lo que cabe a lo ancho y a lo alto:
- * - Ancho: `cqw` (el contenedor padre debe tener `@container`). La línea más
- *   larga, "DE CANARIAS", mide 5,45 em en Kola Regular mayúsculas: con 13,6
- *   ocupa ~40 % del ancho. No bajar de ~5,6 o se saldría.
- * - Alto: 10,5svh, para que el bloque no domine la primera pantalla.
+ * Titular del hero (lema del congreso) en una sola línea a todo el ancho
+ * desde md; en móvil se parte en varias líneas. El tamaño usa `cqw` (el
+ * contenedor padre debe tener `@container`): el lema mide 26,23 em en Kola
+ * Regular mayúsculas, 26,6 deja margen. Recalcular si cambia el texto.
+ * El h1 se anuncia como "V Congreso de Museos de Canarias. <lema>".
  */
-export function HeroWordmark({ edition, name, lines }: HeroWordmarkProps) {
+export function HeroWordmark({ edition, name, headline }: HeroWordmarkProps) {
   const titleRef = useRef<HTMLHeadingElement>(null)
   const layerRef = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
@@ -191,14 +190,10 @@ export function HeroWordmark({ edition, name, lines }: HeroWordmarkProps) {
       <h1
         ref={titleRef}
         data-reveal=""
-        aria-label={`${edition} ${name}`}
-        className="font-wordmark text-[min(calc(100cqw/13.6),10.5svh)] leading-[0.9] font-normal tracking-[-0.02em] whitespace-nowrap text-acento uppercase"
+        aria-label={`${edition} ${name}. ${headline}`}
+        className="font-wordmark text-[clamp(1.75rem,8vw,3rem)] leading-[0.95] font-normal tracking-[-0.02em] text-balance text-acento uppercase md:text-[calc(100cqw/26.6)] md:whitespace-nowrap"
       >
-        {edition} {lines[0]}
-        <br />
-        {lines[1]}
-        <br />
-        {lines[2]}
+        {headline}
       </h1>
     </>
   )

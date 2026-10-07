@@ -60,11 +60,16 @@ export const site: SiteContent = {
   hero: {
     edition: 'V',
     eventName: 'Congreso de Museos de Canarias',
-    eventNameLines: ['Congreso', 'de Museos', 'de Canarias'],
-    dateLabel: '19 y 20 noviembre',
-    // Sin año todavía: fecha HTML válida sin año (--MM-DD).
-    dateTime: '--11-19',
-    location: 'La Gomera',
+    headline: 'Museos en un tiempo de cambios. Diagnosis y perspectiva',
+    dateLabel: '19-21 de noviembre de 2026',
+    dateTime: '2026-11-19',
+    location: 'San Sebastián de La Gomera',
+    intro: [
+      'Los museos de Canarias atraviesan en la actualidad un momento decisivo, marcado por profundas transformaciones sociales, culturales, tecnológicas y territoriales que interpelan a sus funciones comunes y a los modos de relación con la ciudadanía o, lo que es lo mismo, a su razón de ser. En este contexto, la celebración del V Congreso de Museos de Canarias, que va a celebrarse entre el 19 y 21 de noviembre de 2026 en la isla de La Gomera, se concibe como un espacio estratégico de reflexión colectiva, debate profesional y construcción compartida de horizontes futuros.',
+      'Lejos de entenderse únicamente como contenedores de bienes culturales, los museos se reconocen hoy como agentes activos del territorio, instituciones vivas que participan en la configuración de identidades, los procesos educativos, la mediación cultural y las dinámicas de desarrollo local. Esta evolución conceptual, alineada con los debates internacionales más recientes en torno a foros o congresos del sector, adquiere en las islas una dimensión específica por los efectos que generan sus desajustes territoriales, una diversidad cultural evidente, la historia diferenciada, una clara fragilidad medioambiental y, sobre todo, la necesidad de implementar modelos de desarrollo sostenibles.',
+      'La elección de La Gomera como sede del V Congreso no es casual. Se trata de una isla donde la relación entre patrimonio cultural, paisaje, memoria colectiva y comunidad local resulta especialmente visible. En ella, la escala territorial permite pensar el museo no como una institución aislada, sino como parte de un ecosistema cultural interdependiente. Desde luego, dicha circunstancia se revela como una oportunidad única para La Gomera.',
+      'El V Congreso de Museos aspira, por tanto, a convertirse en un laboratorio de ideas desde el que repensar el papel de los museos de Canarias en el siglo XXI.',
+    ],
     scrollHint: ['Desliza', 'para explorar'],
     descriptor: ['Encuentro profesional sobre museos,', 'patrimonio y públicos'],
     ctas: [

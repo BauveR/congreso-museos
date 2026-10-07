@@ -1,16 +1,17 @@
 import { site } from '../content/site'
 import { Background } from '../features/hero3d/Background'
-import { Agenda } from '../features/sections/agenda/Agenda'
-import { Carousel } from '../features/sections/carousel/Carousel'
+import { Access } from '../features/sections/access/Access'
+import { Committees } from '../features/sections/committees/Committees'
 import { Description } from '../features/sections/description/Description'
 import { Footer } from '../features/sections/footer/Footer'
 import { Hero } from '../features/sections/hero/Hero'
-import { Intro } from '../features/sections/intro/Intro'
 import { KineticHeadline } from '../features/sections/kinetic/KineticHeadline'
 import { Nav } from '../features/sections/nav/Nav'
+import { Organization } from '../features/sections/organization/Organization'
+import { Participants } from '../features/sections/participants/Participants'
+import { Program } from '../features/sections/program/Program'
 import { Registration } from '../features/sections/registration/Registration'
 import { Threshold } from '../features/sections/threshold/Threshold'
-import { WhyAttend } from '../features/sections/why-attend/WhyAttend'
 import { useExitFade } from '../hooks/useExitFade'
 import { useSectionTriggers } from '../hooks/useSectionTriggers'
 
@@ -30,13 +31,14 @@ export function Landing() {
       <Nav />
       <main id="main">
         <Hero />
-        <Intro />
-        <WhyAttend />
-        <Carousel />
-        <KineticHeadline />
+        <Committees />
+        <Organization />
+        <Program />
+        <Participants />
         <Threshold />
+        <Access />
         <Description />
-        <Agenda />
+        <KineticHeadline />
         <Registration />
       </main>
       <Footer />

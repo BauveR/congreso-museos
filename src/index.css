@@ -32,11 +32,16 @@
   /* Errores de formulario (AA sobre fondo y superficie). */
   --color-error: #ffa092;
   --color-claro: #f2f1ec;
+  /* Verde salvia: títulos de sección (4,04:1 sobre el fondo: solo texto grande) y cortina de la intro. */
+  --color-salvia: #89976f;
+  /* Salvia para texto: en tema claro se oscurece (5,15:1 sobre el claro). */
+  --color-salvia-texto: var(--color-salvia);
   /* Intro del hero: fondo de la cortina y color de las letras gigantes. */
-  --color-intro: #89976f;
+  --color-intro: var(--color-salvia);
   --color-intro-letra: #d3cd67;
 
-  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-sheet-in: sheet-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-fade-in: fade-in 0.4s ease-out 0.2s both;
   --animate-scroll-line: scroll-line 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 
   @keyframes scroll-line {
@@ -48,9 +53,15 @@
     }
   }
 
-  @keyframes marquee {
-    to {
-      transform: translateX(-50%);
+  @keyframes sheet-in {
+    from {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
     }
   }
 
@@ -68,6 +79,7 @@
   --color-texto: #111311;
   --color-texto-suave: #4a4f45;
   --color-acento-texto: #4d5800;
+  --color-salvia-texto: #5c6a45;
   --color-error: #a3261c;
 }
 
@@ -128,21 +140,38 @@
 /* Ancho completo con margen lateral fluido (nav y hero, como en lenis.dev). */
 @utility edge {
   width: 100%;
-  padding-inline: max(1rem, 2.2vw);
+  padding-inline: var(--wrap-gutter);
 }
 
-/* Contenedor de página: ancho máximo y márgenes laterales mobile first. */
+/*
+ * Ancho de página compartido:
+ * - --wrap-gutter: margen lateral, el mismo que el nav y el hero (edge).
+ * - --wrap-max: ancho máximo del contenido; hasta ahí los bordes izquierdos
+ *   de hero y secciones coinciden, y por encima el contenido se centra.
+ * - --wrap-inset: distancia real del borde de la pantalla al contenido (para
+ *   alinear elementos a ancho completo, como el carrusel o la agenda apilada).
+ * Los bloques de texto largos se limitan aparte a la medida de lectura (max-w-prose).
+ */
+:root {
+  --wrap-gutter: max(1rem, 2.2vw);
+  --wrap-max: 90rem;
+  --wrap-inset: max(var(--wrap-gutter), calc((100vw - var(--wrap-max)) / 2 + var(--wrap-gutter)));
+}
+
+/* Contenedor de página (mobile first): ancho máximo y margen lateral fluido. */
 @utility wrap {
   width: 100%;
-  max-width: 72rem;
+  max-width: var(--wrap-max);
   margin-inline: auto;
-  padding-inline: 1rem;
+  padding-inline: var(--wrap-gutter);
+}
 
-  @media (width >= 40rem) {
-    padding-inline: 1.5rem;
-  }
+/* Hoja inferior abierta (participantes en móvil): la página no se desplaza detrás. */
+html:has(dialog[data-scroll-lock][open]) {
+  overflow: hidden;
+}
 
-  @media (width >= 64rem) {
-    padding-inline: 2rem;
-  }
+/* Fondo de la hoja inferior. */
+dialog[data-scroll-lock]::backdrop {
+  background: rgb(0 0 0 / 0.55);
 }

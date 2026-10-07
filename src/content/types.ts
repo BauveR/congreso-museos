@@ -4,6 +4,7 @@
  */
 export type SectionId =
   | 'hero'
+  | 'acceso'
   | 'presentacion'
   | 'por-que'
   | 'ponentes'
@@ -63,36 +64,82 @@ export interface HeroContent {
   poster: ImageAsset
 }
 
-export interface IntroContent {
-  title: string
-  subtitle: string
-  primaryCta: Link
-  secondaryCta: Link
+export interface CommitteeMember {
+  name: string
+  /** Cargo, institución y lugar. */
+  affiliation: string
 }
 
-export interface FeatureCard {
-  title: string
-  body: string
+export interface CommitteesContent {
+  scientific: {
+    title: string
+    intro: string
+    members: CommitteeMember[]
+  }
+  organizing: {
+    title: string
+    groups: { role: string; members: CommitteeMember[] }[]
+  }
 }
 
-export interface WhyAttendContent {
+/** Bloque de texto enriquecido: párrafo o lista. */
+export type RichBlock = { p: string } | { list: string[] }
+
+/** Tarjeta de la sección de organización (sesión con alegatorios o mesa plenaria). */
+export interface OrganizationCard {
+  /** Antetítulo pequeño (p. ej. "Mesa plenaria I"). */
+  kicker?: string
+  title: string
+  /** Frase destacada bajo el título. */
+  lead?: string
+  body?: string[]
+  /** Alegatorios: título y sus temas. */
+  groups?: { title: string; points: string[] }[]
+}
+
+export interface OrganizationContent {
+  title: string
+  intro: string[]
+  /** Tramos: texto fijo a la izquierda y tarjetas que suben a la derecha. */
+  steps: { title: string; body: RichBlock[]; cards: OrganizationCard[] }[]
+}
+
+export interface ParticipantAuthor {
+  name: string
+  /** Semblanza (uno o varios párrafos); vacía si falta. */
+  bio?: string[]
+}
+
+export interface Participant {
+  /** Antetítulo de la tarjeta: tipo de conferencia o mesa. */
+  kicker?: string
+  /** Institución o procedencia. */
+  org?: string
+  authors: ParticipantAuthor[]
+  title?: string
+  /** Resumen; el primer párrafo sirve de vista previa. */
+  abstract?: string[]
+}
+
+export interface ParticipantGroup {
+  id: string
+  label: string
+  items: Participant[]
+}
+
+export interface ParticipantsContent {
   title: string
   intro: string
-  cards: FeatureCard[]
-}
-
-export interface CarouselItem {
-  name: string
-  role: string
-  image: ImageAsset
-  /** Video opcional que se reproduce al hover en dispositivos con puntero fino. */
-  video?: string
-}
-
-export interface CarouselContent {
-  bridge: string
-  ariaLabel: string
-  items: CarouselItem[]
+  groups: ParticipantGroup[]
+  /** Textos de interfaz. */
+  pending: string
+  bioLabel: string
+  abstractLabel: string
+  close: string
+  prev: string
+  next: string
+  /** «y N más» en las tarjetas con muchos autores. */
+  moreAuthors: (n: number) => string
 }
 
 export interface KineticContent {
@@ -119,15 +166,43 @@ export interface DescriptionContent {
 /** Titular de dos líneas; la segunda va en color de acento. */
 export type TwoLineHeadline = [string, string]
 
-export interface AgendaItem {
+/** Una actividad de una franja horaria (puede haber varias en paralelo). */
+export interface ProgramEntry {
   title: string
-  time: string
-  description: string
+  /** Líneas de detalle: ponente, responsables, coordinación… */
+  notes?: string[]
+  /** Elementos listados (p. ej. lugares de las visitas libres). */
+  list?: string[]
 }
 
-export interface AgendaContent {
+/** Comunicación de una mesa plenaria. */
+export interface ProgramTalk {
+  authors: string
   title: string
-  items: AgendaItem[]
+}
+
+export interface ProgramItem {
+  time: string
+  entries: ProgramEntry[]
+  talks?: ProgramTalk[]
+}
+
+export interface ProgramDay {
+  /** Fecha ISO (AAAA-MM-DD). */
+  date: string
+  /** Etiqueta corta para los botones de día en móvil. */
+  short: string
+  label: string
+  parts: { title: string; items: ProgramItem[] }[]
+}
+
+export interface ProgramContent {
+  title: string
+  /** Texto de los botones de día (móvil). */
+  daysLabel: string
+  showTalks: (n: number) => string
+  hideTalks: string
+  days: ProgramDay[]
 }
 
 export interface RegistrationContent {
@@ -138,6 +213,13 @@ export interface RegistrationContent {
   cta: Link
   comingSoonLabel: string
   comingSoonBody: string
+}
+
+export interface AccessContent {
+  title: string
+  intro: string
+  /** Texto mientras carga el estado de la sesión. */
+  loading: string
 }
 
 export interface FooterContent {
@@ -162,17 +244,20 @@ export interface UnderConstructionContent {
 export interface SiteContent {
   meta: { title: string; description: string; lang: string }
   a11y: { skipLink: string }
+  /** Textos de interfaz reutilizables (p. ej. desplegables). */
+  ui: { readMore: string; readLess: string }
   preloader: { label: string }
   underConstruction: UnderConstructionContent
   nav: NavContent
   hero: HeroContent
-  intro: IntroContent
-  whyAttend: WhyAttendContent
-  carousel: CarouselContent
+  committees: CommitteesContent
+  organization: OrganizationContent
+  participants: ParticipantsContent
   kinetic: KineticContent
   threshold: ThresholdContent
   description: DescriptionContent
-  agenda: AgendaContent
+  program: ProgramContent
+  access: AccessContent
   registration: RegistrationContent
   footer: FooterContent
 }

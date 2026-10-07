@@ -1,5 +1,6 @@
 import { DisplayHeading } from '../../../components/DisplayHeading'
 import { Expandable } from '../../../components/ExpandableText'
+import { ScrollLit } from '../../../components/ScrollLitText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import type { CommitteeMember } from '../../../content/types'
@@ -46,7 +47,9 @@ export function Committees() {
       <div className="wrap grid gap-16 lg:grid-cols-2 lg:gap-20">
         <article className="max-w-prose">
           <DisplayHeading>{scientific.title}</DisplayHeading>
-          <p className="mt-6 leading-relaxed text-pretty text-texto">{scientific.intro}</p>
+          <ScrollLit className="mt-6">
+            <p className="leading-relaxed text-pretty text-texto">{scientific.intro}</p>
+          </ScrollLit>
           <Expandable
             className="mt-8"
             head={<MemberList members={scientific.members.slice(0, SCIENTIFIC_VISIBLE)} />}

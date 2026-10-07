@@ -10,9 +10,9 @@ export type SectionId =
   | 'ponentes'
   | 'cinetico'
   | 'umbral'
-  | 'descripcion'
+  | 'previos'
+  | 'saber-mas'
   | 'agenda'
-  | 'inscripciones'
   | 'contacto'
 
 /** Icono del botón (ver el mapa en components/ButtonLink.tsx). */
@@ -116,6 +116,8 @@ export interface Participant {
   /** Institución o procedencia. */
   org?: string
   authors: ParticipantAuthor[]
+  /** Semblanza común a todos los autores (antes de las individuales). */
+  sharedBio?: string[]
   title?: string
   /** Resumen; el primer párrafo sirve de vista previa. */
   abstract?: string[]
@@ -147,24 +149,44 @@ export interface KineticContent {
   fragments: string[]
 }
 
-export interface TextSegment {
-  text: string
-  /** Se muestra en color de acento. */
-  highlight?: boolean
-}
-
 /** Transición con zoom a través de la palabra y paso a tema claro. */
 export interface ThresholdContent {
   word: string
 }
 
-export interface DescriptionContent {
-  /** Párrafo por segmentos para poder destacar palabras. */
-  body: TextSegment[]
+/** Comunicación o ponencia asociada a una mesa técnica. */
+export interface TechnicalTablePaper {
+  /** Frase que la presenta («Dado su contenido, en ella tiene cabida…»). */
+  intro: string
+  item: Participant
 }
 
-/** Titular de dos líneas; la segunda va en color de acento. */
-export type TwoLineHeadline = [string, string]
+export interface TechnicalTable {
+  kicker: string
+  title: string
+  place: string
+  date: string
+  /** Fecha ISO para <time>. */
+  dateTime: string
+  participantsIntro: string
+  participants: string[]
+  paper?: TechnicalTablePaper
+}
+
+export interface PreviousContent {
+  title: string
+  /** Párrafos que se «encienden» palabra a palabra con el scroll. */
+  body: string[]
+  /** Entrada a las tarjetas. */
+  lead: string
+  /** Mesas técnicas: tarjetas apiladas. */
+  tables: TechnicalTable[]
+  /** Textos de interfaz. */
+  readPaper: string
+  showAll: (n: number) => string
+  showLess: string
+}
+
 
 /** Una actividad de una franja horaria (puede haber varias en paralelo). */
 export interface ProgramEntry {
@@ -205,14 +227,41 @@ export interface ProgramContent {
   days: ProgramDay[]
 }
 
-export interface RegistrationContent {
-  /** Flag: con `false` se muestra el estado "Próximamente". */
-  open: boolean
-  headline: TwoLineHeadline
-  body: string
+export interface ContactContent {
+  title: string
+  intro: string
   cta: Link
-  comingSoonLabel: string
-  comingSoonBody: string
+  email: string
+  address: string
+}
+
+export interface TopicBlock {
+  /** Subtítulo del bloque (los alegatorios tienen uno o dos). */
+  heading?: string
+  paragraphs: string[]
+}
+
+/** Mesa plenaria o alegatorio: preguntas de partida y texto extenso. */
+export interface DebateTopic {
+  kicker: string
+  title: string
+  questions?: string[]
+  blocks: TopicBlock[]
+}
+
+export interface MoreInfoContent {
+  title: string
+  body: string[]
+  plenaryLabel: string
+  plenary: DebateTopic[]
+  sideLabel: string
+  /** Frase que introduce los alegatorios. */
+  sideLead: string
+  side: DebateTopic[]
+  questionsLabel: string
+  topicsLabel: string
+  readMore: string
+  close: string
 }
 
 export interface AccessContent {
@@ -223,11 +272,6 @@ export interface AccessContent {
 }
 
 export interface FooterContent {
-  headlines: { lines: TwoLineHeadline; align: 'left' | 'right' }[]
-  title: string
-  emailLabel: string
-  email: string
-  address: string
   socialLabel: string
   social: Link[]
   legal: string
@@ -245,7 +289,7 @@ export interface SiteContent {
   meta: { title: string; description: string; lang: string }
   a11y: { skipLink: string }
   /** Textos de interfaz reutilizables (p. ej. desplegables). */
-  ui: { readMore: string; readLess: string }
+  ui: { readMore: string; readLess: string; scrollToContinue: string; close: string }
   preloader: { label: string }
   underConstruction: UnderConstructionContent
   nav: NavContent
@@ -255,9 +299,10 @@ export interface SiteContent {
   participants: ParticipantsContent
   kinetic: KineticContent
   threshold: ThresholdContent
-  description: DescriptionContent
+  previous: PreviousContent
+  moreInfo: MoreInfoContent
   program: ProgramContent
   access: AccessContent
-  registration: RegistrationContent
+  contact: ContactContent
   footer: FooterContent
 }

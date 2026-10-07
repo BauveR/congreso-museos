@@ -26,9 +26,9 @@ export const timeline: Record<Breakpoint, Keyframes> = {
     cinetico: pose({ scale: 0.9 }),
     umbral: pose({ scale: 0.3 }),
     acceso: pose({ y: -0.3, scale: 0.6 }),
-    descripcion: pose({ scale: 0.6 }),
+    previos: pose({ scale: 0.6 }),
+    'saber-mas': pose({ y: -0.2, scale: 0.6 }),
     agenda: pose({ scale: 0.5 }),
-    inscripciones: pose({ y: 0.2, scale: 0.8 }),
     contacto: pose({ scale: 0.6 }),
   },
   desktop: {
@@ -39,16 +39,16 @@ export const timeline: Record<Breakpoint, Keyframes> = {
     cinetico: pose({ x: 0.5, scale: 1 }),
     umbral: pose({ scale: 0.3 }),
     acceso: pose({ x: -0.55, y: 0.2, scale: 0.8 }),
-    descripcion: pose({ x: 0.55, scale: 0.8 }),
+    previos: pose({ x: 0.55, scale: 0.8 }),
+    'saber-mas': pose({ x: -0.5, y: 0.25, scale: 0.8 }),
     agenda: pose({ x: 0.6, scale: 0.7 }),
-    inscripciones: pose({ y: 0.1, scale: 0.9 }),
     contacto: pose({ x: -0.5, scale: 0.6 }),
   },
 }
 
 /**
  * Color de la esfera en cada sección (se interpola al pasar de una a otra).
- * Hasta "umbral" el fondo es oscuro; desde "descripcion" es claro, así que
+ * Hasta "umbral" el fondo es oscuro; desde "acceso" es claro, así que
  * ahí se usan tonos más oscuros para que la esfera siga viéndose.
  */
 export const sectionColors: Record<SectionId, string> = {
@@ -59,9 +59,9 @@ export const sectionColors: Record<SectionId, string> = {
   cinetico: '#d1e132', // lima: momento fuerte
   umbral: '#f2f1ec', // se funde con el velo claro de la transición
   acceso: '#c8d832', // lima: aparece al recogerse el relleno claro
-  descripcion: '#c8d832', // lima
+  previos: '#89976f', // salvia
+  'saber-mas': '#c8d832', // lima
   agenda: '#2f6f5e', // verde profundo
-  inscripciones: '#8a9a00', // lima oscuro
   contacto: '#111311', // casi negro
 }
 

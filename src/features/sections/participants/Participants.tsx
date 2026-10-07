@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { DisplayHeading } from '../../../components/DisplayHeading'
+import { ScrollLitText } from '../../../components/ScrollLitText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { useBreakpoint } from '../../../hooks/useBreakpoint'
@@ -31,7 +32,7 @@ export function Participants() {
     >
       <header className="wrap">
         <DisplayHeading>{participants.title}</DisplayHeading>
-        <p className="mt-6 max-w-prose leading-relaxed text-pretty">{participants.intro}</p>
+        <ScrollLitText paragraphs={[participants.intro]} className="mt-6 text-texto" />
       </header>
 
       <div className="mt-14 lg:mt-20">

@@ -153,7 +153,7 @@ export function ChoiceGroup({
 export function FormSection({ title, className = '', children }: { title: string; className?: string; children: ReactNode }) {
   return (
     <section className={`flex flex-col gap-5 border-t border-borde pt-8 ${className}`}>
-      <h2 className="text-xl font-bold">{title}</h2>
+      <h2 className="text-xl font-bold text-salvia-texto">{title}</h2>
       {children}
     </section>
   )

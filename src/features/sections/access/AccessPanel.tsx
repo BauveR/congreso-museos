@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { loadMotion } from '../../../app/motion'
 import { DisplayHeading } from '../../../components/DisplayHeading'
+import { ScrollLitText } from '../../../components/ScrollLitText'
 import { registrationText } from '../../../content/inscripcion'
 import { site } from '../../../content/site'
 import { AuthProvider } from '../../../lib/auth/AuthProvider'
@@ -64,13 +65,13 @@ function AccessFlow() {
       {!signedIn && (
         <header className="lg:pt-6">
           <DisplayHeading>{access.title}</DisplayHeading>
-          <p className="mt-6 max-w-prose text-lg leading-relaxed text-pretty">{access.intro}</p>
+          <ScrollLitText paragraphs={[access.intro]} className="mt-6" />
         </header>
       )}
 
       <div
         ref={card}
-        className={`w-full rounded-3xl border border-borde bg-superficie p-5 sm:p-8 ${signedIn ? 'lg:p-12' : 'max-w-xl lg:justify-self-end'}`}
+        className={`theme-dark w-full rounded-3xl p-5 sm:p-8 ${signedIn ? 'lg:p-12' : 'max-w-xl lg:justify-self-end'}`}
       >
         <div key={signedIn ? 'flow' : 'access'} className="animate-fade-in motion-reduce:animate-none">
           {auth.loading && (
@@ -80,8 +81,8 @@ function AccessFlow() {
           )}
           {!auth.loading && !auth.user && <AuthCard framed={false} />}
           {auth.user && (
-            <div className="mx-auto max-w-7xl">
-              <p className="mb-8 flex flex-wrap items-center gap-x-3 border-b border-borde pb-6 text-sm text-texto-suave">
+            <div>
+              <p className="mb-2 flex flex-wrap items-center gap-x-3 text-sm text-texto-suave">
                 <span>
                   {registrationText.signIn.signedInAs} <strong className="text-texto">{auth.user.email}</strong>
                 </span>

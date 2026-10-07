@@ -5,6 +5,10 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion'
 /** Retardo (ms) del fallback CSS de la cortina (.hero-intro en index.css). */
 const CURTAIN_FALLBACK_DELAY = 4000
 
+/** Escritura del texto de presentación: pausa máx. entre palabras y duración total (s). */
+const TYPE_STAGGER = 0.035
+const TYPE_TOTAL = 2.5
+
 /**
  * Posición de las letras gigantes de la intro (esquina superior izquierda),
  * en dos filas desplazadas como en lenis.dev.
@@ -141,6 +145,20 @@ export function HeroWordmark({ edition, name, headline }: HeroWordmarkProps) {
         chars: split.chars as HTMLElement[],
         after: section.querySelectorAll('[data-hero-after]'),
       }
+      // Texto de presentación: oculto palabra a palabra hasta que se «escribe».
+      const typeWords = Array.from(section.querySelectorAll('[data-hero-type] p')).flatMap(
+        (p) => motion.SplitText.create(p, { type: 'words' }).words,
+      )
+      motion.gsap.set(typeWords, { opacity: 0 })
+      const typeIn = () =>
+        motion.gsap.to(typeWords, {
+          opacity: 1,
+          duration: 0.2,
+          ease: 'none',
+          // Ritmo de escritura con un total acotado, sea cual sea la longitud.
+          stagger: Math.min(TYPE_STAGGER, TYPE_TOTAL / Math.max(typeWords.length, 1)),
+        })
+
       // Las máscaras solo sirven para la entrada: luego la dispersión debe poder salir de ellas.
       const releaseMasks = () => split.masks.forEach((m) => ((m as HTMLElement).style.overflow = 'visible'))
 
@@ -153,6 +171,7 @@ export function HeroWordmark({ edition, name, headline }: HeroWordmarkProps) {
       const finish = () => {
         releaseMasks()
         scatterOnScroll(motion, parts)
+        typeIn()
       }
 
       if (curtain && curtainPending) {

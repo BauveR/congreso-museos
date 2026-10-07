@@ -32,5 +32,5 @@ export function plateFontSize(names: string[]): string {
 }
 
 export function hasDetails(item: Participant): boolean {
-  return Boolean(item.abstract?.length) || item.authors.some((a) => a.bio?.length)
+  return Boolean(item.abstract?.length || item.sharedBio?.length) || item.authors.some((a) => a.bio?.length)
 }

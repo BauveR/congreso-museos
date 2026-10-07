@@ -23,7 +23,10 @@ export function Hero() {
           {/* Caja de presentación: texto blanco sobre un velo del fondo (legible
               encima de la esfera). En móvil, primer párrafo + «Leer más». */}
           <div data-hero-after="" className="rounded-2xl border border-borde/70 bg-fondo/70 p-6 text-base leading-relaxed text-pretty text-texto sm:p-8">
-            <ExpandableText paragraphs={hero.intro} />
+            {/* data-hero-type: el texto se escribe palabra a palabra al acabar la intro (HeroWordmark). */}
+            <div data-hero-type="">
+              <ExpandableText paragraphs={hero.intro} />
+            </div>
           </div>
         </div>
       </div>

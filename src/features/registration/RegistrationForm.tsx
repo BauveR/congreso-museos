@@ -24,7 +24,7 @@ const f = t.fields
 
 /** Orden de los campos para enfocar el primer error. */
 const FIELD_ORDER = [
-  'firstName', 'lastName', 'phone', 'city', 'organization', 'jobTitle', 'participationType', 'sessionIds',
+  'firstName', 'lastName', 'city', 'phone', 'organization', 'jobTitle', 'participationType', 'sessionIds',
   'idDocument.number', 'accessibility', 'allergens', 'otherAllergy', 'observations', 'consents.healthData', 'consents.privacy',
 ]
 
@@ -45,11 +45,13 @@ interface Props {
  * (orden de lectura: columna izquierda y luego derecha) y no se parten.
  * Avisos, protección de datos y envío ocupan el ancho completo.
  */
-const WIDE = 'lg:block lg:columns-2 lg:gap-x-16 lg:[&>*]:mb-10 lg:[&>section]:break-inside-avoid'
+const WIDE = 'lg:block lg:columns-2 lg:gap-x-16 lg:[&>*]:mb-10 lg:[&>*:empty]:mb-0 lg:[&>section]:break-inside-avoid'
 const SPAN = 'lg:[column-span:all]'
 
 export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUpdate, onSubmit, wide = false }: Props) {
   const span = wide ? SPAN : ''
+  /** En dos columnas anchas, pares de campos lado a lado. */
+  const pair = wide ? 'grid gap-5 lg:grid-cols-2' : 'contents'
   const [values, setValues] = useState(initial)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [formError, setFormError] = useState<string | null>(null)
@@ -147,17 +149,17 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
         <div className="grid gap-5 sm:grid-cols-2">
           <TextInput id="firstName" label={f.firstName} value={values.firstName} onChange={(e) => set('firstName', e.target.value)} error={err('firstName')} autoComplete="given-name" maxLength={LIMITS.name} required />
           <TextInput id="lastName" label={f.lastName} value={values.lastName} onChange={(e) => set('lastName', e.target.value)} error={err('lastName')} autoComplete="family-name" maxLength={LIMITS.name} required />
-        </div>
-        <TextInput id="email" label={f.email} value={email} readOnly help={f.emailHelp} />
-        <div className="grid gap-5 sm:grid-cols-2">
-          <TextInput id="phone" label={f.phone} type="tel" value={values.phone} onChange={(e) => set('phone', e.target.value)} error={err('phone')} help={f.phoneHelp} autoComplete="tel" required />
+          <TextInput id="email" label={f.email} value={email} readOnly help={f.emailHelp} />
           <TextInput id="city" label={f.city} value={values.city} onChange={(e) => set('city', e.target.value)} error={err('city')} autoComplete="address-level2" maxLength={LIMITS.city} required />
+          <TextInput id="phone" label={f.phone} type="tel" value={values.phone} onChange={(e) => set('phone', e.target.value)} error={err('phone')} help={f.phoneHelp} autoComplete="tel" required />
         </div>
       </FormSection>
 
       <FormSection title={t.sections.professional}>
+        <div className={pair}>
         <TextInput id="organization" label={f.organization} value={values.organization} onChange={(e) => set('organization', e.target.value)} error={err('organization')} autoComplete="organization" maxLength={LIMITS.organization} required />
         <TextInput id="jobTitle" label={f.jobTitle} value={values.jobTitle} onChange={(e) => set('jobTitle', e.target.value)} error={err('jobTitle')} autoComplete="organization-title" maxLength={LIMITS.jobTitle} required />
+        </div>
       </FormSection>
 
       <FormSection title={t.sections.participation}>
@@ -183,7 +185,7 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
 
       <FormSection title={t.sections.attendance}>
         <ChoiceGroup id="sessionIds" legend={t.sections.attendance} help={f.attendanceHelp} error={err('sessionIds')}>
-          {days.map(sessionChoice)}
+          <div className={wide ? 'grid gap-3 lg:grid-cols-3' : 'contents'}>{days.map(sessionChoice)}</div>
         </ChoiceGroup>
         {activities.length > 0 && (
           <ChoiceGroup id="activities" legend={t.sections.activities}>
@@ -219,12 +221,13 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
 
       <FormSection title={t.sections.food}>
         <ChoiceGroup id="allergens" legend={f.allergens} error={err('allergens')}>
-          <div className="grid gap-x-6 sm:grid-cols-2">
+          <div className={`grid gap-x-6 sm:grid-cols-2 ${wide ? 'lg:grid-cols-3' : ''}`}>
             {ALLERGENS.map((a) => (
               <Choice key={a.id} label={a.label} checked={values.allergens.includes(a.id)} onChange={() => set('allergens', toggle(values.allergens, a.id))} />
             ))}
           </div>
         </ChoiceGroup>
+        <div className={pair}>
         <TextInput id="otherAllergy" label={f.otherAllergy} optional={f.optional} value={values.otherAllergy} onChange={(e) => set('otherAllergy', e.target.value)} error={err('otherAllergy')} maxLength={LIMITS.otherAllergy} />
         <SelectInput id="diet" label={f.diet} value={values.diet} onChange={(e) => set('diet', e.target.value as FormValues['diet'])}>
           {DIETS.map((d) => (
@@ -233,6 +236,7 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
             </option>
           ))}
         </SelectInput>
+        </div>
       </FormSection>
 
       <FormSection title={t.sections.observations}>

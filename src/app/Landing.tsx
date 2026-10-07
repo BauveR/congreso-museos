@@ -1,16 +1,17 @@
 import { site } from '../content/site'
 import { Background } from '../features/hero3d/Background'
 import { Access } from '../features/sections/access/Access'
+import { Contact } from '../features/sections/contact/Contact'
 import { Committees } from '../features/sections/committees/Committees'
-import { Description } from '../features/sections/description/Description'
 import { Footer } from '../features/sections/footer/Footer'
 import { Hero } from '../features/sections/hero/Hero'
 import { KineticHeadline } from '../features/sections/kinetic/KineticHeadline'
+import { MoreInfo } from '../features/sections/more-info/MoreInfo'
 import { Nav } from '../features/sections/nav/Nav'
 import { Organization } from '../features/sections/organization/Organization'
+import { Previous } from '../features/sections/previous/Previous'
 import { Participants } from '../features/sections/participants/Participants'
 import { Program } from '../features/sections/program/Program'
-import { Registration } from '../features/sections/registration/Registration'
 import { Threshold } from '../features/sections/threshold/Threshold'
 import { useExitFade } from '../hooks/useExitFade'
 import { useSectionTriggers } from '../hooks/useSectionTriggers'
@@ -37,9 +38,10 @@ export function Landing() {
         <Participants />
         <Threshold />
         <Access />
-        <Description />
+        <Previous />
+        <MoreInfo />
         <KineticHeadline />
-        <Registration />
+        <Contact />
       </main>
       <Footer />
     </>

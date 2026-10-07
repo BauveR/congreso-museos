@@ -1,4 +1,6 @@
 import { participants } from './participantes'
+import { previous } from './previos'
+import { moreInfo } from './saberMas'
 import { program } from './programa'
 import type { SiteContent } from './types'
 
@@ -21,6 +23,8 @@ export const site: SiteContent = {
   ui: {
     readMore: 'Leer más',
     readLess: 'Leer menos',
+    scrollToContinue: 'Desplázate para continuar',
+    close: 'Cerrar',
   },
 
   preloader: {
@@ -46,7 +50,7 @@ export const site: SiteContent = {
     linksRight: [
       // Provisional: aún no hay sección de información práctica; apunta a la sede.
       { label: 'Información práctica', href: '#umbral' },
-      { label: 'Inscripción', href: '#inscripciones' },
+      { label: 'Inscripción', href: '#acceso' },
       { label: 'Contacto', href: '#contacto' },
     ],
   },
@@ -67,7 +71,7 @@ export const site: SiteContent = {
     scrollHint: ['Desliza', 'para explorar'],
     descriptor: ['Encuentro profesional sobre museos,', 'patrimonio y públicos'],
     ctas: [
-      { label: 'Inscripciones', href: '#inscripciones', icon: 'ticket' },
+      { label: 'Inscripciones', href: '#acceso', icon: 'ticket' },
       { label: 'Agenda', href: '#agenda', icon: 'calendar' },
     ],
     poster: {
@@ -247,22 +251,18 @@ export const site: SiteContent = {
   participants,
 
   kinetic: {
-    fragments: ['Una frase', 'partida en', 'fragmentos que', 'se revelan', 'con el scroll.'],
+    fragments: ['Museos', 'en un tiempo', 'de cambios.', 'Diagnosis', 'y perspectiva.'],
   },
 
   threshold: {
     word: 'INSCRÍBETE',
   },
 
-  description: {
-    body: [
-      { text: 'Párrafo descriptivo de relleno sobre el ' },
-      { text: 'enfoque del congreso', highlight: true },
-      { text: ', su historia y los ' },
-      { text: 'ejes temáticos', highlight: true },
-      { text: '. Explica a qué público se dirige y qué se llevará cada persona que asista. Debe ocupar entre tres y seis líneas en escritorio.' },
-    ],
-  },
+  // Mesas técnicas previas en previos.ts (es largo).
+  previous,
+
+  // Mesas plenarias y alegatorios en extenso en saberMas.ts.
+  moreInfo,
 
   // Programa completo en programa.ts (es largo).
   program,
@@ -274,24 +274,16 @@ export const site: SiteContent = {
     loading: 'Cargando…',
   },
 
-  registration: {
-    open: true,
-    headline: ['Reserva', 'tu plaza'],
-    body: 'Texto de relleno que invita a inscribirse y resume condiciones y plazos.',
-    cta: { label: 'Inscribirme', href: '/inscripcion', icon: 'ticket' },
-    comingSoonLabel: 'Próximamente',
-    comingSoonBody: 'Las inscripciones se abrirán en breve. Vuelve pronto.',
+  // Contacto (datos provisionales: sustituir correo y dirección reales).
+  contact: {
+    title: 'Contacto',
+    intro: 'Para cualquier consulta sobre el congreso, las inscripciones o las comunicaciones, escríbenos.',
+    cta: { label: 'Escríbenos', href: 'mailto:contacto@example.com', icon: 'mail' },
+    email: 'contacto@example.com',
+    address: 'Dirección de relleno, 00000 Ciudad',
   },
 
   footer: {
-    headlines: [
-      { lines: ['Nos vemos', 'muy pronto'], align: 'left' },
-      { lines: ['Abierto a ponentes', 'y patrocinadores'], align: 'right' },
-    ],
-    title: 'Contacto',
-    emailLabel: 'Escríbenos',
-    email: 'contacto@example.com',
-    address: 'Dirección de relleno, 00000 Ciudad',
     socialLabel: 'Redes sociales',
     social: [
       { label: 'Instagram', href: '#' },

@@ -1,6 +1,7 @@
 import { DisplayHeading } from '../../../components/DisplayHeading'
 import { Expandable, ExpandableText } from '../../../components/ExpandableText'
 import { RichText } from '../../../components/RichText'
+import { ScrollLit } from '../../../components/ScrollLitText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import type { OrganizationCard, RichBlock } from '../../../content/types'
@@ -64,7 +65,9 @@ export function Organization() {
       <div className="wrap">
         <header className="max-w-prose">
           <DisplayHeading>{organization.title}</DisplayHeading>
-          <ExpandableText paragraphs={organization.intro} className="mt-6 leading-relaxed text-pretty" />
+          <ScrollLit className="mt-6">
+            <ExpandableText paragraphs={organization.intro} className="leading-relaxed text-pretty" />
+          </ScrollLit>
         </header>
 
         {/* Pausa de lectura tras la cabecera antes de que entren los tramos
@@ -78,9 +81,10 @@ export function Organization() {
                 <h3 className="sticky top-16 z-10 -mx-4 self-start bg-fondo/95 px-4 py-3 font-wordmark text-2xl font-normal text-salvia-texto sm:-mx-6 sm:px-6 lg:static lg:mx-0 lg:bg-transparent lg:p-0 lg:text-4xl">
                   {step.title}
                 </h3>
-                <div className="lg:mt-6">
+                {/* Texto que se enciende con el scroll (como Previos o Para saber más). */}
+                <ScrollLit className="lg:mt-6">
                   <StepBody blocks={step.body} />
-                </div>
+                </ScrollLit>
               </div>
               <div className="flex flex-col gap-6 lg:gap-10">
                 {step.cards.map((card) => (

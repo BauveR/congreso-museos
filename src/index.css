@@ -42,6 +42,7 @@
 
   --animate-sheet-in: sheet-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   --animate-fade-in: fade-in 0.4s ease-out 0.2s both;
+  --animate-wheel: wheel 1.6s ease-in-out infinite;
   --animate-scroll-line: scroll-line 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 
   @keyframes scroll-line {
@@ -56,6 +57,22 @@
   @keyframes sheet-in {
     from {
       transform: translateY(100%);
+    }
+  }
+
+  /* Rueda del ratón en las indicaciones de «desplázate». */
+  @keyframes wheel {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    70% {
+      transform: translateY(0.45rem);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 0;
     }
   }
 
@@ -174,4 +191,23 @@ html:has(dialog[data-scroll-lock][open]) {
 /* Fondo de la hoja inferior. */
 dialog[data-scroll-lock]::backdrop {
   background: rgb(0 0 0 / 0.55);
+}
+
+/*
+ * Bloque con la paleta oscura aunque la página esté en tema claro (tarjeta de
+ * inscripción tras el umbral): texto blanco sobre #2f3529 y detalles
+ * (bordes, títulos) en salvia. Redefine los tokens solo dentro del bloque.
+ */
+@utility theme-dark {
+  --color-fondo: #2f3529;
+  --color-superficie: #3a4133;
+  --color-borde: #89976f;
+  --color-texto: #f2f3ee;
+  --color-texto-suave: #c9ccc2;
+  --color-acento-texto: #d1e132;
+  --color-error: #ffa092;
+  --color-salvia-texto: #89976f;
+  color-scheme: dark;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
 }

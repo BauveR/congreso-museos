@@ -35,3 +35,25 @@ copiado tal cual; las correcciones hechas están marcadas como **(corregido)**.
 - **AIDER (Mesa I):** «el protagonismo de la comunidad en las que se **encentran**» → «encuentran» **(corregido)**; queda «en **las** que» → «en **la** que».
 - **María Cantó Domínguez:** «Gestiónde Museos» → «Gestión de Museos» **(corregido, salto del PDF)**.
 - **Guiones:** «─» (carácter de dibujo de cajas) sustituido por la raya «—» **(corregido)**.
+
+## Previos (mesas técnicas)
+
+- **Mesa 2 (Turismo):** «Cuenta con la **participaron** de los representantes…» → «participación» **(corregido)**.
+- **Mesa 3 (Arqueología):** «CONSERVACIÓN **YCONSULTA**» → «conservación y consulta» **(corregido, salto del PDF)**.
+- **Tiempos verbales:** las mesas se fechan en 2026 (9 jun., 29 sep., 27 oct.), pero se mezcla presente («participan», «cuenta con») y futuro («se contempla»). El texto general dice «posibilitó» (pasado).
+- **Comunicación de la Mesa 2 (Isabel Santos Gómez y Zara Rodríguez Martín) y ponencia marco de la Mesa 3 (María del Carmen Cruz de Mercadal):** no aparecen en el programa ni entre las comunicaciones de Participantes. ¿Deben añadirse allí?
+- **Mesa 2, resumen:** «El caso del Museo Insular de La Palma se presenta**, así** como un ejemplo representativo…» (sobra la coma o falta texto).
+- **Mesa 3, resumen:** «Diez años después **a** aquel primer congreso» → «después **de** aquel».
+- **Semblanzas de la Mesa 2:** el texto común («Las autoras desarrollan…», «Ambas desarrollan…») se muestra como semblanza compartida antes de las individuales; en las individuales se ha quitado «Isabel Santos Gómez es…» / «Zara Rodríguez Martín es…» porque el nombre ya encabeza cada una **(adaptado)**.
+
+## Para saber más (mesas plenarias y alegatorios)
+
+- **Texto de entrada:** «en nuestro **entono**» → «entorno» **(corregido)**. «la participación **a** los debates» → ¿«en los debates»?
+- **Mesa plenaria I:** se titula «Narrativas y medios» (aquí y en Organización) y «Narrativa y medios» en el programa.
+- **Mesa plenaria III:** «insular—culturales» → «insular —culturales» (espacio antes de la raya) **(corregido)**.
+- **Alegatorio I.2:** «cráneos humanos **perteneciente** a las antiguas culturas de **la cada** isla» → «pertenecientes… de cada isla»; «hace **más un** siglo» → «más de un siglo»; «El Museo Arqueológico de Tenerife» (¿actual Museo de Naturaleza y Arqueología, MUNA?).
+- **Alegatorio II.1:** «uno de los campos patrimoniales que mayor complejidad» (falta verbo: «que mayor complejidad presentan»). Subtítulo con punto final («…en los museos.»): se ha quitado **(corregido)**.
+- **Alegatorio II.2:** «reconocer **una** práctica no es neutra… sino que está **determinado**» → «reconocer que la conservación no es una práctica neutra… determinada»; «priorizado **determinados unos** relatos»; «muchos centros **que llamados** museos» → «llamados museos».
+- **Alegatorio III.1:** «No limitarse a la exhibición… sino **a** actuar» (concordancia); «siendo mayoritaria en casi todas las islas» (redundante).
+- **Alegatorio III.2:** «El **conversatorio** invitará…» (el resto del texto habla de «alegatorio» o «mesa»); «LPCC» sin desarrollar (¿Ley 11/2019 de Patrimonio Cultural de Canarias?).
+- **Signos de interrogación:** varias preguntas empiezan tras punto sin mayúscula ni separación («…desde el museo ¿Se ha planteado…», «…mediación ¿Es suficiente…»); se han dejado como en el original.

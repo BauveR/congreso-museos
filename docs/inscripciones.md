@@ -13,7 +13,10 @@ Funciona en dos modos (variables `VITE_DATA_MODE` y `DATA_MODE`):
 npm run dev
 ```
 
-- `/inscripcion`: formulario (entra con cualquier nombre y correo).
+- Landing, tras «INSCRÍBETE»: crear cuenta o entrar. En mock las cuentas
+  con contraseña se guardan solo en ese navegador, y «Continuar con Google»
+  entra con una cuenta de prueba.
+- `/inscripcion`: formulario (mismo acceso que en la landing).
 - `/admin`: panel (marca «Entrar como administración»).
 - Los correos se muestran en la terminal (`MAIL_PROVIDER=console`).
 - `npm test`: pruebas de validaciones, aforo, CSV y endpoints.
@@ -23,8 +26,11 @@ npm run dev
 1. **Proyecto** en <https://console.firebase.google.com> → añadir app web.
    Copiar su configuración a `VITE_FIREBASE_*`.
 2. **Authentication** → Métodos de acceso: activar **Google** y
-   **Correo electrónico → Enlace de correo electrónico**. En «Dominios
-   autorizados», añadir el dominio de Vercel.
+   **Correo electrónico/contraseña** (el acceso de la web pide nombre,
+   apellidos, correo y contraseña). El **enlace de correo electrónico** solo
+   lo usa ya el panel de administración (opcional). En «Dominios
+   autorizados», añadir el dominio de Vercel. En «Plantillas», revisar en
+   español el correo de **restablecer contraseña**.
 3. **Firestore** → crear base de datos (modo producción, región `eur3` o
    `europe-southwest1`). En «Reglas», pegar el contenido de `firestore.rules`
    y publicar.

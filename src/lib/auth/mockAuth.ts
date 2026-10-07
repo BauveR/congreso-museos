@@ -40,3 +40,41 @@ export function mockToken(user: MockUser) {
   const base64 = btoa(String.fromCharCode(...new TextEncoder().encode(json)))
   return 'mock.' + base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
+
+const ACCOUNTS_KEY = 'congreso.mockAccounts'
+
+interface MockAccount {
+  name: string
+  password: string
+}
+
+function loadAccounts(): Record<string, MockAccount> {
+  try {
+    return JSON.parse(localStorage.getItem(ACCOUNTS_KEY) ?? '{}') as Record<string, MockAccount>
+  } catch {
+    return {}
+  }
+}
+
+/**
+ * Cuentas con contraseña simuladas (solo en este navegador). Reproduce los
+ * errores de Firebase para probar los mensajes. Lanza el código del error.
+ */
+export function mockPasswordAccount(mode: 'signUp' | 'signIn', email: string, password: string, name = ''): string {
+  const key = email.trim().toLowerCase()
+  const accounts = loadAccounts()
+  const existing = accounts[key]
+  if (mode === 'signUp') {
+    if (existing) throw new Error('auth/email-already-in-use')
+    if (password.length < 6) throw new Error('auth/weak-password')
+    accounts[key] = { name, password }
+    try {
+      localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts))
+    } catch {
+      // Sin almacenamiento: la cuenta dura lo que la sesión.
+    }
+    return name
+  }
+  if (!existing || existing.password !== password) throw new Error('auth/invalid-credential')
+  return existing.name
+}

@@ -119,6 +119,37 @@ export const registrationText = {
   },
 }
 
+/** Acceso y estado de la inscripción en la landing (tras el umbral). */
+export const accessText = {
+  tabs: { signUp: 'Crear cuenta', signIn: 'Ya tengo cuenta' },
+  google: 'Continuar con Google',
+  or: 'o con tu correo',
+  firstName: 'Nombre',
+  lastName: 'Apellidos',
+  email: 'Correo electrónico',
+  password: 'Contraseña',
+  passwordHelp: 'Mínimo 6 caracteres.',
+  showPassword: 'Mostrar contraseña',
+  hidePassword: 'Ocultar contraseña',
+  submitSignUp: 'Crear cuenta',
+  submitSignIn: 'Entrar',
+  forgot: '¿Has olvidado tu contraseña?',
+  forgotNeedsEmail: 'Escribe tu correo arriba y vuelve a pulsar.',
+  resetSent: (email: string) => `Si existe una cuenta con ${email}, te hemos enviado un enlace para crear una contraseña nueva.`,
+  mockNote: 'Modo de pruebas: las cuentas se guardan solo en este navegador.',
+  errors: {
+    'auth/email-already-in-use': 'Ya existe una cuenta con este correo. Entra desde «Ya tengo cuenta».',
+    'auth/invalid-credential': 'Correo o contraseña incorrectos.',
+    'auth/wrong-password': 'Correo o contraseña incorrectos.',
+    'auth/user-not-found': 'Correo o contraseña incorrectos.',
+    'auth/invalid-email': 'El correo no es válido.',
+    'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres.',
+    'auth/too-many-requests': 'Demasiados intentos. Espera unos minutos y vuelve a probar.',
+    'auth/popup-blocked': 'El navegador ha bloqueado la ventana de Google. Permite las ventanas emergentes e inténtalo de nuevo.',
+    'auth/network-request-failed': 'Sin conexión. Revisa tu red e inténtalo de nuevo.',
+  } as Record<string, string>,
+}
+
 export const adminText = {
   pageTitle: 'Administración',
   forbidden: 'Esta cuenta no tiene acceso de administración.',

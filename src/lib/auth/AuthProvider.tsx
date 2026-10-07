@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { AuthContext } from './context'
 import { EMAIL_LINK_KEY, getFirebaseAuth } from './firebaseAuth'
-import { loadMockUser, mockToken, mockUid, saveMockUser, type MockUser } from './mockAuth'
-import type { AuthApi, AuthUser } from './types'
+import { loadMockUser, mockPasswordAccount, mockToken, mockUid, saveMockUser, type MockUser } from './mockAuth'
+import type { AuthApi, AuthUser, SignUpInput } from './types'
 
 const MODE: AuthApi['mode'] = import.meta.env.VITE_DATA_MODE === 'firebase' ? 'firebase' : 'mock'
 
@@ -93,10 +93,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await firebaseSignOut(auth)
   }, [])
 
+  const mockSignIn = useCallback((input: { name: string; email: string; admin: boolean }) => {
+    const mock: MockUser = {
+      uid: mockUid(input.email),
+      email: input.email.trim().toLowerCase(),
+      displayName: input.name.trim(),
+      admin: input.admin,
+    }
+    saveMockUser(mock)
+    setUser(mock)
+    setIsAdmin(mock.admin)
+  }, [])
+
   const signInWithGoogle = useCallback(async () => {
+    if (MODE === 'mock') {
+      mockSignIn({ name: 'Cuenta Google de prueba', email: 'prueba.google@gmail.com', admin: false })
+      return
+    }
     const [{ GoogleAuthProvider, signInWithPopup }, auth] = await Promise.all([import('firebase/auth'), getFirebaseAuth()])
     await signInWithPopup(auth, new GoogleAuthProvider())
-  }, [])
+  }, [mockSignIn])
 
   const sendEmailLink = useCallback(async (email: string) => {
     const [{ sendSignInLinkToEmail }, auth] = await Promise.all([import('firebase/auth'), getFirebaseAuth()])
@@ -111,16 +127,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     window.history.replaceState(null, '', window.location.pathname)
   }, [])
 
-  const mockSignIn = useCallback((input: { name: string; email: string; admin: boolean }) => {
-    const mock: MockUser = {
-      uid: mockUid(input.email),
-      email: input.email.trim().toLowerCase(),
-      displayName: input.name.trim(),
-      admin: input.admin,
-    }
-    saveMockUser(mock)
-    setUser(mock)
-    setIsAdmin(mock.admin)
+  const signUpWithPassword = useCallback(
+    async ({ firstName, lastName, email, password }: SignUpInput) => {
+      const name = `${firstName.trim()} ${lastName.trim()}`.trim()
+      if (MODE === 'mock') {
+        mockPasswordAccount('signUp', email, password, name)
+        mockSignIn({ name, email, admin: false })
+        return
+      }
+      const [{ createUserWithEmailAndPassword, updateProfile }, auth] = await Promise.all([import('firebase/auth'), getFirebaseAuth()])
+      const { user: created } = await createUserWithEmailAndPassword(auth, email.trim(), password)
+      await updateProfile(created, { displayName: name })
+      // onAuthStateChanged llegó antes del nombre: actualizarlo.
+      setUser({ uid: created.uid, email: created.email ?? email.trim(), displayName: name })
+    },
+    [mockSignIn],
+  )
+
+  const signInWithPassword = useCallback(
+    async (email: string, password: string) => {
+      if (MODE === 'mock') {
+        const name = mockPasswordAccount('signIn', email, password)
+        mockSignIn({ name, email, admin: false })
+        return
+      }
+      const [{ signInWithEmailAndPassword }, auth] = await Promise.all([import('firebase/auth'), getFirebaseAuth()])
+      await signInWithEmailAndPassword(auth, email.trim(), password)
+    },
+    [mockSignIn],
+  )
+
+  const resetPassword = useCallback(async (email: string) => {
+    if (MODE === 'mock') return
+    const [{ sendPasswordResetEmail }, auth] = await Promise.all([import('firebase/auth'), getFirebaseAuth()])
+    await sendPasswordResetEmail(auth, email.trim())
   }, [])
 
   const value = useMemo<AuthApi>(
@@ -132,12 +172,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       getIdToken,
       signOut,
       signInWithGoogle,
+      signUpWithPassword,
+      signInWithPassword,
+      resetPassword,
       sendEmailLink,
       pendingEmailLink,
       completeEmailLink,
       mockSignIn,
     }),
-    [user, isAdmin, loading, getIdToken, signOut, signInWithGoogle, sendEmailLink, pendingEmailLink, completeEmailLink, mockSignIn],
+    [user, isAdmin, loading, getIdToken, signOut, signInWithGoogle, signUpWithPassword, signInWithPassword, resetPassword, sendEmailLink, pendingEmailLink, completeEmailLink, mockSignIn],
   )
 
   return <AuthContext value={value}>{children}</AuthContext>

@@ -1,4 +1,5 @@
 import { ButtonLink } from '../../../components/ButtonLink'
+import { ExpandableText } from '../../../components/ExpandableText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { HeroWordmark } from './HeroWordmark'
@@ -19,11 +20,10 @@ export function Hero() {
           <p data-hero-after="" className="font-display text-[clamp(1rem,1.6vw,1.75rem)] leading-tight font-bold uppercase">
             {hero.location}, <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
           </p>
-          {/* Caja de presentación: texto blanco sobre un velo del fondo (legible encima de la esfera). */}
-          <div data-hero-after="" className="flex flex-col gap-4 rounded-2xl border border-borde/70 bg-fondo/70 p-6 text-base leading-relaxed text-texto sm:p-8">
-            {hero.intro.map((paragraph) => (
-              <p key={paragraph.slice(0, 32)}>{paragraph}</p>
-            ))}
+          {/* Caja de presentación: texto blanco sobre un velo del fondo (legible
+              encima de la esfera). En móvil, primer párrafo + «Leer más». */}
+          <div data-hero-after="" className="rounded-2xl border border-borde/70 bg-fondo/70 p-6 text-base leading-relaxed text-pretty text-texto sm:p-8">
+            <ExpandableText paragraphs={hero.intro} />
           </div>
         </div>
       </div>

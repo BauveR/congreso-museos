@@ -1,0 +1,114 @@
+import { ChevronRight } from 'lucide-react'
+import { useEffect, useId, useRef, type TransitionEvent } from 'react'
+import { loadMotion } from '../../../app/motion'
+import { site } from '../../../content/site'
+import type { Participant } from '../../../content/types'
+import { NamePlate } from './NamePlate'
+import { ParticipantDetails } from './ParticipantDetails'
+import { hasDetails } from './plate'
+
+interface ParticipantCardProps {
+  item: Participant
+  accent: boolean
+  /** Escritorio: la tarjeta se despliega en línea; móvil: abre la hoja inferior. */
+  inline: boolean
+  expanded: boolean
+  onOpen: () => void
+  onClose: () => void
+}
+
+const scrollBehavior = (): ScrollBehavior =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+
+/**
+ * Tarjeta de participante. Cerrada: nombre en Kola (zona de la foto), título y
+ * dos líneas del resumen. En escritorio se despliega a lo ancho (unas cinco
+ * tarjetas) mostrando el texto completo a la derecha del nombre; el panel
+ * tiene ancho fijo y la tarjeta lo destapa al crecer (sin recolocar el texto).
+ */
+export function ParticipantCard({ item, accent, inline, expanded, onOpen, onClose }: ParticipantCardProps) {
+  const { participants, ui } = site
+  const card = useRef<HTMLLIElement>(null)
+  const button = useRef<HTMLButtonElement>(null)
+  const detailsId = useId()
+  const open = inline && expanded
+  const readable = hasDetails(item)
+  const preview = item.abstract?.[0]
+
+  // Llevar la tarjeta abierta al inicio de la fila.
+  const align = () => card.current?.scrollIntoView({ behavior: scrollBehavior(), block: 'nearest', inline: 'start' })
+
+  useEffect(() => {
+    if (open) align()
+  }, [open])
+
+  const onTransitionEnd = (e: TransitionEvent) => {
+    if (e.target !== e.currentTarget || e.propertyName !== 'width') return
+    if (open) align()
+    // La altura de la sección cambia: recolocar los efectos de las siguientes.
+    void loadMotion().then(({ ScrollTrigger }) => ScrollTrigger.refresh())
+  }
+
+  const toggle = () => {
+    if (open) onClose()
+    else onOpen()
+    // Sin transición (reduced motion) no hay transitionend.
+    if (inline && scrollBehavior() === 'auto') void loadMotion().then(({ ScrollTrigger }) => ScrollTrigger.refresh())
+  }
+
+  return (
+    <li
+      ref={card}
+      onTransitionEnd={onTransitionEnd}
+      onKeyDown={(e) => {
+        if (open && e.key === 'Escape') {
+          onClose()
+          button.current?.focus()
+        }
+      }}
+      className={`shrink-0 snap-start transition-[width] duration-500 ease-out motion-reduce:transition-none ${open ? 'w-(--card-open)' : 'w-(--card)'}`}
+    >
+      <article className="relative flex gap-10 overflow-hidden">
+        <div className="flex w-(--card) shrink-0 flex-col">
+          <NamePlate item={item} accent={accent} />
+          <p className="sr-only">{item.authors.map((a) => a.name).join(', ') || participants.pending}</p>
+
+          <div className="mt-4 flex flex-col gap-2">
+            {(item.kicker || item.org) && (
+              <p className="text-xs font-bold tracking-widest text-texto-suave uppercase">
+                {[item.kicker, item.org].filter(Boolean).join(' · ')}
+              </p>
+            )}
+            <h4 className={`font-display text-lg leading-snug text-balance ${open ? '' : 'line-clamp-4'}`}>
+              {item.title ?? <span className="text-texto-suave">{participants.pending}</span>}
+            </h4>
+            {preview && !open && <p className="line-clamp-2 text-sm leading-relaxed text-texto-suave">{preview}</p>}
+
+            {readable && (
+              <button
+                ref={button}
+                type="button"
+                onClick={toggle}
+                aria-expanded={inline ? open : undefined}
+                aria-controls={inline ? detailsId : undefined}
+                aria-haspopup={inline ? undefined : 'dialog'}
+                // Cerrada, toda la tarjeta es zona de clic.
+                className={`mt-1 inline-flex min-h-11 items-center gap-1.5 self-start text-sm font-bold tracking-wide text-acento-texto uppercase ${open ? '' : 'after:absolute after:inset-0 after:content-[""]'}`}
+              >
+                {open ? ui.readLess : ui.readMore}
+                {item.title && <span className="sr-only">: {item.title}</span>}
+                <ChevronRight aria-hidden className={`size-4 transition-transform duration-300 motion-reduce:transition-none ${open ? 'rotate-180' : ''}`} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {open && (
+          <div id={detailsId} className="w-[calc(var(--card-open)_-_var(--card)_-_2.5rem)] shrink-0 animate-fade-in pt-1 motion-reduce:animate-none">
+            <ParticipantDetails item={item} columns />
+          </div>
+        )}
+      </article>
+    </li>
+  )
+}

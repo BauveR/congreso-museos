@@ -150,9 +150,9 @@ export function ChoiceGroup({
 }
 
 /** Bloque de sección del formulario. */
-export function FormSection({ title, children }: { title: string; children: ReactNode }) {
+export function FormSection({ title, className = '', children }: { title: string; className?: string; children: ReactNode }) {
   return (
-    <section className="flex flex-col gap-5 border-t border-borde pt-8">
+    <section className={`flex flex-col gap-5 border-t border-borde pt-8 ${className}`}>
       <h2 className="text-xl font-bold">{title}</h2>
       {children}
     </section>

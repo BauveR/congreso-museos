@@ -36,9 +36,20 @@ interface Props {
   initial: FormValues
   isUpdate: boolean
   onSubmit: (input: FormInput) => Promise<void>
+  /** Escritorio ancho (landing): secciones en dos columnas equilibradas. */
+  wide?: boolean
 }
 
-export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUpdate, onSubmit }: Props) {
+/**
+ * Dos columnas con CSS columns: las secciones se reparten igualando la altura
+ * (orden de lectura: columna izquierda y luego derecha) y no se parten.
+ * Avisos, protección de datos y envío ocupan el ancho completo.
+ */
+const WIDE = 'lg:block lg:columns-2 lg:gap-x-16 lg:[&>*]:mb-10 lg:[&>section]:break-inside-avoid'
+const SPAN = 'lg:[column-span:all]'
+
+export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUpdate, onSubmit, wide = false }: Props) {
+  const span = wide ? SPAN : ''
   const [values, setValues] = useState(initial)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [formError, setFormError] = useState<string | null>(null)
@@ -115,8 +126,8 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
   }
 
   return (
-    <form onSubmit={submit} noValidate className="flex flex-col gap-10">
-      <div ref={summaryRef} tabIndex={-1} aria-live="assertive">
+    <form onSubmit={submit} noValidate className={`flex flex-col gap-10 ${wide ? WIDE : ''}`}>
+      <div ref={summaryRef} tabIndex={-1} aria-live="assertive" className={span}>
         {(formError || errorCount > 0) && (
           <div role="alert" className="rounded-xl border border-error p-4 text-sm">
             <p className="font-semibold text-error">{formError ?? t.errorSummary}</p>
@@ -228,7 +239,7 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
         <TextArea id="observations" label={f.observations} optional={f.optional} value={values.observations} onChange={(e) => set('observations', e.target.value)} error={err('observations')} maxLength={LIMITS.observations} rows={4} />
       </FormSection>
 
-      <FormSection title={t.sections.privacy}>
+      <FormSection title={t.sections.privacy} className={span}>
         <dl className="grid gap-x-4 gap-y-2 rounded-xl border border-borde p-4 text-sm sm:grid-cols-[9rem_1fr]">
           {t.privacyInfo.map(([term, desc]) => (
             <div key={term} className="contents">
@@ -263,7 +274,7 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
       <button
         type="submit"
         disabled={submitting}
-        className="inline-flex h-12 items-center justify-center self-start rounded-lg bg-acento px-8 text-sm font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60"
+        className={`inline-flex h-12 items-center justify-center self-start rounded-lg bg-acento px-8 ${span} text-sm font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60`}
       >
         {submitting ? t.submitting : isUpdate ? t.submitUpdate : t.submitCreate}
       </button>

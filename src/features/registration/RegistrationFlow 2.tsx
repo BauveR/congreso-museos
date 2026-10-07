@@ -32,15 +32,13 @@ interface RegistrationFlowProps {
   onSaved?: () => void
   /** Cambio de vista (el contenedor puede animar su altura o cambiar textos). */
   onViewChange?: (kind: RegistrationViewKind) => void
-  /** Formulario en dos columnas en escritorio. */
-  wide?: boolean
 }
 
 /**
  * Inscripción con sesión iniciada: formulario, resumen (con modificar y
  * cancelar) y cancelada. La usan la página /inscripcion y la landing.
  */
-export function RegistrationFlow({ onSaved, onViewChange, wide = false }: RegistrationFlowProps) {
+export function RegistrationFlow({ onSaved, onViewChange }: RegistrationFlowProps) {
   const auth = useAuth()
   const [sessions, setSessions] = useState<PublicSession[] | null>(null)
   const [saved, setSaved] = useState<SavedRegistration | null>(null)
@@ -169,7 +167,6 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
         initial={initialValues(saved?.data ?? null, auth.user.displayName)}
         isUpdate={Boolean(saved)}
         onSubmit={submit}
-        wide={wide}
       />
     </>
   )

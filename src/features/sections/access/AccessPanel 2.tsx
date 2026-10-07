@@ -80,7 +80,7 @@ function AccessFlow() {
           )}
           {!auth.loading && !auth.user && <AuthCard framed={false} />}
           {auth.user && (
-            <div className="mx-auto max-w-7xl">
+            <div className="mx-auto max-w-5xl">
               <p className="mb-8 flex flex-wrap items-center gap-x-3 border-b border-borde pb-6 text-sm text-texto-suave">
                 <span>
                   {registrationText.signIn.signedInAs} <strong className="text-texto">{auth.user.email}</strong>
@@ -89,7 +89,7 @@ function AccessFlow() {
                   {registrationText.signIn.signOut}
                 </button>
               </p>
-              <RegistrationFlow key={auth.user.uid} onSaved={onSaved} onViewChange={onViewChange} wide />
+              <RegistrationFlow key={auth.user.uid} onSaved={onSaved} onViewChange={onViewChange} />
             </div>
           )}
         </div>

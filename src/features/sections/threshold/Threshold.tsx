@@ -11,10 +11,18 @@ import { strokeOrigin } from './strokeOrigin'
 const HOLD = 0.15
 
 /**
+ * La sección siguiente se monta sobre el último tramo (mb negativo de una
+ * pantalla): entra por abajo justo al completarse el zoom, sin una pantalla
+ * en blanco entre medias. El zoom acaba, por eso, una pantalla antes del final.
+ */
+const ZOOM_END = 'bottom 200%'
+
+/**
  * Transición: la palabra crece hasta llenar la pantalla mientras la esfera
  * pulsante del fondo crece desde el centro y la cubre de color claro; al
  * terminar, la página pasa a tema claro (y vuelve a oscuro al subir). Al
- * salir de la sección la esfera vuelve a su tamaño.
+ * salir de la sección la esfera vuelve a su tamaño. La sección siguiente
+ * entra en cuanto se completa el zoom (ver ZOOM_END).
  * Sin esfera (GPU sin 3D) el círculo es un velo CSS. Con reduced motion solo
  * cambia el tema.
  */
@@ -25,16 +33,16 @@ export function Threshold() {
   const veil = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
 
-  // Cambio de tema: siempre, también con reduced motion.
+  // Cambio de tema: siempre, también con reduced motion (sin solape).
   useMotionEffect(({ ScrollTrigger }) => {
     ScrollTrigger.create({
       trigger: section.current,
-      start: 'bottom bottom',
+      start: reducedMotion ? 'bottom bottom' : ZOOM_END,
       onEnter: () => setTheme('light'),
       onLeaveBack: () => setTheme('dark'),
     })
     return () => setTheme('dark')
-  }, [])
+  }, [reducedMotion])
 
   useMotionEffect(
     ({ gsap, ScrollTrigger }) => {
@@ -49,7 +57,7 @@ export function Threshold() {
       }
       ScrollTrigger.create({
         trigger: section.current,
-        start: 'bottom bottom',
+        start: ZOOM_END,
         end: 'bottom top',
         onUpdate: (self) => {
           fill.exit = self.progress
@@ -59,7 +67,7 @@ export function Threshold() {
 
       gsap
         .timeline({
-          scrollTrigger: { trigger: section.current, start: 'top top', end: 'bottom bottom', scrub: true },
+          scrollTrigger: { trigger: section.current, start: 'top top', end: ZOOM_END, scrub: true },
         })
         // Pausa: la palabra se lee completa antes de empezar a crecer.
         .to({}, { duration: HOLD })
@@ -82,7 +90,7 @@ export function Threshold() {
   )
 
   return (
-    <Section id="umbral" ref={section} className="h-[260svh] motion-reduce:h-auto">
+    <Section id="umbral" ref={section} className="-mb-[100svh] h-[360svh] motion-reduce:mb-0 motion-reduce:h-auto">
       <div className="sticky top-0 flex h-svh items-center justify-center overflow-hidden motion-reduce:static motion-reduce:h-auto motion-reduce:py-24">
         <p
           ref={word}

@@ -12,7 +12,9 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion'
  * abajo al llegar a la sección. Texto oscuro (#111311 sobre #89976f: 5,97:1).
  * - Escritorio: tres columnas, una por día.
  * - Móvil: botones de día y se ve un día a la vez (tres días completos en una
- *   columna serían interminables).
+ *   columna serían interminables). Título y días forman una barra fija bajo
+ *   el nav mientras se recorre la tarjeta (patrón de las agendas de eventos):
+ *   siempre se ve el día elegido y se cambia sin volver arriba.
  * - Comunicaciones de cada mesa plegadas en todos los tamaños.
  */
 
@@ -66,7 +68,17 @@ export function Program() {
   const { program } = site
   const [day, setDay] = useState(0)
   const card = useRef<HTMLDivElement>(null)
+  const bar = useRef<HTMLDivElement>(null)
+  const list = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
+
+  /** Cambiar de día; si ya se había bajado por el anterior, empezar el nuevo desde arriba. */
+  const selectDay = (i: number) => {
+    setDay(i)
+    const barBottom = bar.current?.getBoundingClientRect().bottom ?? 0
+    const top = list.current?.getBoundingClientRect().top ?? 0
+    if (top < barBottom) window.scrollBy({ top: top - barBottom })
+  }
 
   // La tarjeta entra desde abajo al llegar a la sección (una vez).
   useMotionEffect(
@@ -87,26 +99,33 @@ export function Program() {
     <Section id="agenda" className="py-24 sm:py-32">
       <div className="edge">
         <div ref={card} className="rounded-3xl bg-salvia p-5 text-acento-contraste sm:p-8 lg:p-10">
-          {/* Título dentro de la tarjeta, en oscuro (el salvia no se vería sobre salvia). */}
-          <DisplayHeading color="text-acento-contraste" className="mb-8 lg:mb-10">
-            {program.title}
-          </DisplayHeading>
-          <div role="group" aria-label={program.daysLabel} className="mb-8 grid grid-cols-3 gap-2 lg:hidden">
-            {program.days.map((d, i) => (
-              <button
-                key={d.date}
-                type="button"
-                aria-pressed={day === i}
-                aria-controls={`programa-${d.date}`}
-                onClick={() => setDay(i)}
-                className="min-h-11 rounded-full border border-acento-contraste/40 text-sm font-bold uppercase aria-pressed:bg-acento-contraste aria-pressed:text-salvia"
-              >
-                {d.short}
-              </button>
-            ))}
+          {/* Móvil: barra fija (título + días) bajo el nav, con el fondo de la tarjeta
+              y a sangre de su relleno. Escritorio: solo el título, sin fijar. */}
+          <div
+            ref={bar}
+            className="sticky top-16 z-10 -mx-5 -mt-5 mb-8 rounded-t-3xl border-b border-acento-contraste/20 bg-salvia px-5 pt-5 pb-4 sm:-mx-8 sm:-mt-8 sm:px-8 sm:pt-8 lg:static lg:m-0 lg:mb-10 lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0"
+          >
+            {/* Título dentro de la tarjeta, en oscuro (el salvia no se vería sobre salvia). */}
+            <DisplayHeading color="text-acento-contraste" className="mb-4 lg:mb-0">
+              {program.title}
+            </DisplayHeading>
+            <div role="group" aria-label={program.daysLabel} className="grid grid-cols-3 gap-2 lg:hidden">
+              {program.days.map((d, i) => (
+                <button
+                  key={d.date}
+                  type="button"
+                  aria-pressed={day === i}
+                  aria-controls={`programa-${d.date}`}
+                  onClick={() => selectDay(i)}
+                  className="min-h-11 rounded-full border border-acento-contraste/40 text-sm font-bold uppercase aria-pressed:bg-acento-contraste aria-pressed:text-salvia"
+                >
+                  {d.short}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-3 lg:gap-0 lg:divide-x lg:divide-acento-contraste/25">
+          <div ref={list} className="grid gap-10 lg:grid-cols-3 lg:gap-0 lg:divide-x lg:divide-acento-contraste/25">
             {program.days.map((d, i) => (
               <div
                 key={d.date}

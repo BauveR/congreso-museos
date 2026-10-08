@@ -2,11 +2,12 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import { site } from '../../../content/site'
 import type { ParticipantGroup } from '../../../content/types'
+import type { PlateTone } from './NamePlate'
 import { ParticipantCard } from './ParticipantCard'
 
 interface ParticipantSliderProps {
   group: ParticipantGroup
-  accent: boolean
+  tone: PlateTone
   /** Escritorio: despliegue en línea. */
   inline: boolean
   /** Índice de la tarjeta abierta en esta fila (o null). */
@@ -20,7 +21,7 @@ interface ParticipantSliderProps {
  * dedo o el trackpad y nunca se mueve sola (se puede leer y pulsar). En
  * escritorio, flechas para avanzar de pantalla en pantalla.
  */
-export function ParticipantSlider({ group, accent, inline, openIndex, onOpen, onClose }: ParticipantSliderProps) {
+export function ParticipantSlider({ group, tone, inline, openIndex, onOpen, onClose }: ParticipantSliderProps) {
   const { participants } = site
   const headingId = useId()
   const scroller = useRef<HTMLUListElement>(null)
@@ -77,7 +78,7 @@ export function ParticipantSlider({ group, accent, inline, openIndex, onOpen, on
           <ParticipantCard
             key={`${item.title ?? item.kicker}-${i}`}
             item={item}
-            accent={accent}
+            tone={tone}
             inline={inline}
             expanded={openIndex === i}
             onOpen={() => onOpen(i)}

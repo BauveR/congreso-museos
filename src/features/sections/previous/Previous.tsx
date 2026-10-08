@@ -36,7 +36,7 @@ function TableCard({ table, index, deck, onReadPaper }: TableCardProps) {
         expandedLabel={ui.readLess}
         srContext={paper.item.title}
         onClick={stacked ? deck.toggle : () => onReadPaper(paper.item)}
-        className={`text-acento-texto [--expand-icon:var(--color-superficie)] ${className}`}
+        className={`text-acento-texto ${className}`}
       />
     )
   const list = (items: string[]) => (

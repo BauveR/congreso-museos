@@ -36,9 +36,13 @@
   --color-salvia: #89976f;
   /* Salvia para texto: en tema claro se oscurece (5,15:1 sobre el claro). */
   --color-salvia-texto: var(--color-salvia);
+  /* Ocre: tarjetas de pósteres (con texto oscuro, 11:1). */
+  --color-ocre: #d3cd67;
+  /* Lima: nombre destacado en las comunicaciones de varios autores. */
+  --color-lima: #c8d832;
   /* Intro del hero: fondo de la cortina y color de las letras gigantes. */
   --color-intro: var(--color-salvia);
-  --color-intro-letra: #d3cd67;
+  --color-intro-letra: var(--color-ocre);
 
   --animate-sheet-in: sheet-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   --animate-fade-in: fade-in 0.4s ease-out 0.2s both;

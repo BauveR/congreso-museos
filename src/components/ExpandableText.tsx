@@ -1,8 +1,8 @@
-import { ChevronDown } from 'lucide-react'
 import { useId, useState, type ReactNode } from 'react'
 import { loadMotion } from '../app/motion'
 import { site } from '../content/site'
 import { useBreakpoint } from '../hooks/useBreakpoint'
+import { ExpandButton } from './ExpandButton'
 
 interface ExpandableProps {
   /** Contenido siempre visible. */
@@ -61,20 +61,18 @@ export function Expandable({
       )}
 
       {collapsible && (
-        <button
-          type="button"
-          aria-expanded={open}
-          aria-controls={id}
+        <ExpandButton
+          expanded={open}
+          controls={id}
+          label={moreLabel}
+          expandedLabel={lessLabel}
           onClick={() => {
             setOpen((o) => !o)
             // Sin transición (reduced motion) no hay transitionend: recalcular igualmente.
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) refreshTriggers()
           }}
-          className={`mt-4 inline-flex min-h-11 items-center gap-2 self-start text-sm font-bold tracking-wide uppercase ${buttonClassName}`}
-        >
-          {open ? lessLabel : moreLabel}
-          <ChevronDown aria-hidden className={`size-4 transition-transform duration-300 motion-reduce:transition-none ${open ? 'rotate-180' : ''}`} />
-        </button>
+          className={`mt-4 ${buttonClassName}`}
+        />
       )}
     </div>
   )

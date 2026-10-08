@@ -14,7 +14,7 @@ const MAX_SIZE = 26
 
 export function visibleNames(item: Participant): { names: string[]; hidden: number } {
   const all = item.authors.map((a) => a.name)
-  if (all.length <= MAX_NAMES) return { names: all, hidden: 0 }
+  if (item.allNames || all.length <= MAX_NAMES) return { names: all, hidden: 0 }
   return { names: all.slice(0, MAX_NAMES - 1), hidden: all.length - (MAX_NAMES - 1) }
 }
 

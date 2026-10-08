@@ -1,15 +1,15 @@
-import { ChevronRight } from 'lucide-react'
 import { useEffect, useId, useRef, type TransitionEvent } from 'react'
 import { loadMotion } from '../../../app/motion'
+import { ExpandButton } from '../../../components/ExpandButton'
 import { site } from '../../../content/site'
 import type { Participant } from '../../../content/types'
-import { NamePlate } from './NamePlate'
+import { NamePlate, type PlateTone } from './NamePlate'
 import { ParticipantDetails } from './ParticipantDetails'
 import { hasDetails } from './plate'
 
 interface ParticipantCardProps {
   item: Participant
-  accent: boolean
+  tone: PlateTone
   /** Escritorio: la tarjeta se despliega en línea; móvil: abre la hoja inferior. */
   inline: boolean
   expanded: boolean
@@ -26,7 +26,7 @@ const scrollBehavior = (): ScrollBehavior =>
  * tarjetas) mostrando el texto completo a la derecha del nombre; el panel
  * tiene ancho fijo y la tarjeta lo destapa al crecer (sin recolocar el texto).
  */
-export function ParticipantCard({ item, accent, inline, expanded, onOpen, onClose }: ParticipantCardProps) {
+export function ParticipantCard({ item, tone, inline, expanded, onOpen, onClose }: ParticipantCardProps) {
   const { participants, ui } = site
   const card = useRef<HTMLLIElement>(null)
   const button = useRef<HTMLButtonElement>(null)
@@ -69,8 +69,9 @@ export function ParticipantCard({ item, accent, inline, expanded, onOpen, onClos
       className={`shrink-0 snap-start transition-[width] duration-500 ease-out motion-reduce:transition-none ${open ? 'w-(--card-open)' : 'w-(--card)'}`}
     >
       <article className="relative flex gap-10 overflow-hidden">
-        <div className="flex w-(--card) shrink-0 flex-col">
-          <NamePlate item={item} accent={accent} />
+        {/* Columna del nombre: entera es zona de clic, para abrir y para plegar. */}
+        <div className="relative flex w-(--card) shrink-0 flex-col">
+          <NamePlate item={item} tone={tone} />
           <p className="sr-only">{item.authors.map((a) => a.name).join(', ') || participants.pending}</p>
 
           <div className="mt-4 flex flex-col gap-2">
@@ -79,26 +80,25 @@ export function ParticipantCard({ item, accent, inline, expanded, onOpen, onClos
                 {[item.kicker, item.org].filter(Boolean).join(' · ')}
               </p>
             )}
-            <h4 className={`font-display text-lg leading-snug text-balance ${open ? '' : 'line-clamp-4'}`}>
+            <h4 className={`font-display text-xl leading-snug text-balance ${open ? '' : 'line-clamp-4'}`}>
               {item.title ?? <span className="text-texto-suave">{participants.pending}</span>}
             </h4>
             {preview && !open && <p className="line-clamp-2 text-sm leading-relaxed text-texto-suave">{preview}</p>}
 
             {readable && (
-              <button
+              <ExpandButton
                 ref={button}
-                type="button"
+                expanded={open}
+                opensDialog={!inline}
+                controls={detailsId}
+                direction="right"
+                label={ui.readMore}
+                expandedLabel={ui.readLess}
+                srContext={item.title}
                 onClick={toggle}
-                aria-expanded={inline ? open : undefined}
-                aria-controls={inline ? detailsId : undefined}
-                aria-haspopup={inline ? undefined : 'dialog'}
-                // Cerrada, toda la tarjeta es zona de clic.
-                className={`mt-1 inline-flex min-h-11 items-center gap-1.5 self-start text-sm font-bold tracking-wide text-acento-texto uppercase ${open ? '' : 'after:absolute after:inset-0 after:content-[""]'}`}
-              >
-                {open ? ui.readLess : ui.readMore}
-                {item.title && <span className="sr-only">: {item.title}</span>}
-                <ChevronRight aria-hidden className={`size-4 transition-transform duration-300 motion-reduce:transition-none ${open ? 'rotate-180' : ''}`} />
-              </button>
+                // Toda la columna del nombre es zona de clic (abierta, pliega).
+                className="mt-1 text-acento-texto after:absolute after:inset-0 after:content-['']"
+              />
             )}
           </div>
         </div>

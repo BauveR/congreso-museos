@@ -207,6 +207,7 @@ export const participants: ParticipantsContent = {
               ],
             },
           ],
+          allNames: true,
           title: 'La acción patrimonial comunitaria, una oportunidad para los museos-cenicienta de Canarias',
           abstract: [
             'Esta comunicación revela el desarrollo de los ámbitos de educación e investigación en los museos de La Gomera: desde sus orígenes a cómo se han ido conformando los proyectos hasta ir llegando al concepto de la Acción Patrimonial Comunitaria (APC), con el propósito de sintetizar la experiencia de más de veinte años. Dicho recorrido está mediado por las condiciones objetivas de cada centro: el tamaño de nuestros complejos, número de trabajadores, financiación, dimensión de su exposición, calidad y cantidad de sus colecciones, la joven naturaleza de la disciplina científica que gobierna sus narrativas, su historia y su relación con un entorno insular.',
@@ -325,6 +326,7 @@ export const participants: ParticipantsContent = {
               ],
             },
           ],
+          allNames: true,
           title: 'Más allá de lo visible: hacia una colección de referencia de diatomeas en el Museo de Ciencias Naturales de Tenerife',
           abstract: [
             'Con el objetivo de poner en valor el patrimonio biológico poco visible, el Museo de Ciencias Naturales de Tenerife ha iniciado la creación de una colección de referencia de diatomeas. El proyecto en torno a esa acción se concibe como un repositorio que integre diferentes tipos de materiales y datos asociados, incluyendo cultivos vivos, preparaciones microscópicas permanentes, imágenes de microscopía, muestras de ADN y bases de datos con información genética. La integración de estos recursos permitirá garantizar la preservación, trazabilidad y accesibilidad de los especímenes, facilitando futuras investigaciones.',
@@ -396,6 +398,7 @@ export const participants: ParticipantsContent = {
               ],
             },
           ],
+          allNames: true,
           title: 'Sobre puertas y ventanas: el enfoque comunitario en la gestión de los centros de interpretación de la isla de La Gomera',
           abstract: [
             'Los centros de interpretación gestionados por AIDER La Gomera responden a una concepción del patrimonio cultural diferente a la del museo tradicional: no custodian objetos inertes detrás de una vitrina, sino que ponen en valor una cultura viva, un saber hacer enraizado en el territorio y una comunidad que sigue siendo su protagonista.',
@@ -545,6 +548,7 @@ export const participants: ParticipantsContent = {
             { name: 'Ricardo Dorta Cruz' },
             { name: 'Conchi Fagundo García' },
           ],
+          allNames: true,
           title: 'Más allá de la exposición: el papel territorial del Centro de Visitantes de Juego de Bolas',
         },
       ],

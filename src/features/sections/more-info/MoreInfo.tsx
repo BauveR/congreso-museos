@@ -25,7 +25,7 @@ function TopicCard({ topic, deck, onRead }: { topic: DebateTopic; deck: DeckCard
       expandedLabel={ui.readLess}
       srContext={topic.title}
       onClick={stacked ? deck.toggle : () => onRead(topic)}
-      className={`[--expand-icon:var(--color-salvia)] ${className}`}
+      className={className}
     />
   )
   const heading = (

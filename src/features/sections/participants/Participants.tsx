@@ -4,8 +4,12 @@ import { ScrollLitText } from '../../../components/ScrollLitText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { useBreakpoint } from '../../../hooks/useBreakpoint'
+import type { PlateTone } from './NamePlate'
 import { ParticipantSheet } from './ParticipantSheet'
 import { ParticipantSlider } from './ParticipantSlider'
+
+/** Color de las tarjetas por grupo (el resto, neutras). */
+const groupTone: Record<string, PlateTone> = { conferencias: 'salvia', posteres: 'ocre' }
 
 interface Selected {
   group: number
@@ -40,7 +44,7 @@ export function Participants() {
           <ParticipantSlider
             key={group.id}
             group={group}
-            accent={g === 0}
+            tone={groupTone[group.id] ?? 'neutro'}
             inline={inline}
             openIndex={selected?.group === g ? selected.index : null}
             onOpen={(index) => setSelected({ group: g, index })}

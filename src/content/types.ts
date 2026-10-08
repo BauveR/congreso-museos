@@ -116,6 +116,8 @@ export interface Participant {
   /** Institución o procedencia. */
   org?: string
   authors: ParticipantAuthor[]
+  /** Mostrar todos los nombres en la tarjeta (por defecto, con más de tres: dos y «y N más»). */
+  allNames?: boolean
   /** Semblanza común a todos los autores (antes de las individuales). */
   sharedBio?: string[]
   title?: string

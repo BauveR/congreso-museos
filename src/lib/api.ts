@@ -1,4 +1,5 @@
 import { reportError } from './diagnostics'
+import { getAppCheckToken } from './firebaseApp'
 
 /** Error de la API con su código y, si los hay, errores por campo. */
 export class ApiError extends Error {
@@ -52,11 +53,14 @@ interface ApiOptions {
 /** fetch a /api con JSON y token; lanza ApiError si la respuesta no es 2xx. */
 export async function api<T>(path: string, { method = 'GET', body, token }: ApiOptions = {}): Promise<T> {
   const context = `${method} /api/${path}`
+  // App Check solo en escrituras con sesión: son las que podría abusar un bot.
+  const appCheck = token && method !== 'GET' ? await getAppCheckToken() : undefined
   const response = await request(context, `/api/${path}`, {
     method,
     headers: {
       ...(body === undefined ? {} : { 'content-type': 'application/json' }),
       ...(token ? { authorization: `Bearer ${token}` } : {}),
+      ...(appCheck ? { 'x-firebase-appcheck': appCheck } : {}),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
   })

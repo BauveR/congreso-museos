@@ -29,6 +29,15 @@ export function assertSafeMode() {
   }
 }
 
+/**
+ * ¿Inscripciones abiertas al público? REGISTRATION_OPEN=false las cierra
+ * (antes del lanzamiento): solo administración puede inscribirse para probar.
+ * Cancelar la propia inscripción sigue permitido siempre.
+ */
+export function registrationOpen(): boolean {
+  return env('REGISTRATION_OPEN') !== 'false'
+}
+
 export function requireEnv(name: string): string {
   const value = env(name)
   if (!value) throw new Error(`Falta la variable de entorno ${name}`)

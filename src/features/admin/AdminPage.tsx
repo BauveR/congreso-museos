@@ -25,6 +25,8 @@ const button =
   'inline-flex h-10 items-center justify-center rounded-lg bg-acento px-4 text-xs font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60'
 const ghost =
   'inline-flex h-10 items-center justify-center rounded-lg border border-acento-texto px-4 text-xs font-bold tracking-wide uppercase hover:bg-acento-texto/10 disabled:opacity-60'
+const danger =
+  'inline-flex h-10 items-center justify-center rounded-lg border border-error px-4 text-xs font-bold tracking-wide text-error uppercase hover:bg-error/10 disabled:opacity-60'
 const cell = 'rounded-md border border-borde bg-superficie px-2 py-1.5 text-sm text-texto'
 
 
@@ -161,7 +163,53 @@ function foodSummary(d: RegistrationData): string {
   return parts.join(', ') || '—'
 }
 
-function RegistrationsPanel({ sessions }: { sessions: Session[] }) {
+/** Cancelar una inscripción ajena, con confirmación en dos pasos (sin diálogos del navegador). */
+function CancelRegistration({ uid, onCancelled }: { uid: string; onCancelled: () => void }) {
+  const auth = useAuth()
+  const [confirming, setConfirming] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const r = t.registrations
+
+  const cancel = async () => {
+    setBusy(true)
+    setError(null)
+    try {
+      await api(`admin/registrations?uid=${encodeURIComponent(uid)}`, { method: 'DELETE', token: await auth.getIdToken() })
+      onCancelled()
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : String(e))
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-borde pt-4">
+      {confirming ? (
+        <>
+          <button type="button" className={danger} disabled={busy} onClick={() => void cancel()}>
+            {r.cancelConfirm}
+          </button>
+          <button type="button" className={ghost} disabled={busy} onClick={() => setConfirming(false)}>
+            {r.cancelKeep}
+          </button>
+        </>
+      ) : (
+        <button type="button" className={danger} onClick={() => setConfirming(true)}>
+          {r.cancel}
+        </button>
+      )}
+      <p className="text-sm text-texto-suave">{r.cancelHelp}</p>
+      {error && (
+        <p role="alert" className="w-full font-semibold text-error">
+          {error}
+        </p>
+      )}
+    </div>
+  )
+}
+
+function RegistrationsPanel({ sessions, onSessionsChanged }: { sessions: Session[]; onSessionsChanged: () => void }) {
   const auth = useAuth()
   const [filters, setFilters] = useState({ session: '', type: '', city: '', certificate: '', food: '', q: '' })
   const [rows, setRows] = useState<AdminRegistration[] | null>(null)
@@ -334,6 +382,14 @@ function RegistrationsPanel({ sessions }: { sessions: Session[] }) {
                             </div>
                           ))}
                         </dl>
+                        <CancelRegistration
+                          uid={uid}
+                          onCancelled={() => {
+                            setRows((list) => list?.filter((row) => row.uid !== uid) ?? null)
+                            setOpen(null)
+                            onSessionsChanged()
+                          }}
+                        />
                       </td>
                     </tr>
                   )}
@@ -354,6 +410,8 @@ function AdminDashboard() {
   const [tab, setTab] = useState<'stats' | 'sessions' | 'registrations'>('stats')
   const [sessions, setSessions] = useState<Session[] | null>(null)
   const [error, setError] = useState<string | null>(null)
+  /** Se incrementa para volver a pedir las sesiones (p. ej. tras cancelar una inscripción). */
+  const [sessionsVersion, setSessionsVersion] = useState(0)
 
   useEffect(() => {
     if (!auth.user || !auth.isAdmin) return
@@ -369,7 +427,7 @@ function AdminDashboard() {
     return () => {
       cancelled = true
     }
-  }, [auth])
+  }, [auth, sessionsVersion])
 
   if (auth.loading) return <p role="status">…</p>
   if (!auth.user) return <SignInPanel allowAdmin />
@@ -406,7 +464,9 @@ function AdminDashboard() {
       )}
       {sessions && tab === 'stats' && <StatsPanel sessions={sessions} />}
       {sessions && tab === 'sessions' && <SessionsPanel sessions={sessions} setSessions={setSessions} />}
-      {sessions && tab === 'registrations' && <RegistrationsPanel sessions={sessions} />}
+      {sessions && tab === 'registrations' && (
+        <RegistrationsPanel sessions={sessions} onSessionsChanged={() => setSessionsVersion((v) => v + 1)} />
+      )}
     </>
   )
 }

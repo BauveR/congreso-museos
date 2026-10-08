@@ -7,7 +7,7 @@ import {
   type Session,
   type SessionPatch,
 } from '../../../shared/sessions.js'
-import type { Registration, SaveResult, Store } from './types.js'
+import { sameSessions, today, type Registration, type SaveResult, type Store } from './types.js'
 
 /**
  * Almacenamiento en memoria (DATA_MODE=mock). Las operaciones se encadenan
@@ -18,6 +18,7 @@ export class MemoryStore implements Store {
   private sessions = new Map<string, Session>()
   private registrations = new Map<string, Registration>()
   private queue: Promise<unknown> = Promise.resolve()
+  private mailQuota = new Map<string, { day: string; count: number }>()
 
   constructor(sessions: Session[] = DEFAULT_SESSIONS) {
     for (const s of sessions) this.sessions.set(s.id, { ...s })
@@ -63,7 +64,11 @@ export class MemoryStore implements Store {
         updatedAt: now,
       }
       this.registrations.set(uid, registration)
-      return { registration: structuredClone(registration), created: !previous }
+      return {
+        registration: structuredClone(registration),
+        created: !previous,
+        sessionsChanged: !previous || !sameSessions(previous.data.sessionIds, data.sessionIds),
+      }
     })
   }
 
@@ -80,6 +85,17 @@ export class MemoryStore implements Store {
 
   async listRegistrations() {
     return [...this.registrations.values()].map((r) => structuredClone(r))
+  }
+
+  consumeMailQuota(uid: string, max: number) {
+    return this.transaction(() => {
+      const day = today()
+      const current = this.mailQuota.get(uid)
+      const count = current?.day === day ? current.count : 0
+      if (count >= max) return false
+      this.mailQuota.set(uid, { day, count: count + 1 })
+      return true
+    })
   }
 
   recount() {

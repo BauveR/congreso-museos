@@ -102,6 +102,7 @@ export const registrationText = {
   submitting: 'Enviando…',
   errorSummary: 'Revisa los campos marcados.',
   genericError: 'No se ha podido completar la operación. Inténtalo de nuevo.',
+  closed: 'Las inscripciones aún no están abiertas. Vuelve pronto: lo anunciaremos en esta web.',
 
   success: {
     created: 'Inscripción confirmada',
@@ -213,6 +214,10 @@ export const adminText = {
     columns: ['Nombre', 'Correo', 'Teléfono', 'Ciudad', 'Entidad', 'Tipo', 'Días', 'Certif.', 'Alimentación'],
     details: 'Ver detalle',
     hideDetails: 'Ocultar',
+    cancel: 'Cancelar esta inscripción',
+    cancelHelp: 'Libera sus plazas y no avisa a la persona. Para inscripciones falsas, duplicadas o de prueba.',
+    cancelConfirm: 'Sí, cancelarla',
+    cancelKeep: 'No',
     detailLabels: {
       jobTitle: 'Cargo',
       idDocument: 'Documento',

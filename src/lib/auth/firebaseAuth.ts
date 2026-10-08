@@ -1,23 +1,13 @@
-import type { FirebaseApp } from 'firebase/app'
 import type { Auth } from 'firebase/auth'
-import { cleanEnv } from '../../../shared/env'
+import { getFirebaseApp } from '../firebaseApp'
 
-/*
- * Firebase Auth (VITE_DATA_MODE=firebase). El SDK se carga bajo demanda:
- * solo en las páginas de inscripción y administración, nunca en la landing.
- */
+/* Firebase Auth (VITE_DATA_MODE=firebase), cargado bajo demanda. */
 
 let authPromise: Promise<Auth> | null = null
 
 export function getFirebaseAuth(): Promise<Auth> {
-  authPromise ??= Promise.all([import('firebase/app'), import('firebase/auth')]).then(([app, auth]) => {
-    const firebaseApp: FirebaseApp = app.initializeApp({
-      apiKey: cleanEnv(import.meta.env.VITE_FIREBASE_API_KEY),
-      authDomain: cleanEnv(import.meta.env.VITE_FIREBASE_AUTH_DOMAIN),
-      projectId: cleanEnv(import.meta.env.VITE_FIREBASE_PROJECT_ID),
-      appId: cleanEnv(import.meta.env.VITE_FIREBASE_APP_ID),
-    })
-    const instance = auth.getAuth(firebaseApp)
+  authPromise ??= Promise.all([getFirebaseApp(), import('firebase/auth')]).then(([app, auth]) => {
+    const instance = auth.getAuth(app)
     instance.languageCode = 'es'
     return instance
   })

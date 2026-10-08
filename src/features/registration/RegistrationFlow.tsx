@@ -18,7 +18,8 @@ interface SavedRegistration {
 /** `justSaved`: se acaba de guardar (hay que informar del correo); si no, es una inscripción previa. */
 type View =
   | { kind: 'form' }
-  | { kind: 'done'; justSaved: boolean; created: boolean; emailSent: boolean }
+  /** emailSent: null = no se envió a propósito (cambios menores o cupo diario agotado). */
+  | { kind: 'done'; justSaved: boolean; created: boolean; emailSent: boolean | null }
   | { kind: 'cancelled' }
 
 const primary =
@@ -44,6 +45,8 @@ interface RegistrationFlowProps {
 export function RegistrationFlow({ onSaved, onViewChange, wide = false }: RegistrationFlowProps) {
   const auth = useAuth()
   const [sessions, setSessions] = useState<PublicSession[] | null>(null)
+  /** Inscripciones abiertas (el servidor decide; administración puede inscribirse siempre). */
+  const [open, setOpen] = useState(true)
   const [saved, setSaved] = useState<SavedRegistration | null>(null)
   const [view, setView] = useState<View>({ kind: 'form' })
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -58,11 +61,12 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
       try {
         const token = await auth.getIdToken()
         const [s, r] = await Promise.all([
-          api<{ sessions: PublicSession[] }>('sessions'),
+          api<{ sessions: PublicSession[]; open: boolean }>('sessions'),
           api<{ registration: SavedRegistration | null }>('registration', { token }),
         ])
         if (cancelled) return
         setSessions(s.sessions)
+        setOpen(s.open)
         setSaved(r.registration)
         setView(r.registration ? { kind: 'done', justSaved: false, created: false, emailSent: false } : { kind: 'form' })
         setLoadError(null)
@@ -86,7 +90,7 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
   const submit = async (input: FormInput) => {
     const token = await auth.getIdToken()
     try {
-      const result = await api<{ registration: SavedRegistration; created: boolean; emailSent: boolean }>('registration', {
+      const result = await api<{ registration: SavedRegistration; created: boolean; emailSent: boolean | null }>('registration', {
         method: 'POST',
         body: input,
         token,
@@ -129,7 +133,7 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
       <>
         <div role="status" className="mb-8 rounded-2xl border border-borde bg-superficie p-6">
           <h2 className="text-2xl font-bold">{view.justSaved && !view.created ? t.success.updated : t.success.created}</h2>
-          {view.justSaved && (
+          {view.justSaved && view.emailSent !== null && (
             <p className="mt-2 text-texto-suave">{view.emailSent ? t.success.emailSent(saved.email) : t.success.emailFailed}</p>
           )}
         </div>
@@ -158,6 +162,15 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
           )}
         </div>
       </>
+    )
+  }
+
+  // Cerradas: ni alta ni cambios (el servidor también lo impide); cancelar sigue disponible en el resumen.
+  if (!open && !auth.isAdmin) {
+    return (
+      <p role="status" className="rounded-2xl border border-borde bg-superficie p-6 text-lg">
+        {t.closed}
+      </p>
     )
   }
 

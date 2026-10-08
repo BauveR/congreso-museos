@@ -9,7 +9,7 @@ import {
   type SessionPatch,
 } from '../../../shared/sessions.js'
 import { getAdminApp } from '../firebase.js'
-import type { Registration, SaveResult, Store } from './types.js'
+import { sameSessions, today, type Registration, type SaveResult, type Store } from './types.js'
 
 /*
  * Modelo en Firestore:
@@ -99,7 +99,11 @@ export class FirestoreStore implements Store {
       if (idDocument) tx.set(identityRef, { idDocument })
       else tx.delete(identityRef)
 
-      return { registration: { ...stored, data }, created: !previous }
+      return {
+        registration: { ...stored, data },
+        created: !previous,
+        sessionsChanged: !previous || !sameSessions(previous.data.sessionIds, data.sessionIds),
+      }
     })
   }
 
@@ -122,6 +126,21 @@ export class FirestoreStore implements Store {
       tx.delete(identityRef)
       tx.delete(regRef)
       return this.merge(previous, identitySnap.data())
+    })
+  }
+
+  /** Cupo en mailQuota/{uid}: { day, count }. Solo el servidor lo lee (reglas: todo cerrado). */
+  async consumeMailQuota(uid: string, max: number) {
+    const db = await this.db()
+    const ref = db.collection('mailQuota').doc(uid)
+    return db.runTransaction(async (tx) => {
+      const day = today()
+      const snap = await tx.get(ref)
+      const current = snap.data() as { day?: string; count?: number } | undefined
+      const count = current?.day === day ? (current.count ?? 0) : 0
+      if (count >= max) return false
+      tx.set(ref, { day, count: count + 1 })
+      return true
     })
   }
 

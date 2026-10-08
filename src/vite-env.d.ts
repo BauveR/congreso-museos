@@ -2,6 +2,8 @@
 
 // Solo variables públicas (prefijo VITE_). Las secretas viven en /api.
 interface ImportMetaEnv {
+  /** 'true': la portada muestra «Sitio en construcción» (producción hasta el lanzamiento). */
+  readonly VITE_UNDER_CONSTRUCTION?: string
   /** mock (sin Firebase, solo desarrollo) | firebase */
   readonly VITE_DATA_MODE?: 'mock' | 'firebase'
   readonly VITE_FIREBASE_API_KEY?: string

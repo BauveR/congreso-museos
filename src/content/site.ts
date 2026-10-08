@@ -32,7 +32,8 @@ export const site: SiteContent = {
   },
 
   underConstruction: {
-    enabled: false,
+    // Por entorno: en Vercel, VITE_UNDER_CONSTRUCTION=true solo en producción.
+    enabled: import.meta.env.VITE_UNDER_CONSTRUCTION === 'true',
     title: 'Sitio en construcción',
     body: 'Muy pronto estaremos en línea.',
   },

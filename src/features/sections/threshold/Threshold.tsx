@@ -79,6 +79,9 @@ export function Threshold() {
           HOLD + 0.55,
         )
         .to(fill, { grow: 1, ease: 'power1.in', duration: 0.45, onUpdate: writeFill }, HOLD + 0.55)
+        // La esfera está detrás de la página: las letras se funden mientras crece,
+        // para que no queden sus formas delante del círculo ni bajo Acceso.
+        .to(el, { autoAlpha: 0, ease: 'power1.in', duration: 0.35 }, HOLD + 0.55)
 
       return () => {
         scrollState.fill = 0

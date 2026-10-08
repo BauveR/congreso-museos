@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from 'react'
 import {
   ALLERGENS,
   DIET_LABELS,
+  DIETS,
   ID_TYPE_LABELS,
   PARTICIPATION_LABELS,
   PARTICIPATION_TYPES,
@@ -155,9 +156,19 @@ function SessionsPanel({ sessions, setSessions }: { sessions: Session[]; setSess
 
 const ALLERGEN_LABELS = new Map<string, string>(ALLERGENS.map((a) => [a.id, a.label]))
 
+/** Resumen de alimentación para la tabla: dieta y alergias (— si no hay nada). */
+function foodSummary(d: RegistrationData): string {
+  const parts = [
+    d.diet !== 'ninguna' ? DIET_LABELS[d.diet] : '',
+    ...d.allergens.map((a) => ALLERGEN_LABELS.get(a) ?? a),
+    d.otherAllergy?.trim() ?? '',
+  ].filter(Boolean)
+  return parts.join(', ') || '—'
+}
+
 function RegistrationsPanel({ sessions }: { sessions: Session[] }) {
   const auth = useAuth()
-  const [filters, setFilters] = useState({ session: '', type: '', city: '', certificate: '', q: '' })
+  const [filters, setFilters] = useState({ session: '', type: '', city: '', certificate: '', food: '', q: '' })
   const [rows, setRows] = useState<AdminRegistration[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [open, setOpen] = useState<string | null>(null)
@@ -204,7 +215,7 @@ function RegistrationsPanel({ sessions }: { sessions: Session[] }) {
 
   return (
     <section className="flex flex-col gap-6">
-      <fieldset className="grid gap-4 rounded-2xl border border-borde p-4 sm:grid-cols-2 lg:grid-cols-5">
+      <fieldset className="grid gap-4 rounded-2xl border border-borde p-4 sm:grid-cols-2 lg:grid-cols-3">
         <legend className="px-2 text-sm font-semibold">{r.filters}</legend>
         <SelectInput id="fSession" label={r.session} value={filters.session} onChange={(e) => set('session', e.target.value)}>
           <option value="">{r.allSessions}</option>
@@ -228,6 +239,28 @@ function RegistrationsPanel({ sessions }: { sessions: Session[] }) {
           <option value="si">Sí</option>
           <option value="no">No</option>
         </SelectInput>
+        <SelectInput id="fFood" label={r.food} value={filters.food} onChange={(e) => set('food', e.target.value)}>
+          <option value="">{r.any}</option>
+          {Object.entries(r.foodOptions).map(([value, text]) => (
+            <option key={value} value={value}>
+              {text}
+            </option>
+          ))}
+          <optgroup label={r.foodDiets}>
+            {DIETS.filter((d) => d !== 'ninguna').map((d) => (
+              <option key={d} value={d}>
+                {DIET_LABELS[d]}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label={r.foodAllergens}>
+            {ALLERGENS.map((a) => (
+              <option key={a.id} value={`alergeno:${a.id}`}>
+                {a.label}
+              </option>
+            ))}
+          </optgroup>
+        </SelectInput>
         <TextInput id="fQ" label={r.search} value={filters.q} onChange={(e) => set('q', e.target.value)} />
       </fieldset>
 
@@ -248,7 +281,7 @@ function RegistrationsPanel({ sessions }: { sessions: Session[] }) {
       {rows && rows.length === 0 && <p className="text-texto-suave">{r.empty}</p>}
       {rows && rows.length > 0 && (
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[60rem] text-left text-sm">
+          <table className="w-full min-w-[68rem] text-left text-sm">
             <thead className="text-xs tracking-wide text-texto-suave uppercase">
               <tr>
                 {r.columns.map((c) => (
@@ -273,6 +306,7 @@ function RegistrationsPanel({ sessions }: { sessions: Session[] }) {
                     <td className="py-2 pr-3">{PARTICIPATION_LABELS[d.participationType]}</td>
                     <td className="py-2 pr-3">{d.sessionIds.map((id) => titles.get(id)?.split('·')[0]?.trim() ?? id).join(', ')}</td>
                     <td className="py-2 pr-3">{d.certificate ? 'Sí' : 'No'}</td>
+                    <td className="py-2 pr-3">{foodSummary(d)}</td>
                     <td className="py-2">
                       <button
                         type="button"
@@ -286,7 +320,7 @@ function RegistrationsPanel({ sessions }: { sessions: Session[] }) {
                   </tr>
                   {open === uid && (
                     <tr>
-                      <td colSpan={9} className="pb-4">
+                      <td colSpan={10} className="pb-4">
                         <dl className="grid gap-x-4 gap-y-1 rounded-xl bg-superficie p-4 sm:grid-cols-[14rem_1fr]">
                           {[
                             [r.detailLabels.jobTitle, d.jobTitle],

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
+import { cleanEnv } from '../../shared/env'
 import { safeStorage } from '../lib/safeStorage'
 
 /** Parámetro del enlace para quien prueba: /?acceso=CLAVE */
 const PARAM = 'acceso'
 const STORAGE_KEY = 'previewAccess'
 /** Huella SHA-256 (hex) de la clave: la clave nunca está en el código publicado. */
-const KEY_HASH = import.meta.env.VITE_PREVIEW_KEY_HASH?.trim().toLowerCase()
+const KEY_HASH = cleanEnv(import.meta.env.VITE_PREVIEW_KEY_HASH)?.toLowerCase()
 
 async function sha256(text: string): Promise<string> {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text))

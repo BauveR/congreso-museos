@@ -1,3 +1,4 @@
+import { cleanEnv } from '../../shared/env'
 import { participants } from './participantes'
 import { previous } from './previos'
 import { moreInfo } from './saberMas'
@@ -33,7 +34,7 @@ export const site: SiteContent = {
 
   underConstruction: {
     // Por entorno: en Vercel, VITE_UNDER_CONSTRUCTION=true solo en producción.
-    enabled: import.meta.env.VITE_UNDER_CONSTRUCTION === 'true',
+    enabled: cleanEnv(import.meta.env.VITE_UNDER_CONSTRUCTION) === 'true',
     title: 'Sitio en construcción',
     body: 'Muy pronto estaremos en línea.',
   },

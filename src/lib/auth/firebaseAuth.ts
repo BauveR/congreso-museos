@@ -1,5 +1,6 @@
 import type { FirebaseApp } from 'firebase/app'
 import type { Auth } from 'firebase/auth'
+import { cleanEnv } from '../../../shared/env'
 
 /*
  * Firebase Auth (VITE_DATA_MODE=firebase). El SDK se carga bajo demanda:
@@ -11,10 +12,10 @@ let authPromise: Promise<Auth> | null = null
 export function getFirebaseAuth(): Promise<Auth> {
   authPromise ??= Promise.all([import('firebase/app'), import('firebase/auth')]).then(([app, auth]) => {
     const firebaseApp: FirebaseApp = app.initializeApp({
-      apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-      authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-      projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-      appId: import.meta.env.VITE_FIREBASE_APP_ID,
+      apiKey: cleanEnv(import.meta.env.VITE_FIREBASE_API_KEY),
+      authDomain: cleanEnv(import.meta.env.VITE_FIREBASE_AUTH_DOMAIN),
+      projectId: cleanEnv(import.meta.env.VITE_FIREBASE_PROJECT_ID),
+      appId: cleanEnv(import.meta.env.VITE_FIREBASE_APP_ID),
     })
     const instance = auth.getAuth(firebaseApp)
     instance.languageCode = 'es'

@@ -8,10 +8,15 @@
  * - "firebase": Firestore + verificación real de tokens (firebase-admin).
  */
 
+import { cleanEnv } from '../../shared/env.js'
+
 export type DataMode = 'mock' | 'firebase'
 
+/** Variable de entorno limpia (sin espacios ni comillas sobrantes del panel). */
+export const env = (name: string): string | undefined => cleanEnv(process.env[name])
+
 export function dataMode(): DataMode {
-  return process.env.DATA_MODE === 'firebase' ? 'firebase' : 'mock'
+  return env('DATA_MODE') === 'firebase' ? 'firebase' : 'mock'
 }
 
 /**
@@ -25,7 +30,7 @@ export function assertSafeMode() {
 }
 
 export function requireEnv(name: string): string {
-  const value = process.env[name]
+  const value = env(name)
   if (!value) throw new Error(`Falta la variable de entorno ${name}`)
   return value
 }

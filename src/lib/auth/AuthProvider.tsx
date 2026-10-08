@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { cleanEnv } from '../../../shared/env'
 import { safeStorage } from '../safeStorage'
 import { AuthContext } from './context'
 import { EMAIL_LINK_KEY, getFirebaseAuth } from './firebaseAuth'
 import { loadMockUser, mockPasswordAccount, mockToken, mockUid, saveMockUser, type MockUser } from './mockAuth'
 import type { AuthApi, AuthUser, SignUpInput } from './types'
 
-const MODE: AuthApi['mode'] = import.meta.env.VITE_DATA_MODE === 'firebase' ? 'firebase' : 'mock'
+const MODE: AuthApi['mode'] = cleanEnv(import.meta.env.VITE_DATA_MODE) === 'firebase' ? 'firebase' : 'mock'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   // En mock la sesión se lee de inmediato; en Firebase llega por onAuthStateChanged.

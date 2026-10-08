@@ -1,5 +1,6 @@
 import { PARTICIPATION_LABELS } from '../../shared/registration.js'
 import type { Session } from '../../shared/sessions.js'
+import { env } from './env.js'
 import type { Mail } from './mailer.js'
 import type { Registration } from './store/types.js'
 
@@ -62,7 +63,7 @@ export function cancellationMail(reg: Registration): Mail {
 
 /** Aviso a la organización (opcional: ORGANIZER_EMAIL). */
 export function organizerMail(reg: Registration, sessions: Session[], action: 'nueva' | 'modificada' | 'cancelada'): Mail | null {
-  const to = process.env.ORGANIZER_EMAIL
+  const to = env('ORGANIZER_EMAIL')
   if (!to) return null
   const d = reg.data
   const summary = `${d.firstName} ${d.lastName} (${reg.email}) · ${PARTICIPATION_LABELS[d.participationType]} · ${sessionTitles(reg, sessions).join(', ')}`

@@ -1,4 +1,4 @@
-import { requireEnv } from './env.js'
+import { env, requireEnv } from './env.js'
 
 export interface Mail {
   to: string
@@ -17,13 +17,13 @@ export interface Mail {
  * Remitente: MAIL_FROM (p. ej. "Congreso de Museos <congreso@gmail.com>").
  */
 export async function sendMail(mail: Mail): Promise<void> {
-  const provider = process.env.MAIL_PROVIDER ?? 'console'
+  const provider = env('MAIL_PROVIDER') ?? 'console'
 
   if (provider === 'gmail') {
     const { createTransport } = await import('nodemailer')
     const user = requireEnv('GMAIL_USER')
     const transport = createTransport({ service: 'gmail', auth: { user, pass: requireEnv('GMAIL_APP_PASSWORD') } })
-    await transport.sendMail({ from: process.env.MAIL_FROM ?? user, ...mail })
+    await transport.sendMail({ from: env('MAIL_FROM') ?? user, ...mail })
     return
   }
 

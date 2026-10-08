@@ -199,6 +199,26 @@ export const adminText = {
   },
 }
 
+/** Panel de diagnóstico (solo cuentas de administración). */
+export const diagnosticsText = {
+  button: 'Diagnóstico',
+  title: 'Diagnóstico de errores',
+  kicker: 'Solo administración',
+  close: 'Cerrar diagnóstico',
+  context: 'Contexto',
+  contextLabels: { mode: 'Modo de datos', account: 'Cuenta', uid: 'UID', url: 'Página', browser: 'Navegador' },
+  errors: 'Errores de esta pestaña (más recientes primero)',
+  empty: 'Sin errores registrados desde que se abrió la página.',
+  status: 'HTTP',
+  noConnection: 'sin conexión',
+  code: 'Código',
+  ref: 'Ref. del servidor',
+  refHelp: 'Búscala en Vercel → Logs para ver el error completo.',
+  copy: 'Copiar informe',
+  copied: 'Copiado',
+  clear: 'Vaciar',
+}
+
 export const privacyPage = {
   title: 'Política de privacidad',
   updated: 'Texto genérico provisional. Pendiente de revisión por la entidad organizadora.',

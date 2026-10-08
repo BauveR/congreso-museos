@@ -18,6 +18,7 @@ import { fieldDomId } from '../../components/formIds'
 import { toInput, type FormInput, type FormValues, type PublicSession } from './formValues'
 import { registrationText } from '../../content/inscripcion'
 import { ApiError } from '../../lib/api'
+import { reportError } from '../../lib/diagnostics'
 
 const t = registrationText
 const f = t.fields
@@ -99,6 +100,7 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
     try {
       await onSubmit(input)
     } catch (error) {
+      reportError('Enviar inscripción', error)
       if (error instanceof ApiError && error.fields) setErrors(error.fields)
       setFormError(error instanceof ApiError ? error.message : t.genericError)
       summaryRef.current?.focus()

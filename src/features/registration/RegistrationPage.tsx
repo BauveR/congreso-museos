@@ -1,4 +1,5 @@
 import { PageShell } from '../../components/PageShell'
+import { DiagnosticsButton } from '../admin/DiagnosticsButton'
 import { registrationText } from '../../content/inscripcion'
 import { AuthProvider } from '../../lib/auth/AuthProvider'
 import { useAuth } from '../../lib/auth/context'
@@ -33,6 +34,7 @@ export default function RegistrationPage() {
       <PageShell title={t.pageTitle}>
         <RegistrationGate />
       </PageShell>
+      <DiagnosticsButton />
     </AuthProvider>
   )
 }

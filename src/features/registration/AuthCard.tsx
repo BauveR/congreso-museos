@@ -5,6 +5,7 @@ import { fieldDomId } from '../../components/formIds'
 import { accessText, registrationText } from '../../content/inscripcion'
 import { useAuth } from '../../lib/auth/context'
 import { authErrorCode } from '../../lib/auth/types'
+import { reportError } from '../../lib/diagnostics'
 
 const t = accessText
 
@@ -83,7 +84,10 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
       await action()
     } catch (e) {
       // Cerrar la ventana de Google no es un error que mostrar.
-      if (authErrorCode(e) !== 'auth/popup-closed-by-user' && authErrorCode(e) !== 'auth/cancelled-popup-request') setError(errorMessage(e))
+      if (authErrorCode(e) !== 'auth/popup-closed-by-user' && authErrorCode(e) !== 'auth/cancelled-popup-request') {
+        reportError('Acceso (Google o correo)', e)
+        setError(errorMessage(e))
+      }
     } finally {
       setBusy(false)
     }

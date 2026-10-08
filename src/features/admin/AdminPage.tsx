@@ -15,6 +15,7 @@ import { api, ApiError, download } from '../../lib/api'
 import { AuthProvider } from '../../lib/auth/AuthProvider'
 import { useAuth } from '../../lib/auth/context'
 import { SignedInBar, SignInPanel } from '../registration/SignInPanel'
+import { DiagnosticsButton } from './DiagnosticsButton'
 
 const t = adminText
 const button =
@@ -386,6 +387,7 @@ export default function AdminPage() {
       <PageShell title={t.pageTitle} wide>
         <AdminDashboard />
       </PageShell>
+      <DiagnosticsButton />
     </AuthProvider>
   )
 }

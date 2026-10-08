@@ -32,9 +32,22 @@ export async function readJson(request: Request, maxBytes = 32_000): Promise<unk
   }
 }
 
+/** ¿La petición viene de una cuenta de administración? (solo se consulta ante un 500). */
+async function isAdminRequest(request: Request): Promise<boolean> {
+  try {
+    const { requireAdmin } = await import('./auth.js')
+    await requireAdmin(request)
+    return true
+  } catch {
+    return false
+  }
+}
+
 /**
  * Envuelve un manejador: errores conocidos → respuesta JSON con su código;
- * cualquier otro → 500 sin filtrar detalles internos.
+ * cualquier otro → 500 con una referencia (`ref`) que también va al log de
+ * Vercel. El detalle técnico (`detail`) solo se devuelve a administración,
+ * para el panel de diagnóstico; al resto, nada interno.
  */
 export function handler(fn: (request: Request) => Promise<Response>) {
   return async (request: Request): Promise<Response> => {
@@ -47,8 +60,10 @@ export function handler(fn: (request: Request) => Promise<Response>) {
       if (error instanceof CapacityError) {
         return json({ error: error.message, sessionId: error.sessionId }, 409)
       }
-      console.error('[api]', error)
-      return json({ error: 'Error interno' }, 500)
+      const ref = crypto.randomUUID().slice(0, 8)
+      console.error(`[api] ref=${ref}`, error)
+      const detail = (await isAdminRequest(request)) ? String(error instanceof Error ? error.stack ?? error.message : error) : undefined
+      return json({ error: 'Error interno', ref, detail }, 500)
     }
   }
 }

@@ -6,6 +6,7 @@ import { registrationText } from '../../../content/inscripcion'
 import { site } from '../../../content/site'
 import { AuthProvider } from '../../../lib/auth/AuthProvider'
 import { useAuth } from '../../../lib/auth/context'
+import { DiagnosticsButton } from '../../admin/DiagnosticsButton'
 import { AuthCard } from '../../registration/AuthCard'
 import { RegistrationFlow, type RegistrationViewKind } from '../../registration/RegistrationFlow'
 
@@ -103,6 +104,7 @@ export default function AccessPanel() {
   return (
     <AuthProvider>
       <AccessFlow />
+      <DiagnosticsButton />
     </AuthProvider>
   )
 }

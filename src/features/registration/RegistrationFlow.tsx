@@ -3,6 +3,7 @@ import type { RegistrationData } from '../../../shared/registration'
 import { registrationText } from '../../content/inscripcion'
 import { api } from '../../lib/api'
 import { useAuth } from '../../lib/auth/context'
+import { reportError } from '../../lib/diagnostics'
 import { initialValues, type FormInput, type PublicSession } from './formValues'
 import { RegistrationForm } from './RegistrationForm'
 import { RegistrationSummary } from './RegistrationSummary'
@@ -65,7 +66,8 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
         setSaved(r.registration)
         setView(r.registration ? { kind: 'done', justSaved: false, created: false, emailSent: false } : { kind: 'form' })
         setLoadError(null)
-      } catch {
+      } catch (error) {
+        reportError('Cargar días e inscripción', error)
         if (!cancelled) setLoadError(t.genericError)
       }
     })()

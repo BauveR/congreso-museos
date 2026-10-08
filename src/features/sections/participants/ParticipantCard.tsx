@@ -80,7 +80,8 @@ export function ParticipantCard({ item, tone, inline, expanded, onOpen, onClose 
                 {[item.kicker, item.org].filter(Boolean).join(' · ')}
               </p>
             )}
-            <h4 className={`font-display text-xl leading-snug text-balance ${open ? '' : 'line-clamp-4'}`}>
+            {/* Recortado solo si «Leer más» lleva al título completo (los pósteres no tienen más texto). */}
+            <h4 className={`font-display text-xl leading-snug text-balance ${readable && !open ? 'line-clamp-4' : ''}`}>
               {item.title ?? <span className="text-texto-suave">{participants.pending}</span>}
             </h4>
             {preview && !open && <p className="line-clamp-2 text-sm leading-relaxed text-texto-suave">{preview}</p>}

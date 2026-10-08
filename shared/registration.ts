@@ -2,6 +2,8 @@ import { z } from 'zod'
 
 // Mensajes de error genéricos de zod en español (los específicos se definen abajo).
 z.config(z.locales.es())
+// Sin compilar validadores con Function(): la CSP de la web no permite 'unsafe-eval'.
+z.config({ jitless: true })
 
 /*
  * Esquema de inscripción compartido por el navegador (validación inmediata)

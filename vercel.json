@@ -12,10 +12,6 @@
         { "key": "Cross-Origin-Opener-Policy", "value": "same-origin-allow-popups" },
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'"
-        },
-        {
-          "key": "Content-Security-Policy-Report-Only",
           "value": "default-src 'self'; script-src 'self' 'sha256-L5LxZjpRoJEgqv8kKZD0b/GxloYJLHjYA2wAb/wRca8=' 'sha256-rFlw5leZyXn9fvsJoyEu9lFCpA5Kq8aWE53cv1AZkgI=' https://apis.google.com https://www.gstatic.com https://www.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://ik.imagekit.io https://lh3.googleusercontent.com; font-src 'self'; media-src 'self'; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://www.gstatic.com https://content-firebaseappcheck.googleapis.com https://www.google.com; frame-src https://museos-de-canarias.firebaseapp.com https://accounts.google.com https://www.google.com https://recaptcha.google.com; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'"
         }
       ]

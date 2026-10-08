@@ -4,6 +4,8 @@
 interface ImportMetaEnv {
   /** 'true': la portada muestra «Sitio en construcción» (producción hasta el lanzamiento). */
   readonly VITE_UNDER_CONSTRUCTION?: string
+  /** SHA-256 (hex) de la clave de acceso anticipado: /?acceso=CLAVE salta «en construcción». */
+  readonly VITE_PREVIEW_KEY_HASH?: string
   /** mock (sin Firebase, solo desarrollo) | firebase */
   readonly VITE_DATA_MODE?: 'mock' | 'firebase'
   readonly VITE_FIREBASE_API_KEY?: string

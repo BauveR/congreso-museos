@@ -1,28 +1,11 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { safeStorage } from '../safeStorage'
 import { AuthContext } from './context'
 import { EMAIL_LINK_KEY, getFirebaseAuth } from './firebaseAuth'
 import { loadMockUser, mockPasswordAccount, mockToken, mockUid, saveMockUser, type MockUser } from './mockAuth'
 import type { AuthApi, AuthUser, SignUpInput } from './types'
 
 const MODE: AuthApi['mode'] = import.meta.env.VITE_DATA_MODE === 'firebase' ? 'firebase' : 'mock'
-
-const safeStorage = {
-  get: (key: string) => {
-    try {
-      return localStorage.getItem(key)
-    } catch {
-      return null
-    }
-  },
-  set: (key: string, value: string | null) => {
-    try {
-      if (value === null) localStorage.removeItem(key)
-      else localStorage.setItem(key, value)
-    } catch {
-      // Sin almacenamiento: se pedirá el correo al volver del enlace.
-    }
-  },
-}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   // En mock la sesión se lee de inmediato; en Firebase llega por onAuthStateChanged.

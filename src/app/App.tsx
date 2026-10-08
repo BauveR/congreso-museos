@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import { site } from '../content/site'
 import { Landing } from './Landing'
+import { usePreviewAccess } from './previewAccess'
 import { SmoothScroll } from './providers/SmoothScroll'
 import { UnderConstruction } from './UnderConstruction'
 
@@ -11,9 +12,11 @@ const AdminPage = lazy(() => import('../features/admin/AdminPage'))
 const PrivacyPage = lazy(() => import('../features/legal/PrivacyPage'))
 
 function Home() {
-  return site.underConstruction.enabled ? (
-    <UnderConstruction />
-  ) : (
+  const { enabled } = site.underConstruction
+  // En construcción: solo con el enlace de acceso anticipado (previewAccess).
+  const access = usePreviewAccess(enabled)
+  if (enabled && !access) return access === null ? null : <UnderConstruction />
+  return (
     <SmoothScroll>
       <Landing />
     </SmoothScroll>

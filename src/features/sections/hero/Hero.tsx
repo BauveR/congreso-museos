@@ -7,8 +7,8 @@ import { ScrollHint } from './ScrollHint'
 
 /**
  * Hero con la composición de lenis.dev: wordmark a todo el ancho arriba,
- * línea grande alineada a la derecha y fila inferior con indicador de
- * scroll, texto descriptivo y botones. El 3D queda detrás, abajo.
+ * lugar, fecha y presentación a la izquierda, y fila inferior con
+ * indicador de scroll, texto descriptivo y botones. El 3D queda detrás, abajo.
  */
 export function Hero() {
   const { hero } = site
@@ -16,17 +16,15 @@ export function Hero() {
     <Section id="hero" className="flex min-h-svh flex-col pt-20 pb-8">
       <div className="edge @container">
         <HeroWordmark edition={hero.edition} name={hero.eventName} headline={hero.headline} />
-        <div className="mt-[5svh] grid gap-8 lg:grid-cols-[1fr_40%] lg:items-start lg:gap-12">
+        <div className="mt-[5svh] flex flex-col gap-6">
           <p data-hero-after="" className="font-display text-[clamp(1rem,1.6vw,1.75rem)] leading-tight font-bold uppercase">
             {hero.location}, <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
           </p>
-          {/* Caja de presentación: texto blanco sobre un velo del fondo (legible
-              encima de la esfera). En móvil, primer párrafo + «Leer más». */}
-          <div data-hero-after="" className="rounded-2xl border border-borde/70 bg-fondo/70 p-6 text-base leading-relaxed text-pretty text-texto sm:p-8">
-            {/* data-hero-type: el texto se escribe palabra a palabra al acabar la intro (HeroWordmark). */}
-            <div data-hero-type="">
-              <ExpandableText paragraphs={hero.intro} />
-            </div>
+          {/* Presentación a la izquierda y a medida de lectura, sin caja. En
+              móvil, primer párrafo + «Leer más»; en escritorio, completa.
+              data-hero-type: se escribe palabra a palabra al acabar la intro (HeroWordmark). */}
+          <div data-hero-type="" className="max-w-prose text-lg leading-relaxed text-pretty text-texto">
+            <ExpandableText paragraphs={hero.intro} />
           </div>
         </div>
       </div>

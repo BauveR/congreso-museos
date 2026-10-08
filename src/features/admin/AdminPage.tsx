@@ -17,6 +17,8 @@ import { AuthProvider } from '../../lib/auth/AuthProvider'
 import { useAuth } from '../../lib/auth/context'
 import { SignedInBar, SignInPanel } from '../registration/SignInPanel'
 import { DiagnosticsButton } from './DiagnosticsButton'
+import { StatsPanel } from './StatsPanel'
+import type { AdminRegistration } from './types'
 
 const t = adminText
 const button =
@@ -25,13 +27,6 @@ const ghost =
   'inline-flex h-10 items-center justify-center rounded-lg border border-acento-texto px-4 text-xs font-bold tracking-wide uppercase hover:bg-acento-texto/10 disabled:opacity-60'
 const cell = 'rounded-md border border-borde bg-superficie px-2 py-1.5 text-sm text-texto'
 
-interface AdminRegistration {
-  uid: string
-  email: string
-  data: RegistrationData
-  createdAt: string
-  updatedAt: string
-}
 
 /* ---------- Días y aforo ---------- */
 
@@ -356,7 +351,7 @@ function RegistrationsPanel({ sessions }: { sessions: Session[] }) {
 
 function AdminDashboard() {
   const auth = useAuth()
-  const [tab, setTab] = useState<'sessions' | 'registrations'>('sessions')
+  const [tab, setTab] = useState<'stats' | 'sessions' | 'registrations'>('stats')
   const [sessions, setSessions] = useState<Session[] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -391,7 +386,7 @@ function AdminDashboard() {
     <>
       <SignedInBar />
       <div role="tablist" aria-label={t.pageTitle} className="mb-8 flex gap-2 border-b border-borde">
-        {(['sessions', 'registrations'] as const).map((key) => (
+        {(['stats', 'sessions', 'registrations'] as const).map((key) => (
           <button
             key={key}
             role="tab"
@@ -409,6 +404,7 @@ function AdminDashboard() {
           {error}
         </p>
       )}
+      {sessions && tab === 'stats' && <StatsPanel sessions={sessions} />}
       {sessions && tab === 'sessions' && <SessionsPanel sessions={sessions} setSessions={setSessions} />}
       {sessions && tab === 'registrations' && <RegistrationsPanel sessions={sessions} />}
     </>

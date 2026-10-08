@@ -153,7 +153,27 @@ export const accessText = {
 export const adminText = {
   pageTitle: 'Administración',
   forbidden: 'Esta cuenta no tiene acceso de administración.',
-  tabs: { sessions: 'Días y aforo', registrations: 'Inscritos' },
+  tabs: { stats: 'Resumen', sessions: 'Días y aforo', registrations: 'Inscritos' },
+
+  stats: {
+    day: 'Día',
+    allDays: 'Todos los días',
+    registered: 'Inscritos',
+    peopleAllDays: 'personas en total',
+    ofCapacity: (capacity: number, free: number) => `de ${capacity} plazas · ${free} libres`,
+    full: 'Completo',
+    certificate: 'Piden certificado',
+    foodNeeds: 'Con necesidades alimentarias',
+    ofTotal: (pct: number) => `${pct} % de los inscritos`,
+    participation: 'Tipo de participación',
+    food: 'Alimentación',
+    foodHelp: 'Una persona puede contar en varias barras (dieta y alergias).',
+    cities: 'Procedencia',
+    otherAllergy: 'Otra alergia (escrita)',
+    noFoodNeeds: 'Sin necesidades',
+    otherCities: 'Otras',
+    empty: 'Aún no hay inscripciones para este día.',
+  },
 
   sessions: {
     title: 'Título',

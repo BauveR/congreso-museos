@@ -125,6 +125,14 @@ export const accessText = {
   tabs: { signUp: 'Crear cuenta', signIn: 'Ya tengo cuenta' },
   google: 'Continuar con Google',
   or: 'o con tu correo',
+  /** En «Ya tengo cuenta»: camino claro para quien no usa Google. */
+  institutionalCta: '¿Correo institucional? Crea tu cuenta aquí',
+  /** En «Crear cuenta»: señala el formulario de correo y contraseña. */
+  signUpHint: 'Si tu correo no es de Google (por ejemplo, el institucional), crea tu cuenta aquí abajo con tu correo y una contraseña.',
+  /** Si Google falla o se cierra su ventana. */
+  googleHelpTitle: '¿No has podido entrar con Google?',
+  googleHelpBody: 'Crea tu cuenta con tu correo (también el institucional) y una contraseña. Solo se tarda un minuto.',
+  googleHelpButton: 'Crear cuenta con correo y contraseña',
   firstName: 'Nombre',
   lastName: 'Apellidos',
   email: 'Correo electrónico',

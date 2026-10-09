@@ -1,4 +1,4 @@
-import { Eye, EyeOff } from 'lucide-react'
+import { ArrowDown, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { FieldShell, TextInput } from '../../components/form'
 import { fieldDomId } from '../../components/formIds'
@@ -10,6 +10,10 @@ import { reportError } from '../../lib/diagnostics'
 const t = accessText
 
 type Mode = 'signUp' | 'signIn'
+
+/** Llamadas a crear cuenta con correo (en el rojo del sitio, para que destaquen). */
+const institutional =
+  'inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-error px-5 py-2 text-center text-sm font-bold text-error hover:bg-error/10'
 
 const primary =
   'inline-flex h-12 w-full items-center justify-center rounded-lg bg-acento px-6 text-sm font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60'
@@ -75,15 +79,19 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
+  /** Google falló o se cerró su ventana: se ofrece crear la cuenta con correo. */
+  const [googleHelp, setGoogleHelp] = useState(false)
 
-  const run = async (action: () => Promise<void>) => {
+  const run = async (action: () => Promise<void>, { google = false } = {}) => {
     setBusy(true)
     setError(null)
     setNotice(null)
+    setGoogleHelp(false)
     try {
       await action()
     } catch (e) {
-      // Cerrar la ventana de Google no es un error que mostrar.
+      if (google) setGoogleHelp(true)
+      // Cerrar la ventana de Google no es un error que mostrar (basta la ayuda).
       if (authErrorCode(e) !== 'auth/popup-closed-by-user' && authErrorCode(e) !== 'auth/cancelled-popup-request') {
         reportError('Acceso (Google o correo)', e)
         setError(errorMessage(e))
@@ -91,6 +99,19 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
     } finally {
       setBusy(false)
     }
+  }
+
+  const changeMode = (value: Mode) => {
+    setMode(value)
+    setError(null)
+    setNotice(null)
+  }
+
+  /** Ir a «Crear cuenta» con el cursor en Nombre. */
+  const toSignUp = () => {
+    changeMode('signUp')
+    setGoogleHelp(false)
+    requestAnimationFrame(() => document.getElementById(fieldDomId('authFirstName'))?.focus())
   }
 
   const submit = (e: FormEvent) => {
@@ -116,11 +137,7 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
     <button
       type="button"
       aria-pressed={mode === value}
-      onClick={() => {
-        setMode(value)
-        setError(null)
-        setNotice(null)
-      }}
+      onClick={() => changeMode(value)}
       className="min-h-11 flex-1 rounded-full text-sm font-bold tracking-wide uppercase aria-pressed:bg-texto aria-pressed:text-fondo"
     >
       {label}
@@ -137,16 +154,41 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
       <button
         type="button"
         disabled={busy}
-        onClick={() => void run(auth.signInWithGoogle)}
+        onClick={() => void run(auth.signInWithGoogle, { google: true })}
         className="mt-6 inline-flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-[#747775] bg-white px-6 text-sm font-semibold text-[#1f1f1f] hover:bg-[#f2f2f2] disabled:opacity-60"
       >
         <GoogleLogo />
         {t.google}
       </button>
 
+      {googleHelp && (
+        <div role="status" className="mt-4 rounded-2xl border-2 border-error p-4">
+          <p className="font-bold">{t.googleHelpTitle}</p>
+          <p className="mt-1 text-sm text-texto-suave">{t.googleHelpBody}</p>
+          <button type="button" onClick={toSignUp} className={`${institutional} mt-3`}>
+            {t.googleHelpButton}
+            <ArrowRight aria-hidden className="size-4 shrink-0" />
+          </button>
+        </div>
+      )}
+
+      {mode === 'signIn' && !googleHelp && (
+        <button type="button" onClick={toSignUp} className={`${institutional} mt-4`}>
+          {t.institutionalCta}
+          <ArrowRight aria-hidden className="size-4 shrink-0" />
+        </button>
+      )}
+
       <p className="my-6 flex items-center gap-4 text-xs font-bold tracking-widest text-texto-suave uppercase before:h-px before:flex-1 before:bg-borde after:h-px after:flex-1 after:bg-borde">
         {t.or}
       </p>
+
+      {mode === 'signUp' && (
+        <p className="-mt-2 mb-5 flex items-start gap-3 rounded-lg bg-error/10 p-3 text-sm leading-snug">
+          <ArrowDown aria-hidden className="mt-0.5 size-5 shrink-0 animate-bounce text-error motion-reduce:animate-none" />
+          {t.signUpHint}
+        </p>
+      )}
 
       <form onSubmit={submit} className="flex flex-col gap-4">
         {mode === 'signUp' && (

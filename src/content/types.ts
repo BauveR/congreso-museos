@@ -11,6 +11,7 @@ export type SectionId =
   | 'ponentes'
   | 'cinetico'
   | 'umbral'
+  | 'sede'
   | 'previos'
   | 'saber-mas'
   | 'agenda'
@@ -36,8 +37,8 @@ export interface NavContent {
   ariaLabel: string
   menuLabel: string
   closeLabel: string
-  /** `mark` es el monograma del logo; `label` su nombre accesible. */
-  logo: Link & { mark: string }
+  /** Logo (imagen) que enlaza al inicio; `label` es su nombre accesible. */
+  logo: Link & { src: string; width: number; height: number }
   /** En escritorio: enlaces a la izquierda y a la derecha del logo centrado. */
   linksLeft: Link[]
   linksRight: Link[]
@@ -48,6 +49,17 @@ export interface PresentationContent {
   title: string
   /** Un elemento por párrafo. */
   body: string[]
+}
+
+/** Sede: tarjeta con foto y enlace a su web. */
+export interface VenueContent {
+  title: string
+  name: string
+  place: string
+  /** Web de la sede (se abre en otra pestaña). */
+  link: Link
+  /** Foto en dos tamaños (WebP): `src` la grande y `srcSmall` la de móvil. */
+  image: ImageAsset & { srcSmall: string; widthSmall: number }
 }
 
 /** Rasgo diferencial del congreso (tarjeta con título destacado). */
@@ -329,6 +341,7 @@ export interface SiteContent {
   hero: HeroContent
   presentation: PresentationContent
   differences: DifferencesContent
+  venue: VenueContent
   committees: CommitteesContent
   organization: OrganizationContent
   participants: ParticipantsContent

@@ -45,16 +45,21 @@ export const site: SiteContent = {
     ariaLabel: 'Principal',
     menuLabel: 'Abrir menú',
     closeLabel: 'Cerrar menú',
-    logo: { label: 'V Congreso de Museos de Canarias, inicio', href: '#hero', mark: 'CM' },
+    // Logo «-11» reducido a WebP de 300 px (3× su tamaño en pantalla).
+    logo: { label: 'V Congreso de Museos de Canarias, inicio', href: '#hero', src: '/media/logo-nav.webp', width: 300, height: 124 },
+    // Orden del índice de contenidos (ÍNDICE.docx).
     linksLeft: [
-      { label: 'El Congreso', href: '#presentacion' },
+      { label: 'Inicio', href: '#hero' },
+      { label: 'Declaración de intenciones', href: '#distinto' },
+      { label: 'Organización', href: '#por-que' },
       { label: 'Programa', href: '#agenda' },
       { label: 'Participantes', href: '#ponentes' },
     ],
     linksRight: [
-      // Provisional: aún no hay sección de información práctica; apunta a la sede.
-      { label: 'Información práctica', href: '#umbral' },
+      { label: 'Sede', href: '#sede' },
       { label: 'Inscripción', href: '#acceso' },
+      { label: 'Previos', href: '#previos' },
+      { label: 'Para saber más', href: '#saber-mas' },
       { label: 'Contacto', href: '#contacto' },
     ],
   },
@@ -138,6 +143,22 @@ export const site: SiteContent = {
         'Ven a contarnos.',
         'Ven al V Congreso de Museos de Canarias, en La Gomera.',
       ],
+    },
+  },
+
+  venue: {
+    title: 'Sede',
+    name: 'Bancal Hotel',
+    place: 'La Gomera',
+    // Sin los parámetros de seguimiento de anuncios del enlace original (gclid, gad_source…).
+    link: { label: 'Visitar la web del hotel', href: 'https://www.bancalhotel.com/' },
+    image: {
+      src: '/media/sede-hotel-bancal-1024.webp',
+      srcSmall: '/media/sede-hotel-bancal-640.webp',
+      widthSmall: 640,
+      alt: 'Bancal Hotel: edificio de piedra en terrazas con un jardín de plantas bajas delante.',
+      width: 1024,
+      height: 683,
     },
   },
 

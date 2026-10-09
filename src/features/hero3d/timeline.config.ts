@@ -25,6 +25,7 @@ export const timeline: Record<Breakpoint, Keyframes> = {
     'por-que': pose({ scale: 0.6 }),
     ponentes: pose({ y: 0.3, scale: 0.5 }),
     cinetico: pose({ scale: 0.9 }),
+    sede: pose({ y: 0.25, scale: 0.6 }),
     umbral: pose({ scale: 0.3 }),
     acceso: pose({ y: -0.3, scale: 0.6 }),
     previos: pose({ scale: 0.6 }),
@@ -39,6 +40,7 @@ export const timeline: Record<Breakpoint, Keyframes> = {
     distinto: pose({ x: -0.55, y: 0.15, scale: 0.75 }),
     ponentes: pose({ x: -0.5, y: 0.2, scale: 0.6 }),
     cinetico: pose({ x: 0.5, scale: 1 }),
+    sede: pose({ x: 0.55, y: -0.1, scale: 0.75 }),
     umbral: pose({ scale: 0.3 }),
     acceso: pose({ x: -0.55, y: 0.2, scale: 0.8 }),
     previos: pose({ x: 0.55, scale: 0.8 }),
@@ -62,6 +64,7 @@ export const sectionColors: Record<SectionId, string> = {
   'por-que': '#2f6b45', // verde bosque (ver distinto)
   ponentes: '#e8eadf', // blanco cálido
   cinetico: '#d1e132', // lima: momento fuerte
+  sede: '#d3cd67', // ocre (como la arena y la piedra)
   umbral: '#f2f1ec', // se funde con el velo claro de la transición
   acceso: '#c8d832', // lima: aparece al recogerse el relleno claro
   previos: '#89976f', // salvia

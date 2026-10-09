@@ -14,6 +14,7 @@ import { Participants } from '../features/sections/participants/Participants'
 import { Presentation } from '../features/sections/presentation/Presentation'
 import { Program } from '../features/sections/program/Program'
 import { Threshold } from '../features/sections/threshold/Threshold'
+import { Venue } from '../features/sections/venue/Venue'
 import { useExitFade } from '../hooks/useExitFade'
 import { useSectionTriggers } from '../hooks/useSectionTriggers'
 
@@ -38,6 +39,7 @@ export function Landing() {
         <Organization />
         <Program />
         <Participants />
+        <Venue />
         <Threshold />
         <Access />
         <Previous />

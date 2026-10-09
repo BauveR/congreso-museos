@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router'
 import { registrationText } from '../content/inscripcion'
 import { site } from '../content/site'
+import { SiteLogo } from './SiteLogo'
 
 /** Marco de las páginas interiores (inscripción, administración, legal). */
 export function PageShell({ title, wide = false, children }: { title: string; wide?: boolean; children: ReactNode }) {
@@ -12,9 +13,9 @@ export function PageShell({ title, wide = false, children }: { title: string; wi
           <Link
             to="/"
             aria-label={site.nav.logo.label}
-            className="grid size-10 place-items-center rounded-md bg-acento text-sm font-black text-acento-contraste"
+            className="block"
           >
-            {site.nav.logo.mark}
+            <SiteLogo />
           </Link>
           <Link to="/" className="text-sm font-bold tracking-wide uppercase hover:text-acento-texto">
             {registrationText.backHome}

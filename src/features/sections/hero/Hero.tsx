@@ -15,6 +15,16 @@ export function Hero() {
   return (
     <Section id="hero" className="flex min-h-svh flex-col pt-20 pb-8">
       <div className="edge @container">
+        {/* Logo del congreso sobre el lema. Decorativo: el h1 ya anuncia el nombre.
+            WebP sin pérdida (10,7 KB frente a 28,8 KB del PNG original). */}
+        <img
+          data-hero-after=""
+          src="/media/logo-congreso.webp"
+          alt=""
+          width={1176}
+          height={484}
+          className="mb-6 h-auto w-[min(48vw,16rem)] lg:mb-8 lg:w-[19.2rem]"
+        />
         <HeroWordmark edition={hero.edition} name={hero.eventName} headline={hero.headline} />
         <div className="mt-[5svh] flex flex-col gap-6">
           <p data-hero-after="" className="font-display text-[clamp(1rem,1.6vw,1.75rem)] leading-tight font-bold uppercase">

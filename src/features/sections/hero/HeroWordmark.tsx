@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { useMotionEffect, type Motion } from '../../../app/motion'
 import { useReducedMotion } from '../../../hooks/useReducedMotion'
+import { IntroMark } from '../../../components/IntroMark'
 
 /** Retardo (ms) del fallback CSS de la cortina (.hero-intro en index.css). */
 const CURTAIN_FALLBACK_DELAY = 4000
@@ -10,7 +11,7 @@ const TYPE_STAGGER = 0.035
 const TYPE_TOTAL = 2.5
 
 /**
- * Posición de las letras gigantes de la intro (esquina superior izquierda),
+ * Posición de los símbolos gigantes de la intro (esquina superior izquierda),
  * en dos filas desplazadas como en lenis.dev.
  */
 const INTRO_LETTERS = [
@@ -36,8 +37,9 @@ interface Parts {
 
 /**
  * Intro estilo lenis.dev:
- * 1. Cortina (index.html, color --color-intro) y cuatro letras gigantes en
- *    distintas posiciones (--color-intro-letra) se revelan de abajo arriba.
+ * 1. Cortina (index.html, color --color-intro) y cuatro símbolos del
+ *    congreso gigantes en distintas posiciones (--color-intro-letra) se
+ *    revelan de abajo arriba.
  * 2. La cortina se retira hacia arriba y descubre el hero oscuro.
  * 3. Las cuatro convergen hacia la primera letra del wordmark (FLIP) mientras
  *    pasan al color del wordmark; tres se desvanecen y la cuarta aterriza en
@@ -111,7 +113,7 @@ function scatterOnScroll({ gsap }: Motion, { section, chars }: Parts) {
 }
 
 interface HeroWordmarkProps {
-  /** Edición ("V"): las letras gigantes de la intro. */
+  /** Edición ("V"), para el nombre accesible del h1. */
   edition: string
   /** Nombre del congreso, para el nombre accesible del h1. */
   name: string
@@ -119,8 +121,8 @@ interface HeroWordmarkProps {
 }
 
 /**
- * Titular del hero (lema del congreso) en una sola línea a todo el ancho
- * desde md; en móvil se parte en varias líneas. El tamaño usa `cqw` (el
+ * Titular del hero (lema del congreso) en una sola línea desde md, al 70 %
+ * del ancho; en móvil se parte en varias líneas. El tamaño usa `cqw` (el
  * contenedor padre debe tener `@container`): el lema mide 26,23 em en Kola
  * Regular mayúsculas, 26,6 deja margen. Recalcular si cambia el texto.
  * El h1 se anuncia como "V Congreso de Museos de Canarias. <lema>".
@@ -190,7 +192,8 @@ export function HeroWordmark({ edition, name, headline }: HeroWordmarkProps) {
 
   return (
     <>
-      {/* Letras gigantes de la intro: capa fija sobre la cortina (z 70). */}
+      {/* Símbolos gigantes de la intro: capa fija sobre la cortina (z 70). El tamaño de
+          fuente del span manda (la animación escala por la proporción de fuentes). */}
       <div
         ref={layerRef}
         aria-hidden
@@ -199,8 +202,8 @@ export function HeroWordmark({ edition, name, headline }: HeroWordmarkProps) {
       >
         {INTRO_LETTERS.map((position) => (
           <span key={position.left} className="absolute block overflow-hidden" style={position}>
-            <span className="block font-wordmark text-[min(42svh,30vw)] leading-[0.9] font-normal tracking-[-0.02em] text-intro-letra">
-              {edition}
+            <span className="block text-[min(42svh,30vw)] leading-none text-intro-letra">
+              <IntroMark className="block h-[0.7em] w-auto" />
             </span>
           </span>
         ))}
@@ -210,7 +213,7 @@ export function HeroWordmark({ edition, name, headline }: HeroWordmarkProps) {
         ref={titleRef}
         data-reveal=""
         aria-label={`${edition} ${name}. ${headline}`}
-        className="font-wordmark text-[clamp(1.75rem,8vw,3rem)] leading-[0.95] font-normal tracking-[-0.02em] text-balance text-acento uppercase md:text-[calc(100cqw/26.6)] md:whitespace-nowrap"
+        className="font-wordmark text-[clamp(1.225rem,5.6vw,2.1rem)] leading-[0.95] font-normal tracking-[-0.02em] text-balance text-acento uppercase md:text-[calc(70cqw/26.6)] md:whitespace-nowrap"
       >
         {headline}
       </h1>

@@ -13,6 +13,7 @@ import {
   registrationSchema,
   type ParticipationType,
 } from '../../../shared/registration'
+import { DayPill } from '../../components/DayPill'
 import { Choice, ChoiceGroup, FormSection, SelectInput, TextArea, TextInput } from '../../components/form'
 import { fieldDomId } from '../../components/formIds'
 import { toInput, type FormInput, type FormValues, type PublicSession } from './formValues'
@@ -114,13 +115,14 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
   const days = sessions.filter((s) => s.kind === 'day')
   const activities = sessions.filter((s) => s.kind === 'activity')
 
-  const sessionChoice = (s: PublicSession) => {
+  /** `day`: posición del día, para su píldora de color; las actividades van sin color. */
+  const sessionChoice = (s: PublicSession, day?: number) => {
     const own = ownSessionIds.includes(s.id)
     const full = s.remaining <= 0 && !own
     return (
       <Choice
         key={s.id}
-        label={s.title}
+        label={day === undefined ? s.title : <DayPill index={day}>{s.title}</DayPill>}
         hint={full ? f.full : f.remaining(s.remaining)}
         checked={values.sessionIds.includes(s.id)}
         disabled={full}
@@ -187,11 +189,11 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
 
       <FormSection title={t.sections.attendance}>
         <ChoiceGroup id="sessionIds" legend={t.sections.attendance} help={f.attendanceHelp} error={err('sessionIds')}>
-          <div className={wide ? 'grid gap-3 lg:grid-cols-3' : 'contents'}>{days.map(sessionChoice)}</div>
+          <div className={wide ? 'grid gap-3 lg:grid-cols-3' : 'contents'}>{days.map((s, i) => sessionChoice(s, i))}</div>
         </ChoiceGroup>
         {activities.length > 0 && (
           <ChoiceGroup id="activities" legend={t.sections.activities}>
-            {activities.map(sessionChoice)}
+            {activities.map((s) => sessionChoice(s))}
           </ChoiceGroup>
         )}
       </FormSection>

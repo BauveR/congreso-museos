@@ -4,6 +4,7 @@ import { previous } from './previos'
 import { moreInfo } from './saberMas'
 import { program } from './programa'
 import type { SiteContent } from './types'
+import { EVENT } from '../../shared/event'
 
 /*
  * Contenido de relleno. Todos los textos de la web viven aquí; los
@@ -67,10 +68,10 @@ export const site: SiteContent = {
   hero: {
     edition: 'V',
     eventName: 'Congreso de Museos de Canarias',
-    headline: 'Museos en un tiempo de cambios. Diagnosis y perspectiva',
-    dateLabel: '19-21 de noviembre de 2026',
-    dateTime: '2026-11-19',
-    location: 'San Sebastián de La Gomera',
+    headline: EVENT.headline,
+    dateLabel: EVENT.dateLabel,
+    dateTime: EVENT.dateTime,
+    location: EVENT.place,
     scrollHint: ['Desliza', 'para explorar'],
     ctas: [
       { label: 'Inscripciones', href: '#acceso', icon: 'ticket' },
@@ -147,15 +148,19 @@ export const site: SiteContent = {
 
   venue: {
     title: 'Sede',
-    name: 'Bancal Hotel',
-    place: 'La Gomera',
+    name: EVENT.venue.name,
+    address: [...EVENT.venue.address],
     // Sin los parámetros de seguimiento de anuncios del enlace original (gclid, gad_source…).
     link: { label: 'Visitar la web del hotel', href: 'https://www.bancalhotel.com/' },
+    directions: {
+      label: 'Cómo llegar',
+      mapsQuery: EVENT.venue.mapsQuery,
+    },
     image: {
       src: '/media/sede-hotel-bancal-1024.webp',
       srcSmall: '/media/sede-hotel-bancal-640.webp',
       widthSmall: 640,
-      alt: 'Bancal Hotel: edificio de piedra en terrazas con un jardín de plantas bajas delante.',
+      alt: 'Bancal Hotel & Spa: edificio de piedra en terrazas con un jardín de plantas bajas delante.',
       width: 1024,
       height: 683,
     },

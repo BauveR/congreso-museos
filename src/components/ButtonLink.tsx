@@ -1,4 +1,4 @@
-import { ArrowUpRight, CalendarDays, Mail, Ticket, type LucideIcon } from 'lucide-react'
+import { ArrowUpRight, CalendarDays, Mail, MapPin, Ticket, type LucideIcon } from 'lucide-react'
 import type { AnchorHTMLAttributes } from 'react'
 import type { LinkIcon } from '../content/types'
 
@@ -9,6 +9,7 @@ const icons: Record<LinkIcon, LucideIcon> = {
   ticket: Ticket,
   calendar: CalendarDays,
   mail: Mail,
+  map: MapPin,
 }
 
 /** Botón (fondo + borde) y caja del icono, por variante. */

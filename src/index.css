@@ -40,14 +40,6 @@
   --color-ocre: #d3cd67;
   /* Lima: nombre destacado en las comunicaciones de varios autores. */
   --color-lima: #c8d832;
-  /*
-   * Días del congreso: tres verdes de claro a oscuro (validados para
-   * distinguirse también con daltonismo; texto ≥ 5,6:1 en cada uno).
-   */
-  --color-dia-1: #d1e132;
-  --color-dia-2: #6fb86a;
-  --color-dia-3: #2f6b45;
-  --color-dia-3-texto: #f2f3ee;
   /* Intro del hero: fondo de la cortina y color de las letras gigantes. */
   --color-intro: var(--color-salvia);
   --color-intro-letra: var(--color-ocre);

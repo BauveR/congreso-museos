@@ -18,7 +18,7 @@ export type SectionId =
   | 'contacto'
 
 /** Icono del botón (ver el mapa en components/ButtonLink.tsx). */
-export type LinkIcon = 'arrow' | 'ticket' | 'calendar' | 'mail'
+export type LinkIcon = 'arrow' | 'ticket' | 'calendar' | 'mail' | 'map'
 
 export interface Link {
   label: string
@@ -55,9 +55,12 @@ export interface PresentationContent {
 export interface VenueContent {
   title: string
   name: string
-  place: string
+  /** Dirección postal, una línea por elemento. */
+  address: string[]
   /** Web de la sede (se abre en otra pestaña). */
   link: Link
+  /** «Cómo llegar»: abre Google Maps buscando `mapsQuery`. */
+  directions: { label: string; mapsQuery: string }
   /** Foto en dos tamaños (WebP): `src` la grande y `srcSmall` la de móvil. */
   image: ImageAsset & { srcSmall: string; widthSmall: number }
 }

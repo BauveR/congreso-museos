@@ -45,7 +45,6 @@ export const registrationText = {
     certificate: 'Certificado',
     accessibility: 'Accesibilidad',
     food: 'Alergias e intolerancias alimentarias',
-    observations: 'Observaciones',
     privacy: 'Protección de datos',
   },
 
@@ -76,7 +75,6 @@ export const registrationText = {
     allergens: 'Marca los alérgenos que debamos tener en cuenta',
     otherAllergy: 'Otra alergia o intolerancia',
     diet: 'Preferencia alimentaria',
-    observations: 'Observaciones',
   },
 
   privacyInfo: [
@@ -94,7 +92,6 @@ export const registrationText = {
     healthData:
       'Consiento expresamente el tratamiento de los datos de accesibilidad y alergias que he indicado, solo para adaptar el congreso a mis necesidades.',
     image: 'Autorizo el uso de mi imagen en fotografías y grabaciones del congreso para su difusión. (Opcional)',
-    communications: 'Quiero recibir información sobre futuras ediciones y actividades. (Opcional)',
   },
 
   submitCreate: 'Enviar inscripción',
@@ -266,7 +263,7 @@ export const privacyPage = {
   sections: [
     ['Responsable del tratamiento', `${legal.controller}, ${legal.taxId}, ${legal.address}. Contacto: ${legal.contactEmail}.`],
     ['Datos que tratamos', 'Datos identificativos y de contacto, datos profesionales, días de asistencia, preferencias de certificado y, solo si nos los facilitas con tu consentimiento explícito, datos de accesibilidad y alergias o intolerancias alimentarias.'],
-    ['Finalidades', 'Gestionar la inscripción y la organización del congreso (aforo, acreditaciones, catering y accesibilidad), comunicarnos contigo sobre el evento, emitir certificados de asistencia y, si lo autorizas, difundir imágenes del congreso e informarte de futuras ediciones.'],
+    ['Finalidades', 'Gestionar la inscripción y la organización del congreso (aforo, acreditaciones, catering y accesibilidad), comunicarnos contigo sobre el evento, emitir certificados de asistencia y, si lo autorizas, difundir imágenes del congreso.'],
     ['Base jurídica', 'Tu consentimiento (art. 6.1.a RGPD) y, para los datos de salud, tu consentimiento explícito (art. 9.2.a RGPD). Puedes retirarlo en cualquier momento sin que afecte a la licitud del tratamiento previo.'],
     ['Conservación', 'Durante la organización del congreso y el tiempo necesario para emitir certificados y atender posibles responsabilidades. Los datos de salud se suprimen al finalizar el evento.'],
     ['Destinatarios', 'No se ceden datos a terceros salvo obligación legal. Utilizamos proveedores tecnológicos (alojamiento, base de datos y correo electrónico) que actúan como encargados del tratamiento con las garantías exigidas.'],

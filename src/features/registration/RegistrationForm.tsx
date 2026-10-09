@@ -27,7 +27,7 @@ const f = t.fields
 /** Orden de los campos para enfocar el primer error. */
 const FIELD_ORDER = [
   'firstName', 'lastName', 'city', 'phone', 'organization', 'jobTitle', 'participationType', 'sessionIds',
-  'idDocument.number', 'accessibility', 'allergens', 'otherAllergy', 'observations', 'consents.healthData', 'consents.privacy',
+  'idDocument.number', 'accessibility', 'allergens', 'otherAllergy', 'consents.healthData', 'consents.privacy',
 ]
 
 interface Props {
@@ -243,10 +243,6 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
         </div>
       </FormSection>
 
-      <FormSection title={t.sections.observations}>
-        <TextArea id="observations" label={f.observations} optional={f.optional} value={values.observations} onChange={(e) => set('observations', e.target.value)} error={err('observations')} maxLength={LIMITS.observations} rows={4} />
-      </FormSection>
-
       <FormSection title={t.sections.privacy} className={span}>
         <dl className="grid gap-x-4 gap-y-2 rounded-xl border border-borde p-4 text-sm sm:grid-cols-[9rem_1fr]">
           {t.privacyInfo.map(([term, desc]) => (
@@ -271,7 +267,6 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
             </div>
           )}
           <Choice label={t.consents.image} checked={values.consents.image} onChange={(e) => set('consents', { ...values.consents, image: e.target.checked })} />
-          <Choice label={t.consents.communications} checked={values.consents.communications} onChange={(e) => set('consents', { ...values.consents, communications: e.target.checked })} />
           <div>
             <Choice id={fieldDomId('consents.privacy')} label={t.consents.privacy} checked={values.consents.privacy} onChange={(e) => set('consents', { ...values.consents, privacy: e.target.checked })} aria-invalid={Boolean(err('consents.privacy'))} aria-describedby={err('consents.privacy') ? `${fieldDomId('consents.privacy')}-error` : undefined} required />
             {err('consents.privacy') && <p id={`${fieldDomId('consents.privacy')}-error`} className="text-sm font-semibold text-error">{err('consents.privacy')}</p>}

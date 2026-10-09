@@ -1,6 +1,7 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useId } from 'react'
+import { PagerArrows } from '../../../components/PagerArrows'
 import { site } from '../../../content/site'
+import { useScrollPager } from '../../../hooks/useScrollPager'
 import type { ParticipantGroup } from '../../../content/types'
 import type { PlateTone } from './NamePlate'
 import { ParticipantCard } from './ParticipantCard'
@@ -24,33 +25,7 @@ interface ParticipantSliderProps {
 export function ParticipantSlider({ group, tone, inline, openIndex, onOpen, onClose }: ParticipantSliderProps) {
   const { participants } = site
   const headingId = useId()
-  const scroller = useRef<HTMLUListElement>(null)
-  const [edges, setEdges] = useState({ start: true, end: false })
-
-  const measure = () => {
-    const el = scroller.current
-    if (!el) return
-    const start = el.scrollLeft <= 4
-    const end = el.scrollLeft + el.clientWidth >= el.scrollWidth - 4
-    setEdges((prev) => (prev.start === start && prev.end === end ? prev : { start, end }))
-  }
-
-  useEffect(() => {
-    const el = scroller.current
-    if (!el) return
-    const observer = new ResizeObserver(measure)
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
-  const page = (dir: 1 | -1) => {
-    const el = scroller.current
-    if (!el) return
-    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: smooth ? 'smooth' : 'auto' })
-  }
-
-  const arrow = 'grid size-11 place-items-center rounded-full border border-borde transition-colors hover:border-texto disabled:opacity-30 disabled:hover:border-borde'
+  const { ref: scroller, edges, measure, page } = useScrollPager<HTMLUListElement>()
 
   return (
     <div className="mt-14 first:mt-0 lg:mt-20">
@@ -58,14 +33,7 @@ export function ParticipantSlider({ group, tone, inline, openIndex, onOpen, onCl
         <h3 id={headingId} className="text-sm font-bold tracking-widest uppercase">
           {group.label} <span className="ml-1 font-normal text-texto-suave">{group.items.length}</span>
         </h3>
-        <div className="hidden gap-2 lg:flex">
-          <button type="button" className={arrow} onClick={() => page(-1)} disabled={edges.start} aria-label={`${participants.prev}: ${group.label}`}>
-            <ArrowLeft aria-hidden className="size-5" />
-          </button>
-          <button type="button" className={arrow} onClick={() => page(1)} disabled={edges.end} aria-label={`${participants.next}: ${group.label}`}>
-            <ArrowRight aria-hidden className="size-5" />
-          </button>
-        </div>
+        <PagerArrows edges={edges} page={page} prevLabel={`${participants.prev}: ${group.label}`} nextLabel={`${participants.next}: ${group.label}`} />
       </div>
 
       <ul

@@ -194,6 +194,21 @@ export interface KineticContent {
   fragments: string[]
 }
 
+/** Foto de la galería: ruta del original (ver services/imagekit.ts) y texto alternativo. */
+export interface GalleryImage {
+  file: string
+  alt: string
+}
+
+/** Slider de fotos bajo la frase cinética. */
+export interface GalleryContent {
+  /** Nombre del carrusel para lectores de pantalla. */
+  label: string
+  prev: string
+  next: string
+  images: GalleryImage[]
+}
+
 /** Transición con zoom a través de la palabra y paso a tema claro. */
 export interface ThresholdContent {
   word: string
@@ -346,6 +361,7 @@ export interface SiteContent {
   organization: OrganizationContent
   participants: ParticipantsContent
   kinetic: KineticContent
+  gallery: GalleryContent
   threshold: ThresholdContent
   previous: PreviousContent
   moreInfo: MoreInfoContent

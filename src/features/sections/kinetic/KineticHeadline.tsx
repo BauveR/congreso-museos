@@ -3,6 +3,7 @@ import { useMotionEffect } from '../../../app/motion'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { useReducedMotion } from '../../../hooks/useReducedMotion'
+import { Gallery } from '../gallery/Gallery'
 
 /** Desplazamiento inicial de cada fragmento, en fracción del ancho de ventana. */
 const OFFSET = 0.35
@@ -48,7 +49,7 @@ export function KineticHeadline() {
     <Section id="cinetico" className="overflow-x-clip py-24 sm:py-32">
       <h2
         ref={ref}
-        className="wrap text-[clamp(2.25rem,8vw,6.5rem)] leading-[0.95] font-black tracking-tight uppercase"
+        className="wrap font-wordmark text-[clamp(2.25rem,8vw,6.5rem)] leading-[0.95] font-normal uppercase"
       >
         {kinetic.fragments.map((fragment, i) => (
           <span key={i} className="block even:text-right even:text-acento-texto">
@@ -56,6 +57,7 @@ export function KineticHeadline() {
           </span>
         ))}
       </h2>
+      <Gallery />
     </Section>
   )
 }

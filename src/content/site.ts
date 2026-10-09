@@ -334,6 +334,22 @@ export const site: SiteContent = {
     fragments: ['Museos', 'en un tiempo', 'de cambios.', 'Diagnosis', 'y perspectiva.'],
   },
 
+  gallery: {
+    label: 'Imágenes del IV Congreso de Museos de Canarias',
+    prev: 'Fotos anteriores',
+    next: 'Fotos siguientes',
+    // Originales de 4000 px fuera de la web; aquí, la ruta que tendrán en ImageKit.
+    images: [
+      { file: 'galeria/Cmuseos.Viernes-163.jpg', alt: 'Foto de grupo de las personas participantes en el escenario, ante la pantalla del IV Congreso de Museos de Canarias.' },
+      { file: 'galeria/Cmuseos.Viernes-57.jpg', alt: 'Un ponente de pie interviene en una mesa redonda; a su lado, tres participantes sentados le escuchan.' },
+      { file: 'galeria/Cmuseos.Jueves-183.jpg', alt: 'Una ponente presenta «Diversidad de la colección» ante el público en una sala de conferencias.' },
+      { file: 'galeria/Cmuseos.Jueves-199.jpg', alt: 'Asistentes conversan en una sala de exposición con fotografías en blanco y negro colgadas.' },
+      { file: 'galeria/Cmuseos.Viernes-31.jpg', alt: 'Dos ponentes en el estrado junto a una proyección con una cita de César Manrique.' },
+      { file: 'galeria/Cmuseos.Viernes-19.jpg', alt: 'Una ponente habla desde el atril junto a una proyección con ilustraciones y textos históricos.' },
+      { file: 'galeria/Cmuseos.Viernes-194.jpg', alt: 'Público atento en las butacas del auditorio durante una sesión.' },
+    ],
+  },
+
   threshold: {
     word: 'INSCRÍBETE',
   },

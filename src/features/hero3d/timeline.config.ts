@@ -36,8 +36,8 @@ export const timeline: Record<Breakpoint, Keyframes> = {
   desktop: {
     hero: pose({ x: 0.15, y: -0.2, scale: 1.1 }),
     presentacion: pose({ x: 0.6, scale: 0.8 }),
-    'por-que': pose({ y: 0.1, scale: 0.6 }),
     distinto: pose({ x: -0.55, y: 0.15, scale: 0.75 }),
+    'por-que': pose({ y: 0.1, scale: 0.6 }),
     ponentes: pose({ x: -0.5, y: 0.2, scale: 0.6 }),
     cinetico: pose({ x: 0.5, scale: 1 }),
     sede: pose({ x: 0.55, y: -0.1, scale: 0.75 }),

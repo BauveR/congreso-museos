@@ -100,8 +100,6 @@ export interface HeroContent {
   location: string
   /** Indicador de scroll en dos líneas. */
   scrollHint: [string, string]
-  /** Texto corto en dos líneas de la fila inferior del hero. */
-  descriptor: [string, string]
   /** Botones de la fila inferior del hero. */
   ctas: Link[]
   poster: ImageAsset

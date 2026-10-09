@@ -72,7 +72,6 @@ export const site: SiteContent = {
     dateTime: '2026-11-19',
     location: 'San Sebastián de La Gomera',
     scrollHint: ['Desliza', 'para explorar'],
-    descriptor: ['Encuentro profesional sobre museos,', 'patrimonio y públicos'],
     ctas: [
       { label: 'Inscripciones', href: '#acceso', icon: 'ticket' },
       { label: 'Agenda', href: '#agenda', icon: 'calendar' },

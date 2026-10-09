@@ -8,7 +8,7 @@ import { ScrollHint } from './ScrollHint'
  * Hero con la composición de lenis.dev: wordmark a todo el ancho arriba,
  * lugar y fecha a la izquierda (la presentación va en su propia sección,
  * debajo), y fila inferior con
- * indicador de scroll, texto descriptivo y botones. El 3D queda detrás, abajo.
+ * indicador de scroll y botones. El 3D queda detrás, abajo.
  */
 export function Hero() {
   const { hero } = site
@@ -33,15 +33,10 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="edge mt-auto grid gap-6 pt-12 lg:grid-cols-[auto_1fr_auto] lg:items-end lg:gap-16">
+      <div className="edge mt-auto grid gap-6 pt-12 lg:grid-cols-[auto_auto] lg:items-end lg:justify-between lg:gap-16">
         <div data-hero-after="" className="order-last lg:order-none">
           <ScrollHint lines={hero.scrollHint} />
         </div>
-        <p data-hero-after="" className="text-xs leading-tight font-bold tracking-wide text-texto-suave uppercase">
-          {hero.descriptor[0]}
-          <br />
-          {hero.descriptor[1]}
-        </p>
         <div data-hero-after="" className="flex flex-col gap-3 sm:flex-row">
           {hero.ctas.map((cta, i) => (
             <ButtonLink

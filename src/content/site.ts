@@ -172,7 +172,7 @@ export const site: SiteContent = {
         { name: 'Carmen Gloria Rodríguez Santana', affiliation: 'Casa de Colón, Las Palmas de Gran Canaria' },
         { name: 'Isabel Santos Gómez', affiliation: 'Museo Insular, Santa Cruz de La Palma' },
         { name: 'Juan Carlos Hernández Marrero', affiliation: 'Museo Arqueológico, San Sebastián de La Gomera' },
-        { name: 'Carla Armas de León', affiliation: 'Fundación Cristino de Vera, San Cristóbal de La Laguna' },
+        { name: 'Clara Armas de León', affiliation: 'Fundación Cristino de Vera, San Cristóbal de La Laguna' },
         { name: 'Isidoro Hernández Sánchez', affiliation: 'Museo Arqueológico de Fuerteventura, Betancuria' },
         { name: 'Carlos Pallés Darias', affiliation: 'OAMC, Santa Cruz de Tenerife' },
         { name: 'Lorea Arija Bartolomé', affiliation: 'OAMC, Santa Cruz de Tenerife' },
@@ -200,11 +200,6 @@ export const site: SiteContent = {
           role: 'Secretaría general',
           members: [
           { name: 'Juan Alejandro Lorenzo Lima', affiliation: 'Personal técnico de Patrimonio Cultural, Gobierno de Canarias' },
-          ],
-        },
-        {
-          role: 'Secretaría técnica',
-          members: [
           { name: 'Patricia Dávila Mamely', affiliation: 'Personal técnico de Gestión y Planeamiento Territorial y Medioambiental-Gesplan' },
           ],
         },

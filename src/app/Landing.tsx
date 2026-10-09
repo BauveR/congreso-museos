@@ -2,7 +2,7 @@ import { site } from '../content/site'
 import { Background } from '../features/hero3d/Background'
 import { Access } from '../features/sections/access/Access'
 import { Contact } from '../features/sections/contact/Contact'
-import { Committees } from '../features/sections/committees/Committees'
+import { Differences } from '../features/sections/differences/Differences'
 import { Footer } from '../features/sections/footer/Footer'
 import { Hero } from '../features/sections/hero/Hero'
 import { KineticHeadline } from '../features/sections/kinetic/KineticHeadline'
@@ -11,6 +11,7 @@ import { Nav } from '../features/sections/nav/Nav'
 import { Organization } from '../features/sections/organization/Organization'
 import { Previous } from '../features/sections/previous/Previous'
 import { Participants } from '../features/sections/participants/Participants'
+import { Presentation } from '../features/sections/presentation/Presentation'
 import { Program } from '../features/sections/program/Program'
 import { Threshold } from '../features/sections/threshold/Threshold'
 import { useExitFade } from '../hooks/useExitFade'
@@ -32,7 +33,8 @@ export function Landing() {
       <Nav />
       <main id="main">
         <Hero />
-        <Committees />
+        <Presentation />
+        <Differences />
         <Organization />
         <Program />
         <Participants />

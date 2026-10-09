@@ -1,5 +1,4 @@
 import { ButtonLink } from '../../../components/ButtonLink'
-import { ExpandableText } from '../../../components/ExpandableText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { HeroWordmark } from './HeroWordmark'
@@ -7,7 +6,8 @@ import { ScrollHint } from './ScrollHint'
 
 /**
  * Hero con la composición de lenis.dev: wordmark a todo el ancho arriba,
- * lugar, fecha y presentación a la izquierda, y fila inferior con
+ * lugar y fecha a la izquierda (la presentación va en su propia sección,
+ * debajo), y fila inferior con
  * indicador de scroll, texto descriptivo y botones. El 3D queda detrás, abajo.
  */
 export function Hero() {
@@ -30,12 +30,6 @@ export function Hero() {
           <p data-hero-after="" className="font-display text-[clamp(1rem,1.6vw,1.75rem)] leading-tight font-bold uppercase">
             {hero.location}, <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
           </p>
-          {/* Presentación a la izquierda y a medida de lectura, sin caja. En
-              móvil, primer párrafo + «Leer más»; en escritorio, completa.
-              data-hero-type: se escribe palabra a palabra al acabar la intro (HeroWordmark). */}
-          <div data-hero-type="" className="max-w-prose text-lg leading-relaxed text-pretty text-texto">
-            <ExpandableText paragraphs={hero.intro} />
-          </div>
         </div>
       </div>
 

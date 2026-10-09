@@ -24,6 +24,8 @@ export const site: SiteContent = {
   ui: {
     readMore: 'Leer más',
     readLess: 'Leer menos',
+    seeAll: 'Ver todo',
+    seeLess: 'Ver menos',
     scrollToContinue: 'Desplázate para continuar',
     close: 'Cerrar',
   },
@@ -64,12 +66,6 @@ export const site: SiteContent = {
     dateLabel: '19-21 de noviembre de 2026',
     dateTime: '2026-11-19',
     location: 'San Sebastián de La Gomera',
-    intro: [
-      'Los museos de Canarias atraviesan en la actualidad un momento decisivo, marcado por profundas transformaciones sociales, culturales, tecnológicas y territoriales que interpelan a sus funciones comunes y a los modos de relación con la ciudadanía o, lo que es lo mismo, a su razón de ser. En este contexto, la celebración del V Congreso de Museos de Canarias, que va a celebrarse entre el 19 y 21 de noviembre de 2026 en la isla de La Gomera, se concibe como un espacio estratégico de reflexión colectiva, debate profesional y construcción compartida de horizontes futuros.',
-      'Lejos de entenderse únicamente como contenedores de bienes culturales, los museos se reconocen hoy como agentes activos del territorio, instituciones vivas que participan en la configuración de identidades, los procesos educativos, la mediación cultural y las dinámicas de desarrollo local. Esta evolución conceptual, alineada con los debates internacionales más recientes en torno a foros o congresos del sector, adquiere en las islas una dimensión específica por los efectos que generan sus desajustes territoriales, una diversidad cultural evidente, la historia diferenciada, una clara fragilidad medioambiental y, sobre todo, la necesidad de implementar modelos de desarrollo sostenibles.',
-      'La elección de La Gomera como sede del V Congreso no es casual. Se trata de una isla donde la relación entre patrimonio cultural, paisaje, memoria colectiva y comunidad local resulta especialmente visible. En ella, la escala territorial permite pensar el museo no como una institución aislada, sino como parte de un ecosistema cultural interdependiente. Desde luego, dicha circunstancia se revela como una oportunidad única para La Gomera.',
-      'El V Congreso de Museos aspira, por tanto, a convertirse en un laboratorio de ideas desde el que repensar el papel de los museos de Canarias en el siglo XXI.',
-    ],
     scrollHint: ['Desliza', 'para explorar'],
     descriptor: ['Encuentro profesional sobre museos,', 'patrimonio y públicos'],
     ctas: [
@@ -81,6 +77,67 @@ export const site: SiteContent = {
       alt: '',
       width: 1600,
       height: 900,
+    },
+  },
+
+  presentation: {
+    title: 'Presentación del congreso',
+    body: [
+      'Los museos de Canarias atraviesan en la actualidad un momento decisivo, marcado por profundas transformaciones sociales, culturales, tecnológicas y territoriales que interpelan a sus funciones comunes y a los modos de relación con la ciudadanía o, lo que es lo mismo, a su razón de ser. En este contexto, la celebración del V Congreso de Museos de Canarias, que va a celebrarse entre el 19 y 21 de noviembre de 2026 en la isla de La Gomera, se concibe como un espacio estratégico de reflexión colectiva, debate profesional y construcción compartida de horizontes futuros.',
+      'Lejos de entenderse únicamente como contenedores de bienes culturales, los museos se reconocen hoy como agentes activos del territorio, instituciones vivas que participan en la configuración de identidades, los procesos educativos, la mediación cultural y las dinámicas de desarrollo local. Esta evolución conceptual, alineada con los debates internacionales más recientes en torno a foros o congresos del sector, adquiere en las islas una dimensión específica por los efectos que generan sus desajustes territoriales, una diversidad cultural evidente, la historia diferenciada, una clara fragilidad medioambiental y, sobre todo, la necesidad de implementar modelos de desarrollo sostenibles.',
+      'La elección de La Gomera como sede del V Congreso no es casual. Se trata de una isla donde la relación entre patrimonio cultural, paisaje, memoria colectiva y comunidad local resulta especialmente visible. En ella, la escala territorial permite pensar el museo no como una institución aislada, sino como parte de un ecosistema cultural interdependiente. Desde luego, dicha circunstancia se revela como una oportunidad única para La Gomera.',
+      'El V Congreso de Museos aspira, por tanto, a convertirse en un laboratorio de ideas desde el que repensar el papel de los museos de Canarias en el siglo XXI.',
+    ],
+  },
+
+  differences: {
+    heading: 'DECLARACIÓN DE INTENCIONES',
+    title: '¿Qué será distinto en el V Congreso de Museos de Canarias?',
+    items: [
+      {
+        kicker: 'a',
+        title: 'La belleza de lo pequeño',
+        subtitle: 'la isla, el museo y quienes lo sostienen',
+        body: [
+          'Uno de los rasgos definitorios del V Congreso es su reivindicación de lo local, de la escala insular y de los museos llamados pequeños, que constituyen la mayor parte del ecosistema museístico canario. En un contexto marcado por la presión de las grandes masificaciones turísticas y por narrativas culturales orientadas al consumo rápido, el congreso propone detener la mirada en aquellos espacios que operan desde la proximidad, el conocimiento profundo del territorio y la relación directa con la comunidad.',
+          'La elección de La Gomera como sede simboliza esta apuesta: una isla donde el museo no puede desligarse del paisaje, de la memoria oral, del patrimonio inmaterial ni de las dinámicas cotidianas de la población. Esta convocatoria sitúa en el centro no solo a las instituciones museísticas, sino también a las personas que las hacen posibles: los equipos técnicos, los trabajadores y trabajadoras de los museos, frecuentemente invisibilizados en los grandes relatos culturales.',
+          'Reivindicar lo pequeño implica reconocer el valor del trabajo sostenido, de los proyectos de largo recorrido y de las experiencias que no siempre generan cifras altas de visitantes, pero sí impactos profundos en términos de identidad, educación y cohesión social.',
+        ],
+      },
+      {
+        kicker: 'b',
+        title: 'Análisis crítico y proyección en una realidad cambiante',
+        subtitle: 'pensar el presente para construir horizontes',
+        body: [
+          'El tema principal de la última Conferencia General del ICOM en Dubai 2025 fue El futuro de los museos en comunidades en rápida evolución, que «encapsula el panorama dinámico y en constante cambio por el que las comunidades y los museos de todo el mundo navegan hoy en día».',
+          'Esta convocatoria intentará combinar el análisis de la realidad museística actual con una reflexión orientada al futuro. En el V Congreso confrontaremos prácticas y abriremos preguntas sobre los caminos posibles para los museos de Canarias en los próximos años. Dicho enfoque parte del reconocimiento de una época de cambio profundo donde nuestra realidad está inmersa: transformaciones en la concepción del patrimonio, nuevos marcos legales, desafíos tecnológicos, crisis climática, redefinición de los públicos y revisión ética de los discursos museísticos. El congreso propone analizar estas cuestiones desde la experiencia concreta de los museos canarios, tratando de evitar soluciones enlatadas procedentes de modelos procedentes de otras realidades. La proyección futura no se entiende aquí como un ejercicio de quiromancia y futurología, sino como una responsabilidad colectiva. Pensar el futuro de los museos implica preguntarse qué papel quieren desempeñar en la sociedad, qué prioridades deben guiar sus políticas y, muy especialmente, cómo adaptarse a escenarios de cambio sin perder su sentido institucional.',
+        ],
+      },
+      {
+        kicker: 'c',
+        title: 'El museo fuera del edificio',
+        subtitle: 'comunidad, territorios y políticas museísticas insulares',
+        body: [
+          'El tercer rasgo diferencial del V Congreso es su vocación explícita de apertura hacia el exterior, entendiendo que el museo no puede pensarse de manera aislada ni exclusivamente desde el ámbito profesional. Este congreso se plantea como un espacio permeable, en diálogo constante con la comunidad, los agentes culturales y las realidades específicas de cada isla.',
+          'En dicho sentido se promueve una participación activa y personalizada, con la invitación expresa a personas vinculadas a los museos y centros patrimoniales de cada isla, atendiendo a la diversidad de modelos, problemáticas y políticas museísticas insulares. El objetivo es poner en relación experiencias distintas, favoreciendo el reconocimiento mutuo y el intercambio de saberes.',
+          'El rol de la comunidad ocupa un lugar central en este planteamiento. El congreso invita a reflexionar sobre cómo los museos pueden —y deben— incorporar a la ciudadanía en sus procesos de definición, gestión y programación, superando modelos verticales y fomentando formas de corresponsabilidad cultural. Volcar el congreso hacia el exterior significa también escuchar, abrir espacios de diálogo y reconocer que el conocimiento sobre el patrimonio no reside únicamente en las instituciones, sino también en las personas y colectivos que lo viven y lo transmiten.',
+          'Este enfoque permite visibilizar las políticas museísticas desarrolladas en cada isla, sus logros y sus carencias, generando un mapa plural del estado de los museos de Canarias. El congreso se convierte así en un espacio donde lo insular no es periférico, sino constitutivo de un discurso común.',
+        ],
+      },
+    ],
+    aspiration: {
+      title: '¿A qué aspira el V Congreso de Museos de Canarias?',
+      body: [
+        'Este congreso aspira a reunir a personas profesionales de museos, gestoras culturales, investigadoras, educadoras, personal de administración, cuidadoras, responsables institucionales y representantes de la sociedad civil, fomentando un diálogo integrador que supere las divisiones disciplinares tradicionales. Trataremos de subrayar el motivo de la excelencia de cualquier congreso, aquella circunstancia que lo convierte en un evento trascendental para cualquier materia o ámbito profesional: el contacto humano. El intercambio de opiniones, el diálogo espontáneo o la conversación en profundidad, conocernos, el debate fluido, preguntar, hablar, disentir, conversar… alegar, porque en Canarias se alega.',
+        'Sabemos que los cambios en la concepción sobre cómo consideramos este congreso reúne dificultades en torno a sí. Se ha hecho un trabajo enorme hasta el V Congreso de Museos de Canarias, desde aquel 2017 en La Villa de La Orotava (Tenerife), bajo el respaldo de la Dirección General de Cultura y Patrimonio Cultural. Cada congreso ha tenido su personalidad, su plasmación en aspectos que los han caracterizado. En el presente caso intentaremos hacer confluir por un lado nuestra filosofía sobre cómo entendemos la labor museal y por otro adaptarnos a las necesidades de una actualidad congresual plagada de profundos cambios, algo muy palpable en eventos que recientemente han estado desarrollándose en otros lugares del mundo.',
+        'El V Congreso de Museos de Canarias apostará por pensar los museos desde el territorio y las personas, sin renunciar a las implicaciones complejas que esto conlleva. Lejos de las grandes declaraciones abstractas, plagadas de tecnicismos grandilocuentes, el congreso se construirá desde la escucha, la proximidad y el compromiso con la realidad museística canaria: diversa, humilde y en transformación.',
+        'Esta edición no pretende ofrecer soluciones enlatadas, ya que muchas veces no existen... Queremos generar un espacio de encuentro donde lo pequeño tenga voz, donde el presente se analice con herramientas científicas y sin complacencias, y donde, en definitiva, el futuro se piense como una tarea compartida.',
+      ],
+      closing: [
+        'Trasciende de tu microcosmos, sal de tu centro y piensa colectivamente. Ocupes el lugar que ocupes en tu lugar de trabajo y vengas de la isla que vengas, tu experiencia nos interesa.',
+        'Ven a contarnos.',
+        'Ven al V Congreso de Museos de Canarias, en La Gomera.',
+      ],
     },
   },
 

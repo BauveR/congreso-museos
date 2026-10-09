@@ -21,6 +21,7 @@ export const timeline: Record<Breakpoint, Keyframes> = {
   mobile: {
     hero: pose({ y: 0.05, scale: 0.9 }),
     presentacion: pose({ y: 0.2, scale: 0.7 }),
+    distinto: pose({ y: -0.1, scale: 0.65 }),
     'por-que': pose({ scale: 0.6 }),
     ponentes: pose({ y: 0.3, scale: 0.5 }),
     cinetico: pose({ scale: 0.9 }),
@@ -35,6 +36,7 @@ export const timeline: Record<Breakpoint, Keyframes> = {
     hero: pose({ x: 0.15, y: -0.2, scale: 1.1 }),
     presentacion: pose({ x: 0.6, scale: 0.8 }),
     'por-que': pose({ y: 0.1, scale: 0.6 }),
+    distinto: pose({ x: -0.55, y: 0.15, scale: 0.75 }),
     ponentes: pose({ x: -0.5, y: 0.2, scale: 0.6 }),
     cinetico: pose({ x: 0.5, scale: 1 }),
     umbral: pose({ scale: 0.3 }),
@@ -54,7 +56,10 @@ export const timeline: Record<Breakpoint, Keyframes> = {
 export const sectionColors: Record<SectionId, string> = {
   hero: '#e2ce84', // arena dorada
   presentacion: '#a8e06b', // verde claro
-  'por-que': '#7fd8be', // menta
+  // Verde bosque (como el Día 3): oscuro para que se lea el texto de «¿A qué aspira…?»
+  // y se mantiene en Organización hasta «Contenidos».
+  distinto: '#2f6b45',
+  'por-que': '#2f6b45', // verde bosque (ver distinto)
   ponentes: '#e8eadf', // blanco cálido
   cinetico: '#d1e132', // lima: momento fuerte
   umbral: '#f2f1ec', // se funde con el velo claro de la transición

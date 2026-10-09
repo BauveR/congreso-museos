@@ -6,6 +6,7 @@ export type SectionId =
   | 'hero'
   | 'acceso'
   | 'presentacion'
+  | 'distinto'
   | 'por-que'
   | 'ponentes'
   | 'cinetico'
@@ -42,14 +43,44 @@ export interface NavContent {
   linksRight: Link[]
 }
 
+/** Presentación del congreso (sección bajo el hero). */
+export interface PresentationContent {
+  title: string
+  /** Un elemento por párrafo. */
+  body: string[]
+}
+
+/** Rasgo diferencial del congreso (tarjeta con título destacado). */
+export interface DifferenceItem {
+  /** Letra del rasgo (a, b, c). */
+  kicker: string
+  title: string
+  /** Lo que sigue a los dos puntos del título. */
+  subtitle: string
+  body: string[]
+}
+
+/** «¿Qué será distinto…?» y «¿A qué aspira…?». */
+export interface DifferencesContent {
+  /** Título de la sección (Kola, color claro). */
+  heading: string
+  /** Primer apartado: «¿Qué será distinto…?». */
+  title: string
+  items: DifferenceItem[]
+  aspiration: {
+    title: string
+    body: string[]
+    /** Cierre destacado (llamada final). */
+    closing: string[]
+  }
+}
+
 export interface HeroContent {
   /** Edición del congreso: se muestra en tamaño gigante (p. ej. "V"). */
   edition: string
   eventName: string
   /** Lema del congreso: el titular grande del hero (una línea en escritorio). */
   headline: string
-  /** Texto de presentación de la caja del hero (un elemento por párrafo). */
-  intro: string[]
   /** Fecha legible para humanos. */
   dateLabel: string
   /** Fecha ISO para el elemento <time>. */
@@ -291,11 +322,13 @@ export interface SiteContent {
   meta: { title: string; description: string; lang: string }
   a11y: { skipLink: string }
   /** Textos de interfaz reutilizables (p. ej. desplegables). */
-  ui: { readMore: string; readLess: string; scrollToContinue: string; close: string }
+  ui: { readMore: string; readLess: string; seeAll: string; seeLess: string; scrollToContinue: string; close: string }
   preloader: { label: string }
   underConstruction: UnderConstructionContent
   nav: NavContent
   hero: HeroContent
+  presentation: PresentationContent
+  differences: DifferencesContent
   committees: CommitteesContent
   organization: OrganizationContent
   participants: ParticipantsContent

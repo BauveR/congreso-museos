@@ -188,6 +188,9 @@ export interface ParticipantsContent {
   next: string
   /** «y N más» en las tarjetas con muchos autores. */
   moreAuthors: (n: number) => string
+  /** Móvil: nombre del selector de grupo y botón para cargar más tarjetas. */
+  groupsLabel: string
+  showMore: (n: number) => string
 }
 
 export interface KineticContent {

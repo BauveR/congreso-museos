@@ -5,6 +5,7 @@ import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { useBreakpoint } from '../../../hooks/useBreakpoint'
 import type { PlateTone } from './NamePlate'
+import { ParticipantList } from './ParticipantList'
 import { ParticipantSheet } from './ParticipantSheet'
 import { ParticipantSlider } from './ParticipantSlider'
 
@@ -17,9 +18,10 @@ interface Selected {
 }
 
 /**
- * Participantes: una fila deslizable por tipo (conferencias, comunicaciones,
- * pósteres). Una sola tarjeta abierta a la vez: en escritorio se despliega
- * en la fila; en móvil se lee en una hoja inferior.
+ * Participantes por tipo (conferencias, comunicaciones, pósteres).
+ * - Escritorio: una fila deslizable por tipo; la tarjeta se despliega en la fila.
+ * - Móvil: pestañas por tipo y lista vertical (ParticipantList); el texto se
+ *   lee en una hoja inferior.
  */
 export function Participants() {
   const { participants } = site
@@ -40,7 +42,8 @@ export function Participants() {
       </header>
 
       <div className="mt-14 lg:mt-20">
-        {participants.groups.map((group, g) => (
+        {!inline && <ParticipantList toneOf={(id) => groupTone[id] ?? 'neutro'} onOpen={(group, index) => setSelected({ group, index })} />}
+        {inline && participants.groups.map((group, g) => (
           <ParticipantSlider
             key={group.id}
             group={group}

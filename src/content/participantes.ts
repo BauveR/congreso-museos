@@ -20,6 +20,8 @@ export const participants: ParticipantsContent = {
   prev: 'Anteriores',
   next: 'Siguientes',
   moreAuthors: (n) => `y ${n} más`,
+  groupsLabel: 'Tipo de participación',
+  showMore: (n) => `Ver ${n} más`,
 
   groups: [
     {

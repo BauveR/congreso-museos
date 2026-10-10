@@ -24,7 +24,8 @@ interface ReadingSheetProps {
  * Maps, Apple Maps o Airbnb para fichas largas; en escritorio, centrada y
  * con ancho de lectura. Sobre <dialog>
  * modal nativo: foco atrapado, Escape y semántica de diálogo.
- * - Se cierra con la X, tocando fuera, arrastrando el asa o con «atrás».
+ * - Se cierra con el botón grande de abajo, la X, tocando fuera, arrastrando
+ *   el asa o con «atrás».
  * - Scroll propio (data-lenis-prevent) y la página bloqueada detrás.
  */
 export function ReadingSheet({ open, kicker, title, before, closeLabel, onClose, children }: ReadingSheetProps) {
@@ -123,12 +124,23 @@ export function ReadingSheet({ open, kicker, title, before, closeLabel, onClose,
             </div>
           </div>
 
-          <div ref={body} className="overflow-y-auto overscroll-contain px-5 pt-5 pb-[max(2rem,env(safe-area-inset-bottom))]">
+          <div ref={body} className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pt-5 pb-8">
             {before}
             <h2 id={titleId} className={`font-display text-xl leading-snug text-balance ${before ? 'mt-4' : ''}`}>
               {title}
             </h2>
             <div className="mt-8">{children}</div>
+          </div>
+
+          {/* Cierre grande y siempre a mano (arrastrar o la X son atajos, no la única forma). */}
+          <div className="shrink-0 border-t border-borde px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <button
+              type="button"
+              onClick={close}
+              className="inline-flex h-12 w-full items-center justify-center rounded-lg border border-acento-texto text-sm font-bold tracking-wide uppercase hover:bg-acento-texto/10"
+            >
+              {closeLabel}
+            </button>
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 import { ButtonLink } from '../../../components/ButtonLink'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
+import { HeroBackdrop } from './HeroBackdrop'
 import { HeroWordmark } from './HeroWordmark'
 import { ScrollHint } from './ScrollHint'
 
@@ -14,7 +15,7 @@ export function Hero() {
   const { hero } = site
   return (
     <Section id="hero" className="flex min-h-svh flex-col pt-20 pb-8">
-      <div className="edge @container">
+      <div className="edge relative z-10 @container">
         {/* Logo del congreso sobre el lema. Decorativo: el h1 ya anuncia el nombre.
             WebP sin pérdida (10,7 KB frente a 28,8 KB del PNG original). */}
         <img
@@ -33,22 +34,22 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="edge mt-auto grid gap-6 pt-12 lg:grid-cols-[auto_auto] lg:items-end lg:justify-between lg:gap-16">
-        <div data-hero-after="" className="order-last lg:order-none">
-          <ScrollHint lines={hero.scrollHint} />
-        </div>
-        <div data-hero-after="" className="flex flex-col gap-3 sm:flex-row">
-          {hero.ctas.map((cta, i) => (
-            <ButtonLink
-              key={cta.href}
-              href={cta.href}
-              icon={cta.icon}
-              variant={i === 0 ? 'primary' : 'secondary'}
-              className="xl:min-w-72"
-            >
-              {cta.label}
-            </ButtonLink>
-          ))}
+      <div className="mt-auto pt-12">
+        {/* Paisaje con nubes, apoyado justo encima de los botones: delante de la esfera y detrás del texto (z-10). */}
+        <div className="relative">
+          <HeroBackdrop />
+          <div className="edge relative z-10 grid gap-6 lg:grid-cols-[auto_auto] lg:items-end lg:justify-between lg:gap-16">
+            <div data-hero-after="" className="order-last lg:order-none">
+              <ScrollHint lines={hero.scrollHint} />
+            </div>
+            <div data-hero-after="" className="flex flex-col gap-3 sm:flex-row">
+              {hero.ctas.map((cta, i) => (
+                <ButtonLink key={cta.href} href={cta.href} icon={cta.icon} variant={i === 0 ? 'primary' : 'secondary'} className="xl:min-w-72">
+                  {cta.label}
+                </ButtonLink>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </Section>

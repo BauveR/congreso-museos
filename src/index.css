@@ -48,6 +48,7 @@
   --animate-fade-in: fade-in 0.4s ease-out 0.2s both;
   --animate-wheel: wheel 1.6s ease-in-out infinite;
   --animate-scroll-line: scroll-line 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  --animate-cloud: cloud 40s ease-in-out infinite alternate;
 
   @keyframes scroll-line {
     from {
@@ -77,6 +78,19 @@
     100% {
       transform: translateY(0);
       opacity: 0;
+    }
+  }
+
+  /* Nubes del hero: deriva lenta de lado a lado, con un leve vaivén vertical. */
+  @keyframes cloud {
+    from {
+      transform: translate3d(-8%, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -6%, 0);
+    }
+    to {
+      transform: translate3d(8%, 0, 0);
     }
   }
 

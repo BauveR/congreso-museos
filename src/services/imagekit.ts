@@ -22,9 +22,9 @@ export function imageUrl(file: string, width: number): string {
 }
 
 /** `src` (el más pequeño) y `srcSet` con todos los anchos, para <img>. */
-export function responsiveImage(file: string): { src: string; srcSet: string } {
+export function responsiveImage(file: string, widths: readonly number[] = IMAGE_WIDTHS): { src: string; srcSet: string } {
   return {
-    src: imageUrl(file, IMAGE_WIDTHS[0]),
-    srcSet: IMAGE_WIDTHS.map((w) => `${imageUrl(file, w)} ${w}w`).join(', '),
+    src: imageUrl(file, widths[0] ?? IMAGE_WIDTHS[0]),
+    srcSet: widths.map((w) => `${imageUrl(file, w)} ${w}w`).join(', '),
   }
 }

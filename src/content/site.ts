@@ -77,6 +77,8 @@ export const site: SiteContent = {
       { label: 'Inscripciones', href: '#acceso', icon: 'ticket' },
       { label: 'Agenda', href: '#agenda', icon: 'calendar' },
     ],
+    // Paisaje: public/frame_01.png (3840×2160), franja con dibujo. Nubes: recortes de «Dream 3» (lienzo 1600×800).
+    backdrop: { landscape: 'hero/paisaje.png', clouds: ['hero/nube-1.png', 'hero/nube-2.png'] },
     poster: {
       src: '/media/poster.svg',
       alt: '',

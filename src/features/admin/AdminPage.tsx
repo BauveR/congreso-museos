@@ -1,3 +1,4 @@
+import { Download, SlidersHorizontal } from 'lucide-react'
 import { Fragment, useEffect, useState } from 'react'
 import {
   ALLERGENS,
@@ -8,10 +9,13 @@ import {
   PARTICIPATION_TYPES,
   type RegistrationData,
 } from '../../../shared/registration'
+import { dayColor } from '../../../shared/event'
 import type { Session } from '../../../shared/sessions'
 import { SelectInput, TextInput } from '../../components/form'
 import { PageShell } from '../../components/PageShell'
+import { ReadingSheet } from '../../components/ReadingSheet'
 import { adminText } from '../../content/inscripcion'
+import { useBreakpoint } from '../../hooks/useBreakpoint'
 import { api, ApiError, download } from '../../lib/api'
 import { AuthProvider } from '../../lib/auth/AuthProvider'
 import { useAuth } from '../../lib/auth/context'
@@ -22,23 +26,25 @@ import type { AdminRegistration } from './types'
 
 const t = adminText
 const button =
-  'inline-flex h-10 items-center justify-center rounded-lg bg-acento px-4 text-xs font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60'
+  'inline-flex h-11 items-center justify-center rounded-lg bg-acento px-4 text-xs font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60'
 const ghost =
-  'inline-flex h-10 items-center justify-center rounded-lg border border-acento-texto px-4 text-xs font-bold tracking-wide uppercase hover:bg-acento-texto/10 disabled:opacity-60'
+  'inline-flex h-11 items-center justify-center rounded-lg border border-acento-texto px-4 text-xs font-bold tracking-wide uppercase hover:bg-acento-texto/10 disabled:opacity-60'
 const danger =
-  'inline-flex h-10 items-center justify-center rounded-lg border border-error px-4 text-xs font-bold tracking-wide text-error uppercase hover:bg-error/10 disabled:opacity-60'
-const cell = 'rounded-md border border-borde bg-superficie px-2 py-1.5 text-sm text-texto'
+  'inline-flex h-11 items-center justify-center rounded-lg border border-error px-4 text-xs font-bold tracking-wide text-error uppercase hover:bg-error/10 disabled:opacity-60'
+const cell = 'h-11 rounded-md border border-borde bg-superficie px-3 text-base font-normal tracking-normal text-texto normal-case'
+const fieldLabel = 'flex flex-col gap-1.5 text-xs font-semibold tracking-wide text-texto-suave uppercase'
 
 
 /* ---------- Días y aforo ---------- */
 
-function SessionRow({ session, onSaved }: { session: Session; onSaved: (s: Session) => void }) {
+function SessionCard({ session, onSaved }: { session: Session; onSaved: (s: Session) => void }) {
   const auth = useAuth()
   const [draft, setDraft] = useState(session)
   const [status, setStatus] = useState<{ ok: boolean; text: string } | null>(null)
   const [busy, setBusy] = useState(false)
   const dirty =
     draft.title !== session.title || draft.date !== session.date || draft.capacity !== session.capacity || draft.active !== session.active
+  const id = session.id
 
   const save = async () => {
     setBusy(true)
@@ -61,41 +67,59 @@ function SessionRow({ session, onSaved }: { session: Session; onSaved: (s: Sessi
 
   const full = session.registered >= session.capacity
   return (
-    <tr className="border-t border-borde align-top">
-      <td className="py-3 pr-3">
-        <input aria-label={t.sessions.title} className={`${cell} w-full min-w-48`} value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} />
-      </td>
-      <td className="py-3 pr-3">
-        <input aria-label={t.sessions.date} type="date" className={cell} value={draft.date} onChange={(e) => setDraft({ ...draft, date: e.target.value })} />
-      </td>
-      <td className="py-3 pr-3">
+    <li className="flex flex-col gap-4 rounded-2xl border border-borde p-4 sm:p-5">
+      <label className={fieldLabel}>
+        {t.sessions.title}
+        <input className={`${cell} w-full`} value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} />
+      </label>
+      <div className="grid grid-cols-2 gap-3">
+        <label className={fieldLabel}>
+          {t.sessions.date}
+          <input type="date" className={`${cell} w-full`} value={draft.date} onChange={(e) => setDraft({ ...draft, date: e.target.value })} />
+        </label>
+        <label className={fieldLabel}>
+          {t.sessions.capacity}
+          <input
+            type="number"
+            inputMode="numeric"
+            min={session.registered}
+            step={1}
+            className={`${cell} w-full`}
+            value={Number.isNaN(draft.capacity) ? '' : draft.capacity}
+            onChange={(e) => setDraft({ ...draft, capacity: e.target.valueAsNumber })}
+          />
+        </label>
+      </div>
+      <div>
+        <p className={`flex justify-between text-sm ${full ? 'font-bold text-acento-texto' : 'text-texto-suave'}`}>
+          <span>{t.sessions.registered}</span>
+          <span className="tabular-nums">
+            {session.registered} / {session.capacity}
+          </span>
+        </p>
+        <div aria-hidden className="mt-1.5 h-2 overflow-hidden rounded-full bg-acento/20">
+          <div className="h-full rounded-full bg-acento" style={{ width: `${Math.min(100, (session.registered / Math.max(1, session.capacity)) * 100)}%` }} />
+        </div>
+      </div>
+      <label htmlFor={`active-${id}`} className="flex min-h-11 items-center gap-3 text-sm font-semibold">
         <input
-          aria-label={t.sessions.capacity}
-          type="number"
-          min={session.registered}
-          step={1}
-          className={`${cell} w-24`}
-          value={Number.isNaN(draft.capacity) ? '' : draft.capacity}
-          onChange={(e) => setDraft({ ...draft, capacity: e.target.valueAsNumber })}
+          id={`active-${id}`}
+          type="checkbox"
+          className="size-5 accent-acento"
+          checked={draft.active}
+          onChange={(e) => setDraft({ ...draft, active: e.target.checked })}
         />
-      </td>
-      <td className={`py-3 pr-3 text-sm tabular-nums ${full ? 'font-bold text-acento-texto' : ''}`}>
-        {session.registered} / {session.capacity}
-      </td>
-      <td className="py-3 pr-3">
-        <input aria-label={t.sessions.active} type="checkbox" className="mt-2 size-5 accent-acento" checked={draft.active} onChange={(e) => setDraft({ ...draft, active: e.target.checked })} />
-      </td>
-      <td className="py-3">
-        <button type="button" className={button} disabled={!dirty || busy} onClick={() => void save()}>
-          {t.sessions.save}
-        </button>
-        {status && (
-          <p role="status" className={`mt-1 max-w-56 text-xs ${status.ok ? 'text-texto-suave' : 'font-semibold text-error'}`}>
-            {status.text}
-          </p>
-        )}
-      </td>
-    </tr>
+        {t.sessions.active}
+      </label>
+      <button type="button" className={`${button} w-full`} disabled={!dirty || busy} onClick={() => void save()}>
+        {t.sessions.save}
+      </button>
+      {status && (
+        <p role="status" className={`-mt-2 text-xs ${status.ok ? 'text-texto-suave' : 'font-semibold text-error'}`}>
+          {status.text}
+        </p>
+      )}
+    </li>
   )
 }
 
@@ -117,28 +141,15 @@ function SessionsPanel({ sessions, setSessions }: { sessions: Session[]; setSess
     }
   }
 
+  // Una tarjeta por día (cabe en móvil sin scroll lateral); en escritorio, en columnas.
   return (
     <section className="flex flex-col gap-4">
       <p className="text-sm text-texto-suave">{t.sessions.capacityHelp}</p>
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[44rem] text-left">
-          <thead className="text-xs tracking-wide text-texto-suave uppercase">
-            <tr>
-              <th className="pb-2 font-semibold">{t.sessions.title}</th>
-              <th className="pb-2 font-semibold">{t.sessions.date}</th>
-              <th className="pb-2 font-semibold">{t.sessions.capacity}</th>
-              <th className="pb-2 font-semibold">{t.sessions.registered}</th>
-              <th className="pb-2 font-semibold">{t.sessions.active}</th>
-              <th className="pb-2" />
-            </tr>
-          </thead>
-          <tbody>
-            {sessions.map((s) => (
-              <SessionRow key={`${s.id}-${s.registered}-${s.capacity}`} session={s} onSaved={(u) => setSessions(sessions.map((x) => (x.id === u.id ? u : x)))} />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {sessions.map((s) => (
+          <SessionCard key={`${s.id}-${s.registered}-${s.capacity}`} session={s} onSaved={(u) => setSessions(sessions.map((x) => (x.id === u.id ? u : x)))} />
+        ))}
+      </ul>
       <div className="flex flex-wrap items-center gap-3">
         <button type="button" className={ghost} disabled={busy} onClick={() => void recount()}>
           {t.sessions.recount}
@@ -209,9 +220,64 @@ function CancelRegistration({ uid, onCancelled }: { uid: string; onCancelled: ()
   )
 }
 
+const NO_FILTERS = { session: '', type: '', city: '', certificate: '', food: '', q: '' }
+
+/** Ficha completa de una inscripción y su cancelación (bajo la fila o dentro de la tarjeta). */
+function RegistrationDetails({ row, onCancelled }: { row: AdminRegistration; onCancelled: () => void }) {
+  const { uid, data: d, createdAt, updatedAt } = row
+  const r = t.registrations
+  return (
+    <>
+      <dl className="grid gap-x-4 gap-y-1 rounded-xl bg-superficie p-4 text-sm sm:grid-cols-[14rem_1fr]">
+        {[
+          [r.detailLabels.jobTitle, d.jobTitle],
+          [r.detailLabels.idDocument, d.idDocument ? `${ID_TYPE_LABELS[d.idDocument.type]} ${d.idDocument.number}` : '—'],
+          [r.detailLabels.accessibility, d.accessibility || '—'],
+          [r.detailLabels.allergens, d.allergens.map((a) => ALLERGEN_LABELS.get(a) ?? a).join(', ') || '—'],
+          [r.detailLabels.otherAllergy, d.otherAllergy || '—'],
+          [r.detailLabels.diet, DIET_LABELS[d.diet]],
+          [r.detailLabels.consents, `${d.consents.image ? 'Sí' : 'No'} / ${d.consents.communications ? 'Sí' : 'No'}`],
+          [r.detailLabels.dates, `${new Date(createdAt).toLocaleString('es-ES')} / ${new Date(updatedAt).toLocaleString('es-ES')}`],
+        ].map(([term, value]) => (
+          <div key={term} className="contents">
+            <dt className="font-semibold">{term}</dt>
+            <dd className="mb-2 break-words whitespace-pre-line text-texto-suave sm:mb-0">{value}</dd>
+          </div>
+        ))}
+      </dl>
+      <CancelRegistration uid={uid} onCancelled={onCancelled} />
+    </>
+  )
+}
+
+/** Días elegidos como píldoras con el color de cada día (los mismos que el formulario y el correo). */
+function DayPills({ ids, days }: { ids: string[]; days: Session[] }) {
+  return (
+    <span className="flex flex-wrap gap-1.5">
+      {ids.map((id) => {
+        const index = days.findIndex((s) => s.id === id)
+        const color = index >= 0 ? dayColor(index) : null
+        const title = days[index]?.title.split('·')[0]?.trim() ?? id
+        return (
+          <span
+            key={id}
+            className="rounded-full px-2.5 py-0.5 text-xs font-bold whitespace-nowrap"
+            style={color ? { background: color.bg, color: color.text } : undefined}
+          >
+            {title}
+          </span>
+        )
+      })}
+    </span>
+  )
+}
+
 function RegistrationsPanel({ sessions, onSessionsChanged }: { sessions: Session[]; onSessionsChanged: () => void }) {
   const auth = useAuth()
-  const [filters, setFilters] = useState({ session: '', type: '', city: '', certificate: '', food: '', q: '' })
+  const desktop = useBreakpoint() === 'desktop'
+  const [filters, setFilters] = useState(NO_FILTERS)
+  /** Escritorio: panel de filtros desplegado bajo la barra. Móvil: hoja inferior con los filtros. */
+  const [filtersOpen, setFiltersOpen] = useState(desktop)
   const [rows, setRows] = useState<AdminRegistration[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [open, setOpen] = useState<string | null>(null)
@@ -252,69 +318,124 @@ function RegistrationsPanel({ sessions, onSessionsChanged }: { sessions: Session
     }
   }
 
-  const titles = new Map(sessions.map((s) => [s.id, s.title]))
+  const days = sessions.filter((s) => s.kind === 'day')
   const set = (key: keyof typeof filters, value: string) => setFilters((f) => ({ ...f, [key]: value }))
+  const activeCount = Object.values(filters).filter(Boolean).length
   const r = t.registrations
+  const total = rows ? r.total(rows.length) : '…'
+  const cancelled = (uid: string) => () => {
+    setRows((list) => list?.filter((row) => row.uid !== uid) ?? null)
+    setOpen(null)
+    onSessionsChanged()
+  }
+
+  const clearButton = activeCount > 0 && (
+    <button type="button" className="min-h-11 text-sm font-bold text-acento-texto underline underline-offset-4" onClick={() => setFilters(NO_FILTERS)}>
+      {r.clearFilters}
+    </button>
+  )
+
+  const fields = (
+    <fieldset id="admin-filters" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <legend className="sr-only">{r.filters}</legend>
+      <SelectInput id="fSession" label={r.session} value={filters.session} onChange={(e) => set('session', e.target.value)}>
+        <option value="">{r.allSessions}</option>
+        {sessions.map((s) => (
+          <option key={s.id} value={s.id}>
+            {s.title}
+          </option>
+        ))}
+      </SelectInput>
+      <SelectInput id="fType" label={r.type} value={filters.type} onChange={(e) => set('type', e.target.value)}>
+        <option value="">{r.allTypes}</option>
+        {PARTICIPATION_TYPES.map((type) => (
+          <option key={type} value={type}>
+            {PARTICIPATION_LABELS[type]}
+          </option>
+        ))}
+      </SelectInput>
+      <TextInput id="fCity" label={r.city} value={filters.city} onChange={(e) => set('city', e.target.value)} />
+      <SelectInput id="fCert" label={r.certificate} value={filters.certificate} onChange={(e) => set('certificate', e.target.value)}>
+        <option value="">{r.any}</option>
+        <option value="si">Sí</option>
+        <option value="no">No</option>
+      </SelectInput>
+      <SelectInput id="fFood" label={r.food} value={filters.food} onChange={(e) => set('food', e.target.value)}>
+        <option value="">{r.any}</option>
+        {Object.entries(r.foodOptions).map(([value, text]) => (
+          <option key={value} value={value}>
+            {text}
+          </option>
+        ))}
+        <optgroup label={r.foodDiets}>
+          {DIETS.filter((d) => d !== 'ninguna').map((d) => (
+            <option key={d} value={d}>
+              {DIET_LABELS[d]}
+            </option>
+          ))}
+        </optgroup>
+        <optgroup label={r.foodAllergens}>
+          {ALLERGENS.map((a) => (
+            <option key={a.id} value={`alergeno:${a.id}`}>
+              {a.label}
+            </option>
+          ))}
+        </optgroup>
+      </SelectInput>
+      <TextInput id="fQ" label={r.search} value={filters.q} onChange={(e) => set('q', e.target.value)} />
+    </fieldset>
+  )
 
   return (
     <section className="flex flex-col gap-6">
-      <fieldset className="grid gap-4 rounded-2xl border border-borde p-4 sm:grid-cols-2 lg:grid-cols-3">
-        <legend className="px-2 text-sm font-semibold">{r.filters}</legend>
-        <SelectInput id="fSession" label={r.session} value={filters.session} onChange={(e) => set('session', e.target.value)}>
-          <option value="">{r.allSessions}</option>
-          {sessions.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.title}
-            </option>
-          ))}
-        </SelectInput>
-        <SelectInput id="fType" label={r.type} value={filters.type} onChange={(e) => set('type', e.target.value)}>
-          <option value="">{r.allTypes}</option>
-          {PARTICIPATION_TYPES.map((type) => (
-            <option key={type} value={type}>
-              {PARTICIPATION_LABELS[type]}
-            </option>
-          ))}
-        </SelectInput>
-        <TextInput id="fCity" label={r.city} value={filters.city} onChange={(e) => set('city', e.target.value)} />
-        <SelectInput id="fCert" label={r.certificate} value={filters.certificate} onChange={(e) => set('certificate', e.target.value)}>
-          <option value="">{r.any}</option>
-          <option value="si">Sí</option>
-          <option value="no">No</option>
-        </SelectInput>
-        <SelectInput id="fFood" label={r.food} value={filters.food} onChange={(e) => set('food', e.target.value)}>
-          <option value="">{r.any}</option>
-          {Object.entries(r.foodOptions).map(([value, text]) => (
-            <option key={value} value={value}>
-              {text}
-            </option>
-          ))}
-          <optgroup label={r.foodDiets}>
-            {DIETS.filter((d) => d !== 'ninguna').map((d) => (
-              <option key={d} value={d}>
-                {DIET_LABELS[d]}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label={r.foodAllergens}>
-            {ALLERGENS.map((a) => (
-              <option key={a.id} value={`alergeno:${a.id}`}>
-                {a.label}
-              </option>
-            ))}
-          </optgroup>
-        </SelectInput>
-        <TextInput id="fQ" label={r.search} value={filters.q} onChange={(e) => set('q', e.target.value)} />
-      </fieldset>
-
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p role="status" className="font-semibold">
-          {rows ? r.total(rows.length) : '…'}
-        </p>
-        <button type="button" className={button} disabled={exporting || !rows?.length} onClick={() => void exportCsv()}>
-          {exporting ? r.exporting : r.export}
-        </button>
+      {/* Barra fija arriba al recorrer la lista: filtros, total y exportar siempre a mano, en una sola línea. */}
+      <div className="sticky top-0 z-20 mx-[calc(var(--wrap-gutter)*-1)] flex flex-col gap-4 border-b border-borde bg-fondo/95 px-(--wrap-gutter) py-3 backdrop-blur">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            aria-expanded={filtersOpen}
+            aria-controls={desktop ? 'admin-filters' : undefined}
+            aria-haspopup={desktop ? undefined : 'dialog'}
+            onClick={() => setFiltersOpen((o) => !o)}
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-borde px-4 text-sm font-bold"
+          >
+            <SlidersHorizontal aria-hidden className="size-4" />
+            {r.filters}
+            {activeCount > 0 && (
+              <span className="grid min-w-5 place-items-center rounded-full bg-acento px-1.5 text-xs text-acento-contraste tabular-nums">
+                {activeCount}
+                <span className="sr-only"> {r.activeFilters(activeCount)}</span>
+              </span>
+            )}
+          </button>
+          {desktop && clearButton}
+          <p role="status" className="ml-auto truncate text-sm font-semibold">
+            {total}
+          </p>
+          <button
+            type="button"
+            className={`${button} shrink-0 gap-2`}
+            disabled={exporting || !rows?.length}
+            onClick={() => void exportCsv()}
+            aria-label={desktop ? undefined : exporting ? r.exporting : r.export}
+          >
+            <Download aria-hidden className="size-4" />
+            {desktop && (exporting ? r.exporting : r.export)}
+          </button>
+        </div>
+        {desktop && filtersOpen && fields}
       </div>
+
+      {/* Móvil: los filtros en una hoja inferior; el botón grande de abajo muestra los resultados. */}
+      {!desktop && (
+        <ReadingSheet open={filtersOpen} title={r.filters} closeLabel={r.showResults(total)} onClose={() => setFiltersOpen(false)}>
+          <div className="flex flex-col gap-4">
+            {fields}
+            {clearButton}
+          </div>
+        </ReadingSheet>
+      )}
+
       {error && (
         <p role="alert" className="font-semibold text-error">
           {error}
@@ -322,7 +443,60 @@ function RegistrationsPanel({ sessions, onSessionsChanged }: { sessions: Session
       )}
 
       {rows && rows.length === 0 && <p className="text-texto-suave">{r.empty}</p>}
-      {rows && rows.length > 0 && (
+
+      {/* Móvil: una tarjeta por inscripción, sin scroll lateral. */}
+      {rows && rows.length > 0 && !desktop && (
+        <ul className="flex flex-col gap-3">
+          {rows.map((row) => {
+            const { uid, email, data: d } = row
+            return (
+              <li key={uid} className="flex flex-col gap-3 rounded-2xl border border-borde p-4">
+                <div>
+                  <p className="font-semibold">
+                    {d.lastName}, {d.firstName}
+                  </p>
+                  <p className="text-sm text-texto-suave">
+                    {PARTICIPATION_LABELS[d.participationType]}
+                    {d.city && ` · ${d.city}`}
+                  </p>
+                </div>
+                <DayPills ids={d.sessionIds} days={days} />
+                <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+                  <dt className="text-texto-suave">{r.columns[1]}</dt>
+                  <dd className="min-w-0 break-all">
+                    <a href={`mailto:${email}`} className="underline underline-offset-4">
+                      {email}
+                    </a>
+                  </dd>
+                  <dt className="text-texto-suave">{r.columns[2]}</dt>
+                  <dd>
+                    <a href={`tel:${d.phone}`} className="underline underline-offset-4">
+                      {d.phone}
+                    </a>
+                  </dd>
+                  {d.organization && (
+                    <>
+                      <dt className="text-texto-suave">{r.columns[4]}</dt>
+                      <dd className="min-w-0 break-words">{d.organization}</dd>
+                    </>
+                  )}
+                  <dt className="text-texto-suave">{r.columns[7]}</dt>
+                  <dd>{d.certificate ? 'Sí' : 'No'}</dd>
+                  <dt className="text-texto-suave">{r.columns[8]}</dt>
+                  <dd className="min-w-0 break-words">{foodSummary(d)}</dd>
+                </dl>
+                <button type="button" className={`${ghost} w-full`} aria-expanded={open === uid} onClick={() => setOpen(open === uid ? null : uid)}>
+                  {open === uid ? r.hideDetails : r.details}
+                </button>
+                {open === uid && <RegistrationDetails row={row} onCancelled={cancelled(uid)} />}
+              </li>
+            )
+          })}
+        </ul>
+      )}
+
+      {/* Escritorio: tabla completa. */}
+      {rows && rows.length > 0 && desktop && (
         <div className="overflow-x-auto">
           <table className="w-full min-w-[68rem] text-left text-sm">
             <thead className="text-xs tracking-wide text-texto-suave uppercase">
@@ -336,65 +510,45 @@ function RegistrationsPanel({ sessions, onSessionsChanged }: { sessions: Session
               </tr>
             </thead>
             <tbody>
-              {rows.map(({ uid, email, data: d, createdAt, updatedAt }) => (
-                <Fragment key={uid}>
-                  <tr className="border-t border-borde">
-                    <td className="py-2 pr-3 font-semibold">
-                      {d.lastName}, {d.firstName}
-                    </td>
-                    <td className="py-2 pr-3">{email}</td>
-                    <td className="py-2 pr-3 whitespace-nowrap">{d.phone}</td>
-                    <td className="py-2 pr-3">{d.city}</td>
-                    <td className="py-2 pr-3">{d.organization}</td>
-                    <td className="py-2 pr-3">{PARTICIPATION_LABELS[d.participationType]}</td>
-                    <td className="py-2 pr-3">{d.sessionIds.map((id) => titles.get(id)?.split('·')[0]?.trim() ?? id).join(', ')}</td>
-                    <td className="py-2 pr-3">{d.certificate ? 'Sí' : 'No'}</td>
-                    <td className="py-2 pr-3">{foodSummary(d)}</td>
-                    <td className="py-2">
-                      <button
-                        type="button"
-                        className="text-xs font-bold text-acento-texto underline underline-offset-4"
-                        aria-expanded={open === uid}
-                        onClick={() => setOpen(open === uid ? null : uid)}
-                      >
-                        {open === uid ? r.hideDetails : r.details}
-                      </button>
-                    </td>
-                  </tr>
-                  {open === uid && (
-                    <tr>
-                      <td colSpan={10} className="pb-4">
-                        <dl className="grid gap-x-4 gap-y-1 rounded-xl bg-superficie p-4 sm:grid-cols-[14rem_1fr]">
-                          {[
-                            [r.detailLabels.jobTitle, d.jobTitle],
-                            [r.detailLabels.idDocument, d.idDocument ? `${ID_TYPE_LABELS[d.idDocument.type]} ${d.idDocument.number}` : '—'],
-                            [r.detailLabels.accessibility, d.accessibility || '—'],
-                            [r.detailLabels.allergens, d.allergens.map((a) => ALLERGEN_LABELS.get(a) ?? a).join(', ') || '—'],
-                            [r.detailLabels.otherAllergy, d.otherAllergy || '—'],
-                            [r.detailLabels.diet, DIET_LABELS[d.diet]],
-                            [r.detailLabels.observations, d.observations || '—'],
-                            [r.detailLabels.consents, `${d.consents.image ? 'Sí' : 'No'} / ${d.consents.communications ? 'Sí' : 'No'}`],
-                            [r.detailLabels.dates, `${new Date(createdAt).toLocaleString('es-ES')} / ${new Date(updatedAt).toLocaleString('es-ES')}`],
-                          ].map(([term, value]) => (
-                            <div key={term} className="contents">
-                              <dt className="font-semibold">{term}</dt>
-                              <dd className="whitespace-pre-line text-texto-suave">{value}</dd>
-                            </div>
-                          ))}
-                        </dl>
-                        <CancelRegistration
-                          uid={uid}
-                          onCancelled={() => {
-                            setRows((list) => list?.filter((row) => row.uid !== uid) ?? null)
-                            setOpen(null)
-                            onSessionsChanged()
-                          }}
-                        />
+              {rows.map((row) => {
+                const { uid, email, data: d } = row
+                return (
+                  <Fragment key={uid}>
+                    <tr className="border-t border-borde">
+                      <td className="py-2 pr-3 font-semibold">
+                        {d.lastName}, {d.firstName}
+                      </td>
+                      <td className="py-2 pr-3">{email}</td>
+                      <td className="py-2 pr-3 whitespace-nowrap">{d.phone}</td>
+                      <td className="py-2 pr-3">{d.city}</td>
+                      <td className="py-2 pr-3">{d.organization}</td>
+                      <td className="py-2 pr-3">{PARTICIPATION_LABELS[d.participationType]}</td>
+                      <td className="py-2 pr-3">
+                        <DayPills ids={d.sessionIds} days={days} />
+                      </td>
+                      <td className="py-2 pr-3">{d.certificate ? 'Sí' : 'No'}</td>
+                      <td className="py-2 pr-3">{foodSummary(d)}</td>
+                      <td className="py-2">
+                        <button
+                          type="button"
+                          className="min-h-11 text-xs font-bold text-acento-texto underline underline-offset-4"
+                          aria-expanded={open === uid}
+                          onClick={() => setOpen(open === uid ? null : uid)}
+                        >
+                          {open === uid ? r.hideDetails : r.details}
+                        </button>
                       </td>
                     </tr>
-                  )}
-                </Fragment>
-              ))}
+                    {open === uid && (
+                      <tr>
+                        <td colSpan={10} className="pb-4">
+                          <RegistrationDetails row={row} onCancelled={cancelled(uid)} />
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                )
+              })}
             </tbody>
           </table>
         </div>
@@ -440,8 +594,9 @@ function AdminDashboard() {
     )
   }
 
+  // pb-20: el botón fijo de diagnóstico (abajo a la izquierda) no tapa lo último de la lista.
   return (
-    <>
+    <div className="pb-20">
       <SignedInBar />
       <div role="tablist" aria-label={t.pageTitle} className="mb-8 flex gap-2 border-b border-borde">
         {(['stats', 'sessions', 'registrations'] as const).map((key) => (
@@ -451,7 +606,7 @@ function AdminDashboard() {
             type="button"
             aria-selected={tab === key}
             onClick={() => setTab(key)}
-            className="-mb-px border-b-2 border-transparent px-4 py-3 text-sm font-bold tracking-wide uppercase aria-selected:border-acento aria-selected:text-acento-texto"
+            className="-mb-px min-h-11 flex-1 border-b-2 border-transparent px-2 py-3 text-xs font-bold tracking-wide whitespace-nowrap uppercase aria-selected:border-acento aria-selected:text-acento-texto sm:flex-none sm:px-4 sm:text-sm"
           >
             {t.tabs[key]}
           </button>
@@ -467,7 +622,7 @@ function AdminDashboard() {
       {sessions && tab === 'registrations' && (
         <RegistrationsPanel sessions={sessions} onSessionsChanged={() => setSessionsVersion((v) => v + 1)} />
       )}
-    </>
+    </div>
   )
 }
 

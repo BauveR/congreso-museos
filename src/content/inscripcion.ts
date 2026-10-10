@@ -196,6 +196,10 @@ export const adminText = {
 
   registrations: {
     filters: 'Filtros',
+    activeFilters: (n: number) => (n === 1 ? '1 activo' : `${n} activos`),
+    clearFilters: 'Quitar filtros',
+    /** Botón grande de la hoja de filtros en móvil. */
+    showResults: (total: string) => `Ver ${total}`,
     session: 'Día',
     allSessions: 'Todos los días',
     type: 'Tipo de participación',

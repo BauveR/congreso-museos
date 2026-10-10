@@ -18,9 +18,9 @@ const pct = (part: number, total: number) => (total ? Math.round((part / total) 
 
 function StatTile({ label, value, sub, meter }: { label: string; value: number; sub?: string; meter?: { value: number; max: number } }) {
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-borde p-5">
+    <div className="flex flex-col gap-2 rounded-2xl border border-borde p-4 sm:p-5">
       <p className="text-sm text-texto-suave">{label}</p>
-      <p className="font-display text-5xl leading-none font-semibold">{value}</p>
+      <p className="font-display text-4xl leading-none font-semibold sm:text-5xl">{value}</p>
       {meter && (
         <div
           role="meter"
@@ -108,7 +108,9 @@ export function StatsPanel({ sessions }: { sessions: Session[] }) {
       }}
       className="min-h-11 rounded-full border border-borde px-4 text-sm font-bold aria-pressed:border-acento aria-pressed:bg-acento aria-pressed:text-acento-contraste"
     >
-      {label}
+      {/* Móvil: «Día 1»; desde sm, con la fecha. */}
+      <span className="sm:hidden">{label.split('·')[0]?.trim()}</span>
+      <span className="max-sm:hidden">{label}</span>
     </button>
   )
 

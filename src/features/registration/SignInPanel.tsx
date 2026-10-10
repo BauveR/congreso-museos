@@ -111,7 +111,7 @@ export function SignedInBar() {
   return (
     <p className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-texto-suave">
       <span>
-        {t.signedInAs} <strong className="text-texto">{auth.user.email}</strong>
+        {t.signedInAs} <strong className="break-all text-texto">{auth.user.email}</strong>
       </span>
       <button type="button" onClick={() => void auth.signOut()} className="font-bold text-acento-texto underline underline-offset-4">
         {t.signOut}

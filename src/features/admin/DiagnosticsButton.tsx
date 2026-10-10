@@ -86,10 +86,11 @@ export function DiagnosticsButton() {
         type="button"
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
-        className="fixed bottom-4 left-4 z-50 inline-flex h-11 items-center gap-2 rounded-full bg-texto pr-4 pl-3 text-xs font-bold tracking-wide text-fondo uppercase shadow-xl"
+        className="fixed bottom-4 left-4 z-50 inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-full bg-texto px-3 sm:pr-4 text-xs font-bold tracking-wide text-fondo uppercase shadow-xl"
       >
         <Bug aria-hidden className="size-5" />
-        {t.button}
+        {/* Móvil: solo el icono, para tapar lo menos posible. */}
+        <span className="max-sm:sr-only">{t.button}</span>
         {entries.length > 0 && (
           <span className="grid min-w-5 place-items-center rounded-full bg-error px-1.5 text-[0.6875rem] text-fondo tabular-nums">
             {entries.length}

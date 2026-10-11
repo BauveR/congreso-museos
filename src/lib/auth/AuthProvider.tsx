@@ -168,7 +168,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const resetPassword = useCallback(async (email: string) => {
     if (MODE === 'mock') return
     const [{ sendPasswordResetEmail }, auth] = await Promise.all([import('firebase/auth'), getFirebaseAuth()])
-    await sendPasswordResetEmail(auth, email.trim())
+    // Con url, la página de Firebase muestra «Continuar» de vuelta a donde se pidió.
+    await sendPasswordResetEmail(auth, email.trim(), { url: window.location.origin + window.location.pathname })
+  }, [])
+
+  const cancelEmailLink = useCallback(() => {
+    setPendingEmailLink(false)
+    window.history.replaceState(null, '', window.location.pathname)
   }, [])
 
   const value = useMemo<AuthApi>(
@@ -187,9 +193,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       sendEmailLink,
       pendingEmailLink,
       completeEmailLink,
+      cancelEmailLink,
       mockSignIn,
     }),
-    [user, isAdmin, loading, initError, getIdToken, signOut, signInWithGoogle, signUpWithPassword, signInWithPassword, resetPassword, sendEmailLink, pendingEmailLink, completeEmailLink, mockSignIn],
+    [user, isAdmin, loading, initError, getIdToken, signOut, signInWithGoogle, signUpWithPassword, signInWithPassword, resetPassword, sendEmailLink, pendingEmailLink, completeEmailLink, cancelEmailLink, mockSignIn],
   )
 
   return <AuthContext value={value}>{children}</AuthContext>

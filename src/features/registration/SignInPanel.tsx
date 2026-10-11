@@ -51,6 +51,8 @@ export function SignInPanel({ allowAdmin = false }: { allowAdmin?: boolean }) {
   }
 
   if (auth.pendingEmailLink) {
+    // Enlace caducado o ya usado: se explica y se ofrece pedir otro (si no, esta pantalla no tendría salida).
+    const failed = message === registrationText.genericError
     return (
       <form
         onSubmit={(e) => {
@@ -63,7 +65,21 @@ export function SignInPanel({ allowAdmin = false }: { allowAdmin?: boolean }) {
         <button type="submit" className={button} disabled={busy}>
           {t.emailConfirm}
         </button>
-        {message && <p role="status">{message}</p>}
+        {failed && (
+          <div role="alert" className="flex flex-col gap-3">
+            <p className="text-sm text-error">{t.linkFailed}</p>
+            <button
+              type="button"
+              className="min-h-11 self-start text-sm font-bold text-acento-texto underline underline-offset-4"
+              onClick={() => {
+                setMessage(null)
+                auth.cancelEmailLink()
+              }}
+            >
+              {t.newLink}
+            </button>
+          </div>
+        )}
       </form>
     )
   }

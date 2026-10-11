@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { ConnectionNotice } from '../../components/ConnectionNotice'
 import type { RegistrationData } from '../../../shared/registration'
 import { registrationText } from '../../content/inscripcion'
-import { api } from '../../lib/api'
+import { api, ApiError } from '../../lib/api'
 import { useAuth } from '../../lib/auth/context'
 import { useLoadPhase } from '../../lib/connectivity'
 import { reportError } from '../../lib/diagnostics'
@@ -51,7 +51,7 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
   const [open, setOpen] = useState(true)
   const [saved, setSaved] = useState<SavedRegistration | null>(null)
   const [view, setView] = useState<View>({ kind: 'form' })
-  const [loadError, setLoadError] = useState<string | null>(null)
+  const [loadError, setLoadError] = useState<{ account: boolean; message: string } | null>(null)
   const [confirmCancel, setConfirmCancel] = useState(false)
   const [busy, setBusy] = useState(false)
   /** Se incrementa con «Reintentar» para repetir la carga (sin recargar la página). */
@@ -79,7 +79,9 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
         setLoadError(null)
       } catch (error) {
         reportError('Cargar días e inscripción', error)
-        if (!cancelled) setLoadError(t.genericError)
+        // 401/403: problema de la cuenta (sesión caducada, sin permiso), no de la red.
+        const account = error instanceof ApiError && (error.status === 401 || error.status === 403)
+        if (!cancelled) setLoadError({ account, message: account ? error.message : t.genericError })
       }
     })()
     return () => {
@@ -89,9 +91,22 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
 
   const kind: RegistrationViewKind = loadError ? 'error' : !sessions ? 'loading' : view.kind
   useEffect(() => onViewChange?.(kind), [kind, onViewChange])
-  const phase = useLoadPhase(!sessions, Boolean(loadError))
+  // Los errores de cuenta no son de conexión: ni «está tardando» ni contador de fallos de red.
+  const phase = useLoadPhase(!sessions && !loadError, Boolean(loadError && !loadError.account))
 
   if (!auth.user) return null
+  if (loadError?.account) {
+    // Reintentar daría el mismo error: la salida es volver a entrar.
+    return (
+      <div role="alert" className="rounded-2xl border border-error p-5">
+        <p className="font-bold">{t.accountProblemTitle}</p>
+        <p className="mt-1 text-sm text-texto-suave">{loadError.message}</p>
+        <button type="button" className={`${primary} mt-4`} onClick={() => void auth.signOut()}>
+          {t.signOutAndRetry}
+        </button>
+      </div>
+    )
+  }
   if (phase) {
     return (
       <ConnectionNotice
@@ -157,10 +172,14 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
         </div>
         <h3 className="mb-3 font-bold">{t.success.summary}</h3>
         <RegistrationSummary data={saved.data} sessions={sessions} className="mb-8" />
+        {!open && !auth.isAdmin && <p className="mb-4 text-sm text-texto-suave">{t.closedChanges}</p>}
         <div className="flex flex-wrap gap-3">
-          <button type="button" className={primary} onClick={() => setView({ kind: 'form' })}>
-            {t.success.edit}
-          </button>
+          {/* Con el plazo cerrado, «Modificar» llevaría a un aviso sin salida: solo cancelar. */}
+          {(open || auth.isAdmin) && (
+            <button type="button" className={primary} onClick={() => setView({ kind: 'form' })}>
+              {t.success.edit}
+            </button>
+          )}
           {!confirmCancel ? (
             <button type="button" className={secondary} onClick={() => setConfirmCancel(true)}>
               {t.success.cancel}
@@ -192,8 +211,28 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
     )
   }
 
+  // Sin inscripción y todos los días completos: el formulario no tendría ningún día que elegir.
+  const days = sessions.filter((s) => s.kind === 'day')
+  if (!saved && days.length > 0 && days.every((s) => s.remaining <= 0)) {
+    return (
+      <p role="status" className="rounded-2xl border border-borde bg-superficie p-6 text-lg">
+        {t.allFull}
+      </p>
+    )
+  }
+
   return (
     <>
+      {/* Al modificar: salida al resumen sin guardar. */}
+      {saved && (
+        <button
+          type="button"
+          className="mb-6 min-h-11 text-sm font-bold text-acento-texto underline underline-offset-4"
+          onClick={() => setView({ kind: 'done', justSaved: false, created: false, emailSent: false })}
+        >
+          ← {t.backToSummary}
+        </button>
+      )}
       <RegistrationForm
         key={saved ? 'update' : 'create'}
         email={auth.user.email}

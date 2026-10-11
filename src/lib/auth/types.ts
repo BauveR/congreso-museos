@@ -40,6 +40,8 @@ export interface AuthApi {
   /** Firebase: correo pendiente de confirmar al volver del enlace (si no se recuerda). */
   pendingEmailLink: boolean
   completeEmailLink(email: string): Promise<void>
+  /** Descarta un enlace caducado o ya usado y vuelve al acceso normal (para pedir otro). */
+  cancelEmailLink(): void
   /** Mock: inicio de sesión simulado. */
   mockSignIn(user: { name: string; email: string; admin: boolean }): void
 }

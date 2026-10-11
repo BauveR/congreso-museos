@@ -2,20 +2,30 @@ import { useRef } from 'react'
 import { useMotionEffect } from '../../../app/motion'
 import { site } from '../../../content/site'
 import { useReducedMotion } from '../../../hooks/useReducedMotion'
-import { imageUrl, responsiveImage } from '../../../services/imagekit'
+import { imagekitPicture, withTransform } from '../../../services/imagekit'
 
-/** Ancho generado de cada nube (su tamaño real en la ilustración). */
-const CLOUD_WIDTH = 600
-/** Paisaje: original de 3840 px (franja recortada de 3840×680); el navegador elige el ancho. */
-const LANDSCAPE_WIDTHS = [800, 1600, 2400, 3840] as const
+/**
+ * Nubes desde ImageKit en PNG forzado: con su grano suave, el PNG que
+ * optimiza ImageKit pesa menos que el WebP que daría f-auto (12 y 24 KB
+ * frente a 35 y 45). En móvil, versión de 300 px (4 KB).
+ */
+const cloudSrcSet = (url: string, nativeWidth: number) =>
+  `${withTransform(url, 'w-300,f-png')} 300w, ${withTransform(url, 'f-png')} ${nativeWidth}w`
+/**
+ * Paisaje desde ImageKit (original de 4542×1141). Anchos escalonados para
+ * no descargar de más; tope en 2560 (decorativo: en 4K se amplía sin que se
+ * note). Calidad 45 en AVIF: sin diferencia visible con el grano del dibujo.
+ */
+const LANDSCAPE_WIDTHS = [640, 960, 1280, 1920, 2560] as const
+const LANDSCAPE_QUALITY = 45
 
 /**
  * Posición de cada nube en el lienzo original de 1600×800 (en %), su
  * duración de deriva y hacia dónde se va al hacer scroll.
  */
 const CLOUDS = [
-  { left: '4.69%', top: '35%', width: '31.56%', duration: '46s', delay: '-12s', exit: -1 },
-  { left: '61.25%', top: '20.63%', width: '36.25%', duration: '38s', delay: '-25s', exit: 1 },
+  { left: '4.69%', top: '35%', width: '31.56%', px: 505, duration: '46s', delay: '-12s', exit: -1 },
+  { left: '61.25%', top: '20.63%', width: '36.25%', px: 580, duration: '38s', delay: '-25s', exit: 1 },
 ] as const
 
 /**
@@ -27,6 +37,7 @@ const CLOUDS = [
  */
 export function HeroBackdrop() {
   const { landscape, clouds } = site.hero.backdrop
+  const picture = imagekitPicture(landscape, LANDSCAPE_WIDTHS, LANDSCAPE_QUALITY)
   const root = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
 
@@ -55,7 +66,9 @@ export function HeroBackdrop() {
         // Capa exterior: la mueve el scroll (data-cloud = hacia qué lado sale); imagen interior: la deriva continua.
         <div key={c.left} data-cloud={c.exit} className="absolute" style={{ left: c.left, top: c.top, width: c.width }}>
           <img
-            src={imageUrl(clouds[i] ?? '', CLOUD_WIDTH)}
+            src={withTransform(clouds[i] ?? '', 'f-png')}
+            srcSet={cloudSrcSet(clouds[i] ?? '', c.px)}
+            sizes={c.width.replace('%', 'vw')}
             alt=""
             decoding="async"
             className="block w-full animate-cloud motion-reduce:animate-none"
@@ -63,15 +76,19 @@ export function HeroBackdrop() {
           />
         </div>
       ))}
-      <img
-        {...responsiveImage(landscape, LANDSCAPE_WIDTHS)}
-        sizes="100vw"
-        width={3840}
-        height={680}
-        alt=""
-        decoding="async"
-        className="absolute inset-x-0 bottom-0 block h-auto w-full"
-      />
+      <picture>
+        <source type="image/avif" srcSet={picture.avif} sizes="100vw" />
+        <img
+          src={picture.src}
+          srcSet={picture.webp}
+          sizes="100vw"
+          width={4542}
+          height={1141}
+          alt=""
+          decoding="async"
+          className="absolute inset-x-0 bottom-0 block h-auto w-full"
+        />
+      </picture>
     </div>
   )
 }

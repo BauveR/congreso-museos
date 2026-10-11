@@ -106,7 +106,7 @@ export interface HeroContent {
   /** Botones de la fila inferior del hero. */
   ctas: Link[]
   poster: ImageAsset
-  /** Paisaje fijo al pie del hero y nubes animadas encima (ver services/imagekit.ts). */
+  /** Paisaje fijo al pie del hero y nubes animadas encima: URLs completas de ImageKit (ver services/imagekit.ts). */
   backdrop: { landscape: string; clouds: [string, string] }
 }
 

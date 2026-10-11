@@ -77,8 +77,14 @@ export const site: SiteContent = {
       { label: 'Inscripciones', href: '#acceso', icon: 'ticket' },
       { label: 'Agenda', href: '#agenda', icon: 'calendar' },
     ],
-    // Paisaje: public/frame_01.png (3840×2160), franja con dibujo. Nubes: recortes de «Dream 3» (lienzo 1600×800).
-    backdrop: { landscape: 'hero/paisaje.png', clouds: ['hero/nube-1.png', 'hero/nube-2.png'] },
+    // Paisaje (PNG de 4542×1141) y nubes (recortes de «Dream 3», lienzo 1600×800) en ImageKit.
+    backdrop: {
+      landscape: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/V%20Congreso%20de%20Museos%20de%20Canarias-15.png',
+      clouds: [
+        'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/nube-1.png',
+        'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/nube-2.png',
+      ],
+    },
     poster: {
       src: '/media/poster.svg',
       alt: '',

@@ -1,3 +1,4 @@
+import type { ConnectivityDay, ConnectivityEvent } from '../../../shared/connectivity.js'
 import type { RegistrationData } from '../../../shared/registration.js'
 import {
   applyRegistrationChange,
@@ -19,6 +20,7 @@ export class MemoryStore implements Store {
   private registrations = new Map<string, Registration>()
   private queue: Promise<unknown> = Promise.resolve()
   private mailQuota = new Map<string, { day: string; count: number }>()
+  private events = new Map<string, ConnectivityDay['counts']>()
 
   constructor(sessions: Session[] = DEFAULT_SESSIONS) {
     for (const s of sessions) this.sessions.set(s.id, { ...s })
@@ -96,6 +98,19 @@ export class MemoryStore implements Store {
       this.mailQuota.set(uid, { day, count: count + 1 })
       return true
     })
+  }
+
+  async countEvent(event: ConnectivityEvent, day: string) {
+    const counts = this.events.get(day) ?? {}
+    counts[event] = (counts[event] ?? 0) + 1
+    this.events.set(day, counts)
+  }
+
+  async listEventCounts(sinceDay: string) {
+    return [...this.events]
+      .filter(([day]) => day >= sinceDay)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([day, counts]) => ({ day, counts: { ...counts } }))
   }
 
   recount() {

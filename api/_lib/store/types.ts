@@ -1,3 +1,4 @@
+import type { ConnectivityDay, ConnectivityEvent } from '../../../shared/connectivity.js'
 import type { RegistrationData } from '../../../shared/registration.js'
 import type { Session, SessionPatch } from '../../../shared/sessions.js'
 
@@ -45,4 +46,8 @@ export interface Store {
    * de peticiones): cuenta uno más y devuelve false si ya llegó a `max` hoy.
    */
   consumeMailQuota(uid: string, max: number): Promise<boolean>
+  /** Suma uno al contador anónimo de conexión del día (ver shared/connectivity.ts). */
+  countEvent(event: ConnectivityEvent, day: string): Promise<void>
+  /** Contadores desde `sinceDay` (incluido), del más antiguo al más reciente. */
+  listEventCounts(sinceDay: string): Promise<ConnectivityDay[]>
 }

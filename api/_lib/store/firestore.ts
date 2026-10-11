@@ -1,4 +1,5 @@
 import type { DocumentReference, Firestore } from 'firebase-admin/firestore'
+import type { ConnectivityDay, ConnectivityEvent } from '../../../shared/connectivity.js'
 import type { RegistrationData } from '../../../shared/registration.js'
 import {
   applyRegistrationChange,
@@ -142,6 +143,20 @@ export class FirestoreStore implements Store {
       tx.set(ref, { day, count: count + 1 })
       return true
     })
+  }
+
+  /** Un documento por día en «connectivity», con un campo por evento (incremento atómico). */
+  async countEvent(event: ConnectivityEvent, day: string) {
+    const [db, { FieldValue }] = await Promise.all([this.db(), import('firebase-admin/firestore')])
+    await db.collection('connectivity').doc(day).set({ [event]: FieldValue.increment(1) }, { merge: true })
+  }
+
+  async listEventCounts(sinceDay: string) {
+    const db = await this.db()
+    const snap = await db.collection('connectivity').where('__name__', '>=', db.collection('connectivity').doc(sinceDay)).get()
+    return snap.docs
+      .map((doc): ConnectivityDay => ({ day: doc.id, counts: doc.data() as ConnectivityDay['counts'] }))
+      .sort((a, b) => a.day.localeCompare(b.day))
   }
 
   async listRegistrations() {

@@ -1,5 +1,6 @@
-import { ArrowDown, ArrowRight, Eye, EyeOff } from 'lucide-react'
+import { ArrowDown, ArrowRight, Check, Circle, Eye, EyeOff } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
+import { checkPassword, PASSWORD_MIN, passwordOk, type PasswordChecks } from '../../../shared/password'
 import { FieldShell, TextInput } from '../../components/form'
 import { fieldDomId } from '../../components/formIds'
 import { accessText, registrationText } from '../../content/inscripcion'
@@ -19,6 +20,10 @@ const institutional =
 const primary =
   'inline-flex h-12 w-full items-center justify-center rounded-lg bg-acento px-6 text-sm font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60'
 
+/** Navegadores integrados en apps (redes sociales, mensajería): Google no deja iniciar sesión en ellos. */
+const IN_APP_BROWSER = /FBAN|FBAV|FB_IAB|Instagram|LinkedInApp|Line\/|Twitter|TikTok|Snapchat|Pinterest/i
+const inAppBrowser = () => typeof navigator !== 'undefined' && IN_APP_BROWSER.test(navigator.userAgent)
+
 const errorMessage = (error: unknown) => t.errors[authErrorCode(error)] ?? registrationText.genericError
 
 /** Logo de Google (versión a color de las pautas de marca del botón). */
@@ -33,11 +38,21 @@ function GoogleLogo() {
   )
 }
 
-function PasswordInput({ value, onChange, autoComplete, help }: { value: string; onChange: (v: string) => void; autoComplete: string; help?: string }) {
+interface PasswordInputProps {
+  value: string
+  onChange: (v: string) => void
+  autoComplete: string
+  /** Solo al crear la cuenta; al entrar, cualquier longitud (contraseñas anteriores de 6–7). */
+  minLength?: number
+  /** id de la lista de comprobación que describe el campo. */
+  describedBy?: string
+}
+
+function PasswordInput({ value, onChange, autoComplete, minLength, describedBy }: PasswordInputProps) {
   const [visible, setVisible] = useState(false)
   const id = 'authPassword'
   return (
-    <FieldShell id={id} label={t.password} help={help}>
+    <FieldShell id={id} label={t.password}>
       <div className="relative">
         <input
           id={fieldDomId(id)}
@@ -45,9 +60,9 @@ function PasswordInput({ value, onChange, autoComplete, help }: { value: string;
           value={value}
           onChange={(e) => onChange(e.target.value)}
           required
-          minLength={6}
+          minLength={minLength}
           autoComplete={autoComplete}
-          aria-describedby={help ? `${fieldDomId(id)}-help` : undefined}
+          aria-describedby={describedBy}
           className="w-full rounded-lg border border-borde bg-superficie py-3 pr-12 pl-4 text-texto"
         />
         <button
@@ -61,6 +76,31 @@ function PasswordInput({ value, onChange, autoComplete, help }: { value: string;
         </button>
       </div>
     </FieldShell>
+  )
+}
+
+/** Aviso con los requisitos de la contraseña nueva, visible desde el principio y marcado en vivo al escribir. */
+function PasswordRules({ id, checks, touched }: { id: string; checks: PasswordChecks; touched: boolean }) {
+  const rules = [
+    [checks.length, t.passwordRules.length],
+    [checks.notCommon, t.passwordRules.notCommon],
+    [checks.notPersonal, t.passwordRules.notPersonal],
+  ] as const
+  return (
+    <div id={id} className={`-mt-1 rounded-lg border p-3 text-sm ${touched && !passwordOk(checks) ? 'border-error' : 'border-borde'}`}>
+      <p className="mb-2 font-bold">{t.passwordRules.title}</p>
+      <ul className="flex flex-col gap-1">
+        {rules.map(([ok, label]) => (
+          <li key={label} className={`flex items-center gap-2 ${ok ? 'text-texto' : touched ? 'text-error' : 'text-texto-suave'}`}>
+            {ok ? <Check aria-hidden className="size-4 shrink-0 text-acento-texto" /> : <Circle aria-hidden className="size-3.5 shrink-0" />}
+            <span>
+              {label}
+              <span className="sr-only">{ok ? ': sí' : ': todavía no'}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
@@ -82,6 +122,9 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
   const [notice, setNotice] = useState<string | null>(null)
   /** Google falló o se cerró su ventana: se ofrece crear la cuenta con correo. */
   const [googleHelp, setGoogleHelp] = useState(false)
+  /** Se intentó crear la cuenta con una contraseña que no cumple: los requisitos pendientes, en rojo. */
+  const [passwordTouched, setPasswordTouched] = useState(false)
+  const checks = checkPassword(password, { email, firstName, lastName })
 
   const run = async (action: () => Promise<void>, { google = false } = {}) => {
     setBusy(true)
@@ -119,6 +162,14 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
 
   const submit = (e: FormEvent) => {
     e.preventDefault()
+    // Al crear la cuenta, las reglas de la contraseña antes de llamar a Firebase.
+    if (mode === 'signUp' && !passwordOk(checks)) {
+      setPasswordTouched(true)
+      setNotice(null)
+      setError(t.passwordInvalid)
+      document.getElementById(fieldDomId('authPassword'))?.focus()
+      return
+    }
     void run(() =>
       mode === 'signUp' ? auth.signUpWithPassword({ firstName, lastName, email, password }) : auth.signInWithPassword(email, password),
     )
@@ -153,6 +204,13 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
         {tab('signUp', t.tabs.signUp)}
         {tab('signIn', t.tabs.signIn)}
       </div>
+
+      {inAppBrowser() && (
+        <p role="note" className="mt-6 flex items-start gap-3 rounded-lg bg-error/10 p-3 text-sm leading-snug">
+          <ArrowDown aria-hidden className="mt-0.5 size-5 shrink-0 text-error" />
+          {t.inAppBrowser}
+        </p>
+      )}
 
       <button
         type="button"
@@ -205,8 +263,10 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
           value={password}
           onChange={setPassword}
           autoComplete={mode === 'signUp' ? 'new-password' : 'current-password'}
-          help={mode === 'signUp' ? t.passwordHelp : undefined}
+          minLength={mode === 'signUp' ? PASSWORD_MIN : undefined}
+          describedBy={mode === 'signUp' ? 'authPasswordRules' : undefined}
         />
+        {mode === 'signUp' && <PasswordRules id="authPasswordRules" checks={checks} touched={passwordTouched} />}
 
         {error && (
           <p role="alert" className="text-sm font-semibold text-error">

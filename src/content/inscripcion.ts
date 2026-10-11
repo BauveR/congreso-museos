@@ -26,6 +26,8 @@ export const registrationText = {
     emailSent: 'Te hemos enviado un enlace de acceso. Ábrelo desde este mismo navegador.',
     emailConfirmLabel: 'Confirma tu correo para completar el acceso',
     emailConfirm: 'Acceder',
+    linkFailed: 'El enlace no es válido o ha caducado (cada enlace sirve una sola vez). Pide uno nuevo.',
+    newLink: 'Pedir un enlace nuevo',
     mockTitle: 'Modo de pruebas (sin Firebase)',
     mockHelp: 'Acceso simulado: los datos se guardan en memoria del servidor de desarrollo y se pierden al reiniciarlo.',
     mockName: 'Nombre y apellidos',
@@ -100,6 +102,14 @@ export const registrationText = {
   errorSummary: 'Revisa los campos marcados.',
   genericError: 'No se ha podido completar la operación. Inténtalo de nuevo.',
   closed: 'Las inscripciones aún no están abiertas. Vuelve pronto: lo anunciaremos en esta web.',
+  /** Inscripción ya hecha con el plazo cerrado: no se puede modificar, pero sí cancelar. */
+  closedChanges: 'El plazo de inscripción está cerrado: ya no se pueden hacer cambios, pero puedes cancelar.',
+  /** Sin inscripción previa y todos los días completos. */
+  allFull: 'Todas las plazas están ocupadas. Si quieres quedar en lista de espera, escríbenos desde la sección de contacto de esta web.',
+  /** Error de la cuenta (no de la red) al cargar: sesión caducada o sin permiso. */
+  accountProblemTitle: 'No hemos podido abrir tu inscripción',
+  signOutAndRetry: 'Cerrar sesión y volver a entrar',
+  backToSummary: 'Volver al resumen sin cambios',
 
   success: {
     created: 'Inscripción confirmada',
@@ -121,6 +131,9 @@ export const registrationText = {
 export const accessText = {
   tabs: { signUp: 'Crear cuenta', signIn: 'Ya tengo cuenta' },
   google: 'Continuar con Google',
+  /** Navegador dentro de una app: Google bloquea ahí su acceso (error «disallowed_useragent»). */
+  inAppBrowser:
+    'Estás viendo la web dentro de una app (Instagram, LinkedIn, Facebook…), y ahí Google no permite entrar. Crea tu cuenta con correo y contraseña aquí abajo, o abre esta página en tu navegador.',
   or: 'o con tu correo',
   /** En «Ya tengo cuenta»: camino claro para quien no usa Google. */
   institutionalCta: '¿Correo institucional? Regístrate con email y contraseña',
@@ -134,7 +147,14 @@ export const accessText = {
   lastName: 'Apellidos',
   email: 'Correo electrónico',
   password: 'Contraseña',
-  passwordHelp: 'Mínimo 6 caracteres.',
+  /** Lista de comprobación en vivo al crear la cuenta (shared/password.ts). */
+  passwordRules: {
+    title: 'Requisitos de la contraseña',
+    length: 'Tiene al menos 8 caracteres',
+    notCommon: 'No es una contraseña muy común',
+    notPersonal: 'No incluye tu nombre ni tu correo',
+  },
+  passwordInvalid: 'La contraseña aún no cumple los requisitos indicados bajo el campo.',
   showPassword: 'Mostrar contraseña',
   hidePassword: 'Ocultar contraseña',
   submitSignUp: 'Crear cuenta',
@@ -144,12 +164,13 @@ export const accessText = {
   resetSent: (email: string) => `Si existe una cuenta con ${email}, te hemos enviado un enlace para crear una contraseña nueva.`,
   mockNote: 'Modo de pruebas: las cuentas se guardan solo en este navegador.',
   errors: {
-    'auth/email-already-in-use': 'Ya existe una cuenta con este correo. Entra desde «Ya tengo cuenta».',
+    'auth/email-already-in-use':
+      'Ya existe una cuenta con este correo. Si la creaste con Google, usa «Continuar con Google»; si no, entra desde «Ya tengo cuenta» (y si no recuerdas la contraseña, pulsa «¿Has olvidado tu contraseña?»).',
     'auth/invalid-credential': 'Correo o contraseña incorrectos.',
     'auth/wrong-password': 'Correo o contraseña incorrectos.',
     'auth/user-not-found': 'Correo o contraseña incorrectos.',
     'auth/invalid-email': 'El correo no es válido.',
-    'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres.',
+    'auth/weak-password': 'La contraseña debe tener al menos 8 caracteres.',
     'auth/too-many-requests': 'Demasiados intentos. Espera unos minutos y vuelve a probar.',
     'auth/popup-blocked': 'El navegador ha bloqueado la ventana de Google. Permite las ventanas emergentes e inténtalo de nuevo.',
     'auth/network-request-failed':

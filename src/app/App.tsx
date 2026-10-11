@@ -1,5 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
+import { ConnectionNotice } from '../components/ConnectionNotice'
+import { ErrorBoundary } from '../components/ErrorBoundary'
 import { site } from '../content/site'
 import { Landing } from './Landing'
 import { usePreviewAccess } from './previewAccess'
@@ -26,15 +28,24 @@ function Home() {
 export function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={null}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/inscripcion" element={<RegistrationPage />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/privacidad" element={<PrivacyPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Suspense>
+      {/* Página que no carga (p. ej. archivo de una versión anterior): recarga una vez y, si no, aviso. */}
+      <ErrorBoundary
+        fallback={
+          <div className="wrap py-16">
+            <ConnectionNotice phase="error" onRetry={() => window.location.reload()} />
+          </div>
+        }
+      >
+        <Suspense fallback={null}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/inscripcion" element={<RegistrationPage />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/privacidad" element={<PrivacyPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </BrowserRouter>
   )
 }

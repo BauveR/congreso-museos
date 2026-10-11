@@ -1,4 +1,5 @@
 import { lazy, Suspense, useCallback, useState } from 'react'
+import { ErrorBoundary } from '../../components/ErrorBoundary'
 import { site } from '../../content/site'
 import { useGpuTier } from '../../hooks/useGpuTier'
 import { useTheme } from '../../hooks/useTheme'
@@ -19,6 +20,8 @@ export function Background() {
   const theme = useTheme()
   const quality = gpu && qualityFor(gpu)
   const [ready, setReady] = useState(false)
+  /** El 3D no ha podido cargar: se queda el póster, sin indicador de carga. */
+  const [failed, setFailed] = useState(false)
   // El póster es oscuro: en tema claro se oculta (también en tier 0).
   const showPoster = !ready && theme === 'dark'
   const [progress, setProgress] = useState<number | null>(null)
@@ -39,13 +42,15 @@ export function Background() {
         />
         {quality && (
           <div className={`${fade} ${ready ? 'opacity-100' : 'opacity-0'}`}>
-            <Suspense fallback={null}>
-              <Hero3D quality={quality} onReady={onReady} onProgress={setProgress} />
-            </Suspense>
+            <ErrorBoundary fallback={null} onError={() => setFailed(true)}>
+              <Suspense fallback={null}>
+                <Hero3D quality={quality} onReady={onReady} onProgress={setProgress} />
+              </Suspense>
+            </ErrorBoundary>
           </div>
         )}
       </div>
-      {quality && <Preloader progress={progress} done={ready} />}
+      {quality && <Preloader progress={progress} done={ready || failed} />}
     </>
   )
 }

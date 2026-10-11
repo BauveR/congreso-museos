@@ -1,4 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { ConnectionNotice } from '../../../components/ConnectionNotice'
+import { ErrorBoundary } from '../../../components/ErrorBoundary'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 
@@ -33,7 +35,15 @@ export function Access() {
 
   return (
     <Section id="acceso" ref={section} className="min-h-svh py-24 sm:py-32">
-      {near ? <Suspense fallback={placeholder}><AccessPanel /></Suspense> : placeholder}
+      {near ? (
+        <ErrorBoundary fallback={<ConnectionNotice phase="error" onRetry={() => window.location.reload()} />}>
+          <Suspense fallback={placeholder}>
+            <AccessPanel />
+          </Suspense>
+        </ErrorBoundary>
+      ) : (
+        placeholder
+      )}
     </Section>
   )
 }

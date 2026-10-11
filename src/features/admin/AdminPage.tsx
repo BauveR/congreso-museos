@@ -11,6 +11,7 @@ import {
 } from '../../../shared/registration'
 import { dayColor } from '../../../shared/event'
 import type { Session } from '../../../shared/sessions'
+import { ConnectionNotice } from '../../components/ConnectionNotice'
 import { SelectInput, TextInput } from '../../components/form'
 import { PageShell } from '../../components/PageShell'
 import { ReadingSheet } from '../../components/ReadingSheet'
@@ -19,7 +20,9 @@ import { useBreakpoint } from '../../hooks/useBreakpoint'
 import { api, ApiError, download } from '../../lib/api'
 import { AuthProvider } from '../../lib/auth/AuthProvider'
 import { useAuth } from '../../lib/auth/context'
+import { useLoadPhase } from '../../lib/connectivity'
 import { SignedInBar, SignInPanel } from '../registration/SignInPanel'
+import { ConnectivityPanel } from './ConnectivityPanel'
 import { DiagnosticsButton } from './DiagnosticsButton'
 import { StatsPanel } from './StatsPanel'
 import type { AdminRegistration } from './types'
@@ -284,6 +287,7 @@ function RegistrationsPanel({ sessions, onSessionsChanged }: { sessions: Session
   const [exporting, setExporting] = useState(false)
 
   const query = new URLSearchParams(Object.entries(filters).filter(([, v]) => v)).toString()
+  const { getIdToken } = auth
 
   // Filtros con pequeña espera para no pedir en cada tecla.
   useEffect(() => {
@@ -291,7 +295,7 @@ function RegistrationsPanel({ sessions, onSessionsChanged }: { sessions: Session
     const id = setTimeout(async () => {
       try {
         const result = await api<{ registrations: AdminRegistration[] }>(`admin/registrations${query ? `?${query}` : ''}`, {
-          token: await auth.getIdToken(),
+          token: await getIdToken(),
         })
         if (!cancelled) {
           setRows(result.registrations)
@@ -305,7 +309,7 @@ function RegistrationsPanel({ sessions, onSessionsChanged }: { sessions: Session
       cancelled = true
       clearTimeout(id)
     }
-  }, [query, auth])
+  }, [query, getIdToken])
 
   const exportCsv = async () => {
     setExporting(true)
@@ -566,14 +570,21 @@ function AdminDashboard() {
   const [error, setError] = useState<string | null>(null)
   /** Se incrementa para volver a pedir las sesiones (p. ej. tras cancelar una inscripción). */
   const [sessionsVersion, setSessionsVersion] = useState(0)
+  // Dependencias por uid, no por objeto: no se repite la carga si cambia otra cosa de la sesión.
+  const uid = auth.user?.uid
+  const { isAdmin, getIdToken } = auth
+  const authPhase = useLoadPhase(auth.loading, auth.initError)
 
   useEffect(() => {
-    if (!auth.user || !auth.isAdmin) return
+    if (!uid || !isAdmin) return
     let cancelled = false
     void (async () => {
       try {
-        const result = await api<{ sessions: Session[] }>('admin/sessions', { token: await auth.getIdToken() })
-        if (!cancelled) setSessions(result.sessions)
+        const result = await api<{ sessions: Session[] }>('admin/sessions', { token: await getIdToken() })
+        if (!cancelled) {
+          setSessions(result.sessions)
+          setError(null)
+        }
       } catch (e) {
         if (!cancelled) setError(e instanceof ApiError ? e.message : String(e))
       }
@@ -581,9 +592,9 @@ function AdminDashboard() {
     return () => {
       cancelled = true
     }
-  }, [auth, sessionsVersion])
+  }, [uid, isAdmin, getIdToken, sessionsVersion])
 
-  if (auth.loading) return <p role="status">…</p>
+  if (authPhase) return <ConnectionNotice phase={authPhase} onRetry={() => window.location.reload()} />
   if (!auth.user) return <SignInPanel allowAdmin />
   if (!auth.isAdmin) {
     return (
@@ -617,7 +628,12 @@ function AdminDashboard() {
           {error}
         </p>
       )}
-      {sessions && tab === 'stats' && <StatsPanel sessions={sessions} />}
+      {sessions && tab === 'stats' && (
+        <div className="flex flex-col gap-6">
+          <StatsPanel sessions={sessions} />
+          <ConnectivityPanel />
+        </div>
+      )}
       {sessions && tab === 'sessions' && <SessionsPanel sessions={sessions} setSessions={setSessions} />}
       {sessions && tab === 'registrations' && (
         <RegistrationsPanel sessions={sessions} onSessionsChanged={() => setSessionsVersion((v) => v + 1)} />

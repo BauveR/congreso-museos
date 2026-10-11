@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { loadMotion } from '../../../app/motion'
+import { ConnectionNotice } from '../../../components/ConnectionNotice'
 import { DisplayHeading } from '../../../components/DisplayHeading'
 import { ScrollLitText } from '../../../components/ScrollLitText'
 import { registrationText } from '../../../content/inscripcion'
 import { site } from '../../../content/site'
 import { AuthProvider } from '../../../lib/auth/AuthProvider'
 import { useAuth } from '../../../lib/auth/context'
+import { useLoadPhase } from '../../../lib/connectivity'
 import { DiagnosticsButton } from '../../admin/DiagnosticsButton'
 import { AuthCard } from '../../registration/AuthCard'
 import { RegistrationFlow, type RegistrationViewKind } from '../../registration/RegistrationFlow'
@@ -25,6 +27,7 @@ const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)'
  */
 function AccessFlow() {
   const auth = useAuth()
+  const authPhase = useLoadPhase(auth.loading, auth.initError)
   const { access } = site
   const card = useRef<HTMLDivElement>(null)
   const lastHeight = useRef(0)
@@ -75,12 +78,8 @@ function AccessFlow() {
         className={`theme-dark w-full rounded-3xl p-5 sm:p-8 ${signedIn ? 'lg:p-12' : 'max-w-xl lg:justify-self-end'}`}
       >
         <div key={signedIn ? 'flow' : 'access'} className="animate-fade-in motion-reduce:animate-none">
-          {auth.loading && (
-            <p role="status" className="text-texto-suave">
-              {access.loading}
-            </p>
-          )}
-          {!auth.loading && !auth.user && <AuthCard framed={false} />}
+          {authPhase && <ConnectionNotice phase={authPhase} loadingText={access.loading} onRetry={() => window.location.reload()} />}
+          {!authPhase && !auth.user && <AuthCard framed={false} />}
           {auth.user && (
             <div>
               <p className="mb-2 flex flex-wrap items-center gap-x-3 text-sm text-texto-suave">

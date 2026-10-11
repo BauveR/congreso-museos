@@ -2,6 +2,9 @@ import type { FirebaseApp } from 'firebase/app'
 import type { AppCheck } from 'firebase/app-check'
 import { cleanEnv } from '../../shared/env'
 
+/** Espera máxima por el comprobante: si la red bloquea reCAPTCHA, no se queda colgado. */
+const APP_CHECK_WAIT_MS = 8_000
+
 /*
  * App de Firebase del navegador (VITE_DATA_MODE=firebase), compartida por
  * Auth y App Check. El SDK se carga bajo demanda: nunca en la portada.
@@ -42,7 +45,9 @@ export async function getAppCheckToken(): Promise<string | undefined> {
       }),
     )
     const { getToken } = await import('firebase/app-check')
-    return (await getToken(await appCheckPromise)).token
+    const token = getToken(await appCheckPromise).then((result) => result.token)
+    const timeout = new Promise<undefined>((resolve) => setTimeout(resolve, APP_CHECK_WAIT_MS))
+    return await Promise.race([token, timeout])
   } catch {
     // Sin comprobante (bloqueador, red): el servidor lo registra o lo rechaza según APP_CHECK.
     return undefined

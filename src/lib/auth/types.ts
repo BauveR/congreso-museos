@@ -23,6 +23,8 @@ export interface AuthApi {
   user: AuthUser | null
   isAdmin: boolean
   loading: boolean
+  /** No se pudo iniciar el acceso (red que bloquea Firebase, o TIMEOUT_MS sin respuesta). */
+  initError: boolean
   /** Token para la API (Authorization: Bearer). */
   getIdToken(): Promise<string>
   signOut(): Promise<void>

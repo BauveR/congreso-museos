@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
+import { ConnectionNotice } from '../../components/ConnectionNotice'
 import type { RegistrationData } from '../../../shared/registration'
 import { registrationText } from '../../content/inscripcion'
 import { api } from '../../lib/api'
 import { useAuth } from '../../lib/auth/context'
+import { useLoadPhase } from '../../lib/connectivity'
 import { reportError } from '../../lib/diagnostics'
 import { initialValues, type FormInput, type PublicSession } from './formValues'
 import { RegistrationForm } from './RegistrationForm'
@@ -52,14 +54,19 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
   const [loadError, setLoadError] = useState<string | null>(null)
   const [confirmCancel, setConfirmCancel] = useState(false)
   const [busy, setBusy] = useState(false)
+  /** Se incrementa con «Reintentar» para repetir la carga (sin recargar la página). */
+  const [attempt, setAttempt] = useState(0)
+  // Dependencias por uid, no por objeto: no se repite la carga si cambia otra cosa de la sesión.
+  const uid = auth.user?.uid
+  const { getIdToken } = auth
 
   // Carga de sesiones e inscripción al iniciar sesión (cancelable si cambia la cuenta).
   useEffect(() => {
-    if (!auth.user) return
+    if (!uid) return
     let cancelled = false
     void (async () => {
       try {
-        const token = await auth.getIdToken()
+        const token = await getIdToken()
         const [s, r] = await Promise.all([
           api<{ sessions: PublicSession[]; open: boolean }>('sessions'),
           api<{ registration: SavedRegistration | null }>('registration', { token }),
@@ -78,14 +85,25 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
     return () => {
       cancelled = true
     }
-  }, [auth])
+  }, [uid, getIdToken, attempt])
 
   const kind: RegistrationViewKind = loadError ? 'error' : !sessions ? 'loading' : view.kind
   useEffect(() => onViewChange?.(kind), [kind, onViewChange])
+  const phase = useLoadPhase(!sessions, Boolean(loadError))
 
   if (!auth.user) return null
-  if (loadError) return <p role="alert" className="text-error">{loadError}</p>
-  if (!sessions) return <p role="status">…</p>
+  if (phase) {
+    return (
+      <ConnectionNotice
+        phase={phase}
+        onRetry={() => {
+          setLoadError(null)
+          setAttempt((n) => n + 1)
+        }}
+      />
+    )
+  }
+  if (!sessions) return null
 
   const submit = async (input: FormInput) => {
     const token = await auth.getIdToken()

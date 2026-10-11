@@ -1,8 +1,10 @@
+import { ConnectionNotice } from '../../components/ConnectionNotice'
 import { PageShell } from '../../components/PageShell'
 import { DiagnosticsButton } from '../admin/DiagnosticsButton'
 import { registrationText } from '../../content/inscripcion'
 import { AuthProvider } from '../../lib/auth/AuthProvider'
 import { useAuth } from '../../lib/auth/context'
+import { useLoadPhase } from '../../lib/connectivity'
 import { RegistrationFlow } from './RegistrationFlow'
 import { AuthCard } from './AuthCard'
 import { SignedInBar } from './SignInPanel'
@@ -11,7 +13,9 @@ const t = registrationText
 
 function RegistrationGate() {
   const auth = useAuth()
-  if (auth.loading) return <p role="status">…</p>
+  const phase = useLoadPhase(auth.loading, auth.initError)
+  // Reintentar el acceso es recargar, pero solo si lo pulsa la persona.
+  if (phase) return <ConnectionNotice phase={phase} onRetry={() => window.location.reload()} />
   if (!auth.user) {
     return (
       <>

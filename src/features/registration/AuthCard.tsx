@@ -5,6 +5,7 @@ import { fieldDomId } from '../../components/formIds'
 import { accessText, registrationText } from '../../content/inscripcion'
 import { useAuth } from '../../lib/auth/context'
 import { authErrorCode } from '../../lib/auth/types'
+import { reportConnectivity } from '../../lib/connectivity'
 import { reportError } from '../../lib/diagnostics'
 
 const t = accessText
@@ -91,6 +92,8 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
       await action()
     } catch (e) {
       if (google) setGoogleHelp(true)
+      // Red que bloquea el acceso (Google o Firebase): contador anónimo para el panel.
+      if (authErrorCode(e) === 'auth/network-request-failed') reportConnectivity('auth-network')
       // Cerrar la ventana de Google no es un error que mostrar (basta la ayuda).
       if (authErrorCode(e) !== 'auth/popup-closed-by-user' && authErrorCode(e) !== 'auth/cancelled-popup-request') {
         reportError('Acceso (Google o correo)', e)

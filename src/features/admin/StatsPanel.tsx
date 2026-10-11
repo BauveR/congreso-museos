@@ -69,7 +69,7 @@ function BarList({ title, help, items }: { title: string; help?: string; items: 
 
 /** Pestaña «Resumen»: elige un día (o todos) y muestra cifras y gráficos de sus inscritos. */
 export function StatsPanel({ sessions }: { sessions: Session[] }) {
-  const auth = useAuth()
+  const { getIdToken } = useAuth()
   const days = sessions.filter((s) => s.kind === 'day')
   const [day, setDay] = useState('')
   const [rows, setRows] = useState<AdminRegistration[] | null>(null)
@@ -80,7 +80,7 @@ export function StatsPanel({ sessions }: { sessions: Session[] }) {
     void (async () => {
       try {
         const query = day ? `?session=${encodeURIComponent(day)}` : ''
-        const result = await api<{ registrations: AdminRegistration[] }>(`admin/registrations${query}`, { token: await auth.getIdToken() })
+        const result = await api<{ registrations: AdminRegistration[] }>(`admin/registrations${query}`, { token: await getIdToken() })
         if (!cancelled) setRows(result.registrations)
       } catch {
         // El error ya queda en el panel de diagnóstico; se mantiene el último resumen.
@@ -91,7 +91,7 @@ export function StatsPanel({ sessions }: { sessions: Session[] }) {
     return () => {
       cancelled = true
     }
-  }, [auth, day])
+  }, [getIdToken, day])
 
   const summary = useMemo(() => (rows ? summarize(rows) : null), [rows])
   const session = days.find((s) => s.id === day)

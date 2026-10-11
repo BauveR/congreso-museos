@@ -123,7 +123,7 @@ export const accessText = {
   google: 'Continuar con Google',
   or: 'o con tu correo',
   /** En «Ya tengo cuenta»: camino claro para quien no usa Google. */
-  institutionalCta: '¿Correo institucional? Crea tu cuenta aquí',
+  institutionalCta: '¿Correo institucional? Regístrate con email y contraseña',
   /** En «Crear cuenta»: señala el formulario de correo y contraseña. */
   signUpHint: 'Si tu correo no es de Google (por ejemplo, el institucional), crea tu cuenta aquí abajo con tu correo y una contraseña.',
   /** Si Google falla o se cierra su ventana. */
@@ -152,7 +152,8 @@ export const accessText = {
     'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres.',
     'auth/too-many-requests': 'Demasiados intentos. Espera unos minutos y vuelve a probar.',
     'auth/popup-blocked': 'El navegador ha bloqueado la ventana de Google. Permite las ventanas emergentes e inténtalo de nuevo.',
-    'auth/network-request-failed': 'Sin conexión. Revisa tu red e inténtalo de nuevo.',
+    'auth/network-request-failed':
+      'No hemos podido conectar con el servicio de acceso. Algunas redes de universidades o administraciones lo bloquean: prueba con los datos del móvil o escríbenos y te inscribimos nosotros.',
   } as Record<string, string>,
 }
 
@@ -160,6 +161,16 @@ export const adminText = {
   pageTitle: 'Administración',
   forbidden: 'Esta cuenta no tiene acceso de administración.',
   tabs: { stats: 'Resumen', sessions: 'Días y aforo', registrations: 'Inscritos' },
+
+  connectivity: {
+    title: 'Conexión de las visitas',
+    help: 'Contadores anónimos (por pestaña, sin datos personales). Ayudan a ver si alguna red, p. ej. de una universidad o administración, impide inscribirse.',
+    last7: '7 días',
+    last30: '30 días',
+    ofVisits: (pct: number) => `${pct} % de las visitas`,
+    empty: 'Aún no hay datos.',
+    error: 'No se han podido cargar los contadores.',
+  },
 
   stats: {
     day: 'Día',
@@ -242,6 +253,18 @@ export const adminText = {
 }
 
 /** Panel de diagnóstico (solo cuentas de administración). */
+/** Avisos de conexión (cargas lentas o fallidas), pensados para redes de universidades y administraciones. */
+export const connectionText = {
+  loading: 'Cargando…',
+  slowTitle: 'Está tardando más de lo normal',
+  slowBody: 'Seguimos intentándolo. Algunas redes de universidades o administraciones ralentizan o filtran estos servicios.',
+  errorTitle: 'No hemos podido conectar',
+  errorBody:
+    'Puede deberse a la red (pasa a menudo en universidades y administraciones) o a un bloqueador de contenido. Prueba de nuevo o, si puedes, conéctate con los datos del móvil.',
+  retry: 'Reintentar',
+  contact: (email: string) => `¿Sigue sin funcionar? Escríbenos a ${email} y te inscribimos nosotros.`,
+}
+
 export const diagnosticsText = {
   button: 'Diagnóstico',
   title: 'Diagnóstico de errores',

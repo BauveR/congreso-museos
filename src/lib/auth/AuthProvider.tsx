@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { cleanEnv } from '../../../shared/env'
+import { reportConnectivity, TIMEOUT_MS } from '../connectivity'
 import { safeStorage } from '../safeStorage'
 import { AuthContext } from './context'
 import { EMAIL_LINK_KEY, getFirebaseAuth } from './firebaseAuth'
@@ -14,12 +15,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(() => MODE === 'mock' && Boolean(loadMockUser()?.admin))
   const [loading, setLoading] = useState(MODE !== 'mock')
   const [pendingEmailLink, setPendingEmailLink] = useState(false)
+  const [initError, setInitError] = useState(false)
+
+  // Visita con la inscripción cargada: base para comparar los fallos (anónimo).
+  useEffect(() => reportConnectivity('visit'), [])
 
   useEffect(() => {
     if (MODE === 'mock') return
 
     let unsubscribe = () => {}
     let cancelled = false
+    // Sin respuesta de Firebase en TIMEOUT_MS: se avisa (si contesta después, se recupera solo).
+    const timer = setTimeout(() => {
+      setInitError(true)
+      setLoading(false)
+    }, TIMEOUT_MS)
+    const fail = () => {
+      clearTimeout(timer)
+      if (cancelled) return
+      setInitError(true)
+      setLoading(false)
+    }
     void (async () => {
       const auth = await getFirebaseAuth()
       const { onAuthStateChanged, isSignInWithEmailLink, signInWithEmailLink } = await import('firebase/auth')
@@ -38,19 +54,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (cancelled) return
       unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        if (!firebaseUser || !firebaseUser.email) {
-          setUser(null)
-          setIsAdmin(false)
-        } else {
-          const token = await firebaseUser.getIdTokenResult()
-          setUser({ uid: firebaseUser.uid, email: firebaseUser.email, displayName: firebaseUser.displayName ?? '' })
-          setIsAdmin(token.claims.admin === true)
+        clearTimeout(timer)
+        try {
+          if (!firebaseUser || !firebaseUser.email) {
+            setUser(null)
+            setIsAdmin(false)
+          } else {
+            const token = await firebaseUser.getIdTokenResult()
+            setUser({ uid: firebaseUser.uid, email: firebaseUser.email, displayName: firebaseUser.displayName ?? '' })
+            setIsAdmin(token.claims.admin === true)
+          }
+          setInitError(false)
+          setLoading(false)
+        } catch {
+          // Sesión guardada pero sin poder renovar el token (red): mismo aviso.
+          fail()
         }
-        setLoading(false)
       })
-    })()
+    })().catch(fail)
     return () => {
       cancelled = true
+      clearTimeout(timer)
       unsubscribe()
     }
   }, [])
@@ -153,6 +177,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       isAdmin,
       loading,
+      initError,
       getIdToken,
       signOut,
       signInWithGoogle,
@@ -164,7 +189,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       completeEmailLink,
       mockSignIn,
     }),
-    [user, isAdmin, loading, getIdToken, signOut, signInWithGoogle, signUpWithPassword, signInWithPassword, resetPassword, sendEmailLink, pendingEmailLink, completeEmailLink, mockSignIn],
+    [user, isAdmin, loading, initError, getIdToken, signOut, signInWithGoogle, signUpWithPassword, signInWithPassword, resetPassword, sendEmailLink, pendingEmailLink, completeEmailLink, mockSignIn],
   )
 
   return <AuthContext value={value}>{children}</AuthContext>

@@ -1,3 +1,4 @@
+import { TIMEOUT_MS } from './connectivity'
 import { reportError } from './diagnostics'
 import { getAppCheckToken } from './firebaseApp'
 
@@ -28,7 +29,8 @@ async function request(context: string, url: string, init?: RequestInit): Promis
   try {
     response = await fetch(url, init)
   } catch (error) {
-    const apiError = new ApiError(0, 'Error de conexión')
+    const timedOut = error instanceof DOMException && error.name === 'TimeoutError'
+    const apiError = new ApiError(0, timedOut ? 'La conexión ha tardado demasiado' : 'Error de conexión')
     reportError(context, apiError, { status: 0, detail: error instanceof Error ? error.message : String(error) })
     throw apiError
   }
@@ -48,10 +50,13 @@ interface ApiOptions {
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE'
   body?: unknown
   token?: string
+  /** Corte (ms). Por defecto TIMEOUT_MS en GET; las escrituras no se cortan (el servidor podría haberlas guardado). */
+  timeoutMs?: number
 }
 
 /** fetch a /api con JSON y token; lanza ApiError si la respuesta no es 2xx. */
-export async function api<T>(path: string, { method = 'GET', body, token }: ApiOptions = {}): Promise<T> {
+export async function api<T>(path: string, { method = 'GET', body, token, timeoutMs }: ApiOptions = {}): Promise<T> {
+  const timeout = timeoutMs ?? (method === 'GET' ? TIMEOUT_MS : undefined)
   const context = `${method} /api/${path}`
   // App Check solo en escrituras con sesión: son las que podría abusar un bot.
   const appCheck = token && method !== 'GET' ? await getAppCheckToken() : undefined
@@ -63,6 +68,7 @@ export async function api<T>(path: string, { method = 'GET', body, token }: ApiO
       ...(appCheck ? { 'x-firebase-appcheck': appCheck } : {}),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
+    signal: timeout ? AbortSignal.timeout(timeout) : undefined,
   })
   if (!response.ok) return fail(context, response, 'Error de conexión')
   return (await response.json().catch(() => ({}))) as T

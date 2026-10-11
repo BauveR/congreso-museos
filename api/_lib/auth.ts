@@ -38,7 +38,9 @@ export async function requireUser(request: Request): Promise<AuthUser> {
   try {
     const decoded = await getAuth(getAdminApp()).verifyIdToken(token, true)
     if (!decoded.email) throw new HttpError(403, 'La cuenta no tiene correo electrónico')
-    if (decoded.email_verified === false) throw new HttpError(403, 'Verifica tu correo electrónico antes de inscribirte')
+    // Sin exigir el correo verificado: las cuentas con correo y contraseña (p. ej.
+    // institucionales) nacen sin verificar y se inscriben en el acto. La
+    // confirmación de Resend llega a ese correo y avisa si no ha sido la persona.
     return { uid: decoded.uid, email: decoded.email, name: String(decoded.name ?? ''), admin: decoded.admin === true }
   } catch (error) {
     if (error instanceof HttpError) throw error

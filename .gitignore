@@ -69,6 +69,8 @@ web_modules/
 .env
 .env.*
 !.env.example
+# Solo valores de prueba para los emuladores (sin secretos): se versiona.
+!.env.emulators
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

@@ -3,6 +3,7 @@ import { ConnectionNotice } from '../../../components/ConnectionNotice'
 import { ErrorBoundary } from '../../../components/ErrorBoundary'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
+import { returningFromGoogle } from '../../../lib/auth/redirectFlow'
 
 // Auth, Firebase y el resumen llegan en un chunk aparte, al acercarse la sección.
 const AccessPanel = lazy(() => import('./AccessPanel'))
@@ -17,7 +18,13 @@ const PRELOAD = '150%'
  */
 export function Access() {
   const section = useRef<HTMLElement>(null)
-  const [near, setNear] = useState(false)
+  // Vuelta de Google por redirección: la página se recarga arriba; se carga el panel ya y se baja hasta él.
+  const [near, setNear] = useState(returningFromGoogle)
+
+  useEffect(() => {
+    if (!returningFromGoogle()) return
+    requestAnimationFrame(() => section.current?.scrollIntoView({ block: 'start' }))
+  }, [])
 
   useEffect(() => {
     const el = section.current

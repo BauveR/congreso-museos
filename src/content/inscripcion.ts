@@ -131,6 +131,8 @@ export const registrationText = {
 export const accessText = {
   tabs: { signUp: 'Crear cuenta', signIn: 'Ya tengo cuenta' },
   google: 'Continuar con Google',
+  /** Al volver de Google por redirección (iOS que no es Safari). */
+  signingInWithGoogle: 'Entrando con Google…',
   /** Navegador dentro de una app: Google bloquea ahí su acceso (error «disallowed_useragent»). */
   inAppBrowser:
     'Estás viendo la web dentro de una app (Instagram, LinkedIn, Facebook…), y ahí Google no permite entrar. Crea tu cuenta con correo y contraseña aquí abajo, o abre esta página en tu navegador.',

@@ -25,6 +25,11 @@ export interface AuthApi {
   loading: boolean
   /** No se pudo iniciar el acceso (red que bloquea Firebase, o TIMEOUT_MS sin respuesta). */
   initError: boolean
+  /** Se vuelve de Google por redirección (iOS que no es Safari): mostrar «Entrando…». */
+  returningFromGoogle: boolean
+  /** Error al volver de Google por redirección (se muestra en la tarjeta de acceso). */
+  redirectError: unknown
+  clearRedirectError(): void
   /** Token para la API (Authorization: Bearer). */
   getIdToken(): Promise<string>
   signOut(): Promise<void>

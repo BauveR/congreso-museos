@@ -1,7 +1,7 @@
 import { ConnectionNotice } from '../../components/ConnectionNotice'
 import { PageShell } from '../../components/PageShell'
 import { DiagnosticsButton } from '../admin/DiagnosticsButton'
-import { registrationText } from '../../content/inscripcion'
+import { accessText, registrationText } from '../../content/inscripcion'
 import { AuthProvider } from '../../lib/auth/AuthProvider'
 import { useAuth } from '../../lib/auth/context'
 import { useLoadPhase } from '../../lib/connectivity'
@@ -15,7 +15,10 @@ function RegistrationGate() {
   const auth = useAuth()
   const phase = useLoadPhase(auth.loading, auth.initError)
   // Reintentar el acceso es recargar, pero solo si lo pulsa la persona.
-  if (phase) return <ConnectionNotice phase={phase} onRetry={() => window.location.reload()} />
+  if (phase) {
+    const loadingText = auth.returningFromGoogle ? accessText.signingInWithGoogle : undefined
+    return <ConnectionNotice phase={phase} loadingText={loadingText} onRetry={() => window.location.reload()} />
+  }
   if (!auth.user) {
     return (
       <>

@@ -4,6 +4,7 @@ import { reportConnectivity, TIMEOUT_MS } from '../connectivity'
 import { safeStorage } from '../safeStorage'
 import { AuthContext } from './context'
 import { EMAIL_LINK_KEY, getFirebaseAuth } from './firebaseAuth'
+import { clearGoogleRedirect, markGoogleRedirect, needsGoogleRedirect, returningFromGoogle } from './redirectFlow'
 import { loadMockUser, mockPasswordAccount, mockToken, mockUid, saveMockUser, type MockUser } from './mockAuth'
 import type { AuthApi, AuthUser, SignUpInput } from './types'
 
@@ -16,6 +17,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(MODE !== 'mock')
   const [pendingEmailLink, setPendingEmailLink] = useState(false)
   const [initError, setInitError] = useState(false)
+  // Vuelta de Google por redirección: se sabe antes de cargar Firebase (sessionStorage).
+  const [returning, setReturning] = useState(() => MODE !== 'mock' && returningFromGoogle())
+  const [redirectError, setRedirectError] = useState<unknown>(null)
 
   // Visita con la inscripción cargada: base para comparar los fallos (anónimo).
   useEffect(() => reportConnectivity('visit'), [])
@@ -38,7 +42,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     void (async () => {
       const auth = await getFirebaseAuth()
-      const { onAuthStateChanged, isSignInWithEmailLink, signInWithEmailLink } = await import('firebase/auth')
+      const { onAuthStateChanged, isSignInWithEmailLink, signInWithEmailLink, getRedirectResult } = await import('firebase/auth')
+
+      // Vuelta de Google por redirección: la sesión llega por onAuthStateChanged; aquí solo
+      // se recogen los errores (cuenta desactivada, red…). Un solo uso: se borra la marca.
+      if (returningFromGoogle()) {
+        void getRedirectResult(auth)
+          .catch((error: unknown) => {
+            if (!cancelled) setRedirectError(error)
+          })
+          .finally(() => {
+            clearGoogleRedirect()
+            if (!cancelled) setReturning(false)
+          })
+      }
 
       // Vuelta desde el enlace del correo.
       if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -118,7 +135,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       mockSignIn({ name: 'Cuenta Google de prueba', email: 'prueba.google@gmail.com', admin: false })
       return
     }
-    const [{ GoogleAuthProvider, signInWithPopup }, auth] = await Promise.all([import('firebase/auth'), getFirebaseAuth()])
+    const [{ GoogleAuthProvider, signInWithPopup, signInWithRedirect }, auth] = await Promise.all([import('firebase/auth'), getFirebaseAuth()])
+    // Chrome, Firefox, Edge y Opera de iOS (y la app de Google): misma pestaña. El resto, ventana.
+    if (needsGoogleRedirect(navigator.userAgent, navigator.maxTouchPoints)) {
+      markGoogleRedirect()
+      await signInWithRedirect(auth, new GoogleAuthProvider())
+      return
+    }
     await signInWithPopup(auth, new GoogleAuthProvider())
   }, [mockSignIn])
 
@@ -172,6 +195,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await sendPasswordResetEmail(auth, email.trim(), { url: window.location.origin + window.location.pathname })
   }, [])
 
+  const clearRedirectError = useCallback(() => setRedirectError(null), [])
+
   const cancelEmailLink = useCallback(() => {
     setPendingEmailLink(false)
     window.history.replaceState(null, '', window.location.pathname)
@@ -184,6 +209,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAdmin,
       loading,
       initError,
+      returningFromGoogle: returning,
+      redirectError,
+      clearRedirectError,
       getIdToken,
       signOut,
       signInWithGoogle,
@@ -196,7 +224,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       cancelEmailLink,
       mockSignIn,
     }),
-    [user, isAdmin, loading, initError, getIdToken, signOut, signInWithGoogle, signUpWithPassword, signInWithPassword, resetPassword, sendEmailLink, pendingEmailLink, completeEmailLink, cancelEmailLink, mockSignIn],
+    [user, isAdmin, loading, initError, returning, redirectError, clearRedirectError, getIdToken, signOut, signInWithGoogle, signUpWithPassword, signInWithPassword, resetPassword, sendEmailLink, pendingEmailLink, completeEmailLink, cancelEmailLink, mockSignIn],
   )
 
   return <AuthContext value={value}>{children}</AuthContext>

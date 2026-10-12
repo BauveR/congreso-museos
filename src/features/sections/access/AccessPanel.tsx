@@ -3,7 +3,7 @@ import { loadMotion } from '../../../app/motion'
 import { ConnectionNotice } from '../../../components/ConnectionNotice'
 import { DisplayHeading } from '../../../components/DisplayHeading'
 import { ScrollLitText } from '../../../components/ScrollLitText'
-import { registrationText } from '../../../content/inscripcion'
+import { accessText, registrationText } from '../../../content/inscripcion'
 import { site } from '../../../content/site'
 import { AuthProvider } from '../../../lib/auth/AuthProvider'
 import { useAuth } from '../../../lib/auth/context'
@@ -78,7 +78,13 @@ function AccessFlow() {
         className={`theme-dark w-full rounded-3xl p-5 sm:p-8 ${signedIn ? 'lg:p-12' : 'max-w-xl lg:justify-self-end'}`}
       >
         <div key={signedIn ? 'flow' : 'access'} className="animate-fade-in motion-reduce:animate-none">
-          {authPhase && <ConnectionNotice phase={authPhase} loadingText={access.loading} onRetry={() => window.location.reload()} />}
+          {authPhase && (
+            <ConnectionNotice
+              phase={authPhase}
+              loadingText={auth.returningFromGoogle ? accessText.signingInWithGoogle : access.loading}
+              onRetry={() => window.location.reload()}
+            />
+          )}
           {!authPhase && !auth.user && <AuthCard framed={false} />}
           {auth.user && (
             <div>

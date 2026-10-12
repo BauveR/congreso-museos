@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowRight, Check, Circle, Eye, EyeOff } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { checkPassword, PASSWORD_MIN, passwordOk, type PasswordChecks } from '../../../shared/password'
 import { FieldShell, TextInput } from '../../components/form'
 import { fieldDomId } from '../../components/formIds'
@@ -128,10 +128,22 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
   const [passwordTouched, setPasswordTouched] = useState(false)
   const checks = checkPassword(password, { email, firstName, lastName })
 
+  // Error al volver de Google por redirección: el mismo trato que si fallara la ventana
+  // (mensaje y ayuda), hasta que la persona vuelva a intentarlo. Aquí solo se anota.
+  const { redirectError, clearRedirectError } = auth
+  useEffect(() => {
+    if (!redirectError) return
+    if (authErrorCode(redirectError) === 'auth/network-request-failed') reportConnectivity('auth-network')
+    reportError('Acceso con Google (redirección)', redirectError)
+  }, [redirectError])
+  const shownError = error ?? (redirectError ? errorMessage(redirectError) : null)
+  const showGoogleHelp = googleHelp || Boolean(redirectError)
+
   const run = async (action: () => Promise<void>, { google = false } = {}) => {
     setBusy(true)
     setError(null)
     setGoogleHelp(false)
+    clearRedirectError()
     try {
       await action()
     } catch (e) {
@@ -151,6 +163,7 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
   const changeMode = (value: Mode) => {
     setMode(value)
     setError(null)
+    clearRedirectError()
   }
 
   /** Ir a «Crear cuenta» con el cursor en Nombre. */
@@ -230,7 +243,7 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
         {t.google}
       </button>
 
-      {googleHelp && (
+      {showGoogleHelp && (
         <div role="status" className="mt-4 rounded-2xl border-2 border-error p-4">
           <p className="font-bold">{t.googleHelpTitle}</p>
           <p className="mt-1 text-sm text-texto-suave">{t.googleHelpBody}</p>
@@ -241,7 +254,7 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
         </div>
       )}
 
-      {mode === 'signIn' && !googleHelp && (
+      {mode === 'signIn' && !showGoogleHelp && (
         <button type="button" onClick={toSignUp} className={`${institutional} mt-4`}>
           {t.institutionalCta}
           <ArrowRight aria-hidden className="size-4 shrink-0" />
@@ -276,9 +289,9 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
         />
         {mode === 'signUp' && <PasswordRules id="authPasswordRules" checks={checks} touched={passwordTouched} />}
 
-        {error && (
+        {shownError && (
           <p role="alert" className="text-sm font-semibold text-error">
-            {error}
+            {shownError}
           </p>
         )}
 

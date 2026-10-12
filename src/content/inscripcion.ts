@@ -160,8 +160,25 @@ export const accessText = {
   submitSignUp: 'Crear cuenta',
   submitSignIn: 'Entrar',
   forgot: '¿Has olvidado tu contraseña?',
-  forgotNeedsEmail: 'Escribe tu correo arriba y vuelve a pulsar.',
-  resetSent: (email: string) => `Si existe una cuenta con ${email}, te hemos enviado un enlace para crear una contraseña nueva.`,
+  /** Pantalla «Recupera tu contraseña» (PasswordReset). */
+  reset: {
+    back: 'Volver a entrar',
+    title: 'Recupera tu contraseña',
+    intro: 'Escribe el correo con el que creaste tu cuenta y te enviaremos un enlace para elegir una contraseña nueva.',
+    submit: 'Enviar enlace',
+    sending: 'Enviando…',
+    googleNote: '¿Te registraste con Google? Entonces no tienes contraseña: vuelve y usa «Continuar con Google».',
+    sentTitle: 'Revisa tu correo',
+    sentBody: {
+      before: 'Si hay una cuenta con ',
+      after: ', en unos minutos te llegará un correo con un enlace para crear tu contraseña nueva. El enlace es válido durante 1 hora.',
+    },
+    sentHelp:
+      '¿No lo ves? Busca en spam o en promociones. Si es un correo institucional, puede estar retenido en la cuarentena de tu servicio de correo.',
+    resend: 'Reenviar enlace',
+    resendIn: (s: number) => `Reenviar en ${s} s`,
+    otherEmail: 'Usar otro correo',
+  },
   mockNote: 'Modo de pruebas: las cuentas se guardan solo en este navegador.',
   errors: {
     'auth/email-already-in-use':

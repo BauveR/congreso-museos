@@ -6,6 +6,7 @@ import { fieldDomId } from '../../components/formIds'
 import { accessText, registrationText } from '../../content/inscripcion'
 import { useAuth } from '../../lib/auth/context'
 import { authErrorCode } from '../../lib/auth/types'
+import { PasswordReset } from './PasswordReset'
 import { reportConnectivity } from '../../lib/connectivity'
 import { reportError } from '../../lib/diagnostics'
 
@@ -119,7 +120,8 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [notice, setNotice] = useState<string | null>(null)
+  /** Pantalla «Recupera tu contraseña» en lugar del acceso. */
+  const [resetting, setResetting] = useState(false)
   /** Google falló o se cerró su ventana: se ofrece crear la cuenta con correo. */
   const [googleHelp, setGoogleHelp] = useState(false)
   /** Se intentó crear la cuenta con una contraseña que no cumple: los requisitos pendientes, en rojo. */
@@ -129,7 +131,6 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
   const run = async (action: () => Promise<void>, { google = false } = {}) => {
     setBusy(true)
     setError(null)
-    setNotice(null)
     setGoogleHelp(false)
     try {
       await action()
@@ -150,7 +151,6 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
   const changeMode = (value: Mode) => {
     setMode(value)
     setError(null)
-    setNotice(null)
   }
 
   /** Ir a «Crear cuenta» con el cursor en Nombre. */
@@ -165,7 +165,6 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
     // Al crear la cuenta, las reglas de la contraseña antes de llamar a Firebase.
     if (mode === 'signUp' && !passwordOk(checks)) {
       setPasswordTouched(true)
-      setNotice(null)
       setError(t.passwordInvalid)
       document.getElementById(fieldDomId('authPassword'))?.focus()
       return
@@ -175,16 +174,10 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
     )
   }
 
+  /** «¿Has olvidado tu contraseña?»: su propia pantalla, con el correo ya escrito. */
   const forgot = () => {
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      setError(null)
-      setNotice(t.forgotNeedsEmail)
-      return
-    }
-    void run(async () => {
-      await auth.resetPassword(email)
-      setNotice(t.resetSent(email.trim()))
-    })
+    setError(null)
+    setResetting(true)
   }
 
   const tab = (value: Mode, label: string) => (
@@ -197,6 +190,21 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
       {label}
     </button>
   )
+
+  if (resetting) {
+    return (
+      <div className={`${framed ? 'rounded-3xl border border-borde bg-superficie p-5 sm:p-8' : ''} ${className}`}>
+        <PasswordReset
+          initialEmail={email}
+          onBack={(value) => {
+            setEmail(value)
+            setResetting(false)
+            setMode('signIn')
+          }}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className={`${framed ? 'rounded-3xl border border-borde bg-superficie p-5 sm:p-8' : ''} ${className}`}>
@@ -271,11 +279,6 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
         {error && (
           <p role="alert" className="text-sm font-semibold text-error">
             {error}
-          </p>
-        )}
-        {notice && (
-          <p role="status" className="text-sm">
-            {notice}
           </p>
         )}
 

@@ -50,6 +50,7 @@ export class FirestoreStore implements Store {
 
   async updateSession(id: string, patch: SessionPatch) {
     const db = await this.db()
+    await this.ensureSessions(db)
     const ref = db.collection('sessions').doc(id)
     return db.runTransaction(async (tx) => {
       const snap = await tx.get(ref)
@@ -71,6 +72,8 @@ export class FirestoreStore implements Store {
 
   async saveRegistration(uid: string, email: string, data: RegistrationData): Promise<SaveResult> {
     const db = await this.db()
+    // También aquí, no solo al listar: en una base de datos nueva, la primera escritura no puede fallar.
+    await this.ensureSessions(db)
     const regRef = db.collection('registrations').doc(uid)
     const identityRef = regRef.collection('private').doc('identity')
 

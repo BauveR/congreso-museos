@@ -51,3 +51,15 @@ export function apiRequest(idToken: string, init: { method?: string; body?: unkn
     body: init.body === undefined ? undefined : JSON.stringify(init.body),
   })
 }
+
+/** Inicia sesión con correo y contraseña en el emulador y devuelve un token nuevo (p. ej. tras cambiar sus permisos). */
+export async function signIn(email: string, password = 'volcanes del norte'): Promise<string> {
+  const response = await fetch(`http://${authHost}/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=demo-api-key`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ email, password, returnSecureToken: true }),
+  })
+  const data = (await response.json()) as { idToken?: string; error?: { message: string } }
+  if (!data.idToken) throw new Error(`signIn en el emulador: ${data.error?.message ?? response.status}`)
+  return data.idToken
+}

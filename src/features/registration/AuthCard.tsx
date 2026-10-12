@@ -3,12 +3,15 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { checkPassword, PASSWORD_MIN, passwordOk, type PasswordChecks } from '../../../shared/password'
 import { FieldShell, TextInput } from '../../components/form'
 import { fieldDomId } from '../../components/formIds'
-import { accessText, registrationText } from '../../content/inscripcion'
+import { accessText } from '../../content/inscripcion'
 import { useAuth } from '../../lib/auth/context'
 import { authErrorCode } from '../../lib/auth/types'
+import { describeAuthError, type AuthErrorView, type RecoveryAction } from './authErrors'
+import { InAppBrowserNotice } from './InAppBrowserNotice'
 import { PasswordReset } from './PasswordReset'
 import { reportConnectivity } from '../../lib/connectivity'
 import { reportError } from '../../lib/diagnostics'
+import { detectInAppBrowser } from '../../lib/inAppBrowser'
 
 const t = accessText
 
@@ -21,11 +24,7 @@ const institutional =
 const primary =
   'inline-flex h-12 w-full items-center justify-center rounded-lg bg-acento px-6 text-sm font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60'
 
-/** Navegadores integrados en apps (redes sociales, mensajería): Google no deja iniciar sesión en ellos. */
-const IN_APP_BROWSER = /FBAN|FBAV|FB_IAB|Instagram|LinkedInApp|Line\/|Twitter|TikTok|Snapchat|Pinterest/i
-const inAppBrowser = () => typeof navigator !== 'undefined' && IN_APP_BROWSER.test(navigator.userAgent)
 
-const errorMessage = (error: unknown) => t.errors[authErrorCode(error)] ?? registrationText.genericError
 
 /** Logo de Google (versión a color de las pautas de marca del botón). */
 function GoogleLogo() {
@@ -114,12 +113,15 @@ function PasswordRules({ id, checks, touched }: { id: string; checks: PasswordCh
 export function AuthCard({ framed = true, className = '' }: { framed?: boolean; className?: string }) {
   const auth = useAuth()
   const [mode, setMode] = useState<Mode>('signUp')
+  // Navegador dentro de una app (no cambia durante la visita).
+  const [inApp] = useState(() => (typeof navigator === 'undefined' ? null : detectInAppBrowser(navigator.userAgent)))
+  const googleBlocked = Boolean(inApp?.certain)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<AuthErrorView | null>(null)
   /** Pantalla «Recupera tu contraseña» en lugar del acceso. */
   const [resetting, setResetting] = useState(false)
   /** Google falló o se cerró su ventana: se ofrece crear la cuenta con correo. */
@@ -136,7 +138,7 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
     if (authErrorCode(redirectError) === 'auth/network-request-failed') reportConnectivity('auth-network')
     reportError('Acceso con Google (redirección)', redirectError)
   }, [redirectError])
-  const shownError = error ?? (redirectError ? errorMessage(redirectError) : null)
+  const shownError = error ?? (redirectError ? describeAuthError(redirectError) : null)
   const showGoogleHelp = googleHelp || Boolean(redirectError)
 
   const run = async (action: () => Promise<void>, { google = false } = {}) => {
@@ -153,7 +155,7 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
       // Cerrar la ventana de Google no es un error que mostrar (basta la ayuda).
       if (authErrorCode(e) !== 'auth/popup-closed-by-user' && authErrorCode(e) !== 'auth/cancelled-popup-request') {
         reportError('Acceso (Google o correo)', e)
-        setError(errorMessage(e))
+        setError(describeAuthError(e))
       }
     } finally {
       setBusy(false)
@@ -178,7 +180,7 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
     // Al crear la cuenta, las reglas de la contraseña antes de llamar a Firebase.
     if (mode === 'signUp' && !passwordOk(checks)) {
       setPasswordTouched(true)
-      setError(t.passwordInvalid)
+      setError({ message: t.passwordInvalid, actions: [] })
       document.getElementById(fieldDomId('authPassword'))?.focus()
       return
     }
@@ -191,6 +193,15 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
   const forgot = () => {
     setError(null)
     setResetting(true)
+  }
+
+  /** Salidas bajo un error: con el correo ya escrito (o el que trae el error). */
+  const recover = (action: RecoveryAction, errorEmail?: string) => {
+    if (errorEmail) setEmail(errorEmail)
+    if (action === 'signUp') return toSignUp()
+    if (action === 'reset') return forgot()
+    changeMode('signIn')
+    requestAnimationFrame(() => document.getElementById(fieldDomId('authPassword'))?.focus())
   }
 
   const tab = (value: Mode, label: string) => (
@@ -226,16 +237,14 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
         {tab('signIn', t.tabs.signIn)}
       </div>
 
-      {inAppBrowser() && (
-        <p role="note" className="mt-6 flex items-start gap-3 rounded-lg bg-error/10 p-3 text-sm leading-snug">
-          <ArrowDown aria-hidden className="mt-0.5 size-5 shrink-0 text-error" />
-          {t.inAppBrowser}
-        </p>
-      )}
+      {inApp && <InAppBrowserNotice id="inAppNotice" browser={inApp} />}
 
+      {/* Dentro de una app identificada con seguridad, Google fallaría (403): desactivado y explicado. */}
       <button
         type="button"
-        disabled={busy}
+        disabled={busy || googleBlocked}
+        aria-describedby={inApp ? 'inAppNotice' : undefined}
+        title={googleBlocked ? t.inApp.googleUnavailable : undefined}
         onClick={() => void run(auth.signInWithGoogle, { google: true })}
         className="mt-6 inline-flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-[#747775] bg-white px-6 text-sm font-semibold text-[#1f1f1f] hover:bg-[#f2f2f2] disabled:opacity-60"
       >
@@ -290,9 +299,23 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
         {mode === 'signUp' && <PasswordRules id="authPasswordRules" checks={checks} touched={passwordTouched} />}
 
         {shownError && (
-          <p role="alert" className="text-sm font-semibold text-error">
-            {shownError}
-          </p>
+          <div role="alert" className="flex flex-col gap-3">
+            <p className="text-sm font-semibold text-error">{shownError.message}</p>
+            {shownError.actions.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {shownError.actions.map((action) => (
+                  <button
+                    key={action}
+                    type="button"
+                    onClick={() => recover(action, shownError.email)}
+                    className="inline-flex min-h-11 items-center rounded-lg border border-acento-texto px-4 text-sm font-bold hover:bg-acento-texto/10"
+                  >
+                    {t.errorActions[action]}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         )}
 
         <button type="submit" className={`${primary} mt-2`} disabled={busy}>

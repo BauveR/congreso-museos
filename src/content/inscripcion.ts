@@ -133,9 +133,18 @@ export const accessText = {
   google: 'Continuar con Google',
   /** Al volver de Google por redirección (iOS que no es Safari). */
   signingInWithGoogle: 'Entrando con Google…',
-  /** Navegador dentro de una app: Google bloquea ahí su acceso (error «disallowed_useragent»). */
-  inAppBrowser:
-    'Estás viendo la web dentro de una app (Instagram, LinkedIn, Facebook…), y ahí Google no permite entrar. Crea tu cuenta con correo y contraseña aquí abajo, o abre esta página en tu navegador.',
+  /** Navegador dentro de una app: Google bloquea ahí su acceso (error «disallowed_useragent»). Ver InAppBrowserNotice. */
+  inApp: {
+    title: (app: string | null) => (app ? `Estás dentro de la app de ${app}` : 'Parece que estás dentro de una app'),
+    body: 'Google no permite iniciar sesión desde aquí. Abre esta página en tu navegador, o crea tu cuenta con correo y contraseña aquí abajo.',
+    openChrome: 'Abrir en Chrome',
+    copy: 'Copiar enlace',
+    copied: 'Enlace copiado: pégalo en tu navegador',
+    copyFailed: 'No se ha podido copiar solo. Mantén pulsado el enlace para copiarlo:',
+    linkLabel: 'Enlace de esta página',
+    iosHint: 'En iPhone: pulsa ··· o el icono de compartir y elige «Abrir en el navegador» (o «Abrir en Safari»).',
+    googleUnavailable: 'Google no está disponible dentro de esta app.',
+  },
   or: 'o con tu correo',
   /** En «Ya tengo cuenta»: camino claro para quien no usa Google. */
   institutionalCta: '¿Correo institucional? Regístrate con email y contraseña',
@@ -183,8 +192,12 @@ export const accessText = {
   },
   mockNote: 'Modo de pruebas: las cuentas se guardan solo en este navegador.',
   errors: {
-    'auth/email-already-in-use':
-      'Ya existe una cuenta con este correo. Si la creaste con Google, usa «Continuar con Google»; si no, entra desde «Ya tengo cuenta» (y si no recuerdas la contraseña, pulsa «¿Has olvidado tu contraseña?»).',
+    'auth/email-already-in-use': 'Ya existe una cuenta con este correo. Si la creaste con Google, usa «Continuar con Google»; si no, entra con tu contraseña.',
+    'auth/account-exists-with-different-credential':
+      'Ya tienes una cuenta con este correo, creada con correo y contraseña. Entra con ellos (si no recuerdas la contraseña, puedes crear una nueva).',
+    'auth/user-disabled': 'Esta cuenta está desactivada. Si crees que es un error, escríbenos desde la sección de contacto de la web.',
+    /** Sin conexión a internet (navigator.onLine): no es la red de la institución. */
+    offline: 'No tienes conexión a internet. Comprueba la wifi o los datos móviles e inténtalo de nuevo.',
     'auth/invalid-credential': 'Correo o contraseña incorrectos.',
     'auth/wrong-password': 'Correo o contraseña incorrectos.',
     'auth/user-not-found': 'Correo o contraseña incorrectos.',
@@ -195,6 +208,12 @@ export const accessText = {
     'auth/network-request-failed':
       'No hemos podido conectar con el servicio de acceso. Algunas redes de universidades o administraciones lo bloquean: prueba con los datos del móvil o escríbenos y te inscribimos nosotros.',
   } as Record<string, string>,
+  /** Botones de salida bajo los errores de acceso (authErrors.ts). */
+  errorActions: {
+    signIn: 'Iniciar sesión',
+    reset: 'Recuperar contraseña',
+    signUp: 'Crear cuenta',
+  },
 }
 
 export const adminText = {

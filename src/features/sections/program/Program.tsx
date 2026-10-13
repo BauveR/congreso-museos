@@ -18,6 +18,9 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion'
  * - Comunicaciones de cada mesa plegadas en todos los tamaños.
  */
 
+/** Actividades destacadas en blanco: alegatorios, mesas plenarias, conferencias y ponencias. */
+const HIGHLIGHT = /^(Alegatorio|Mesa plenaria|Conferencia|Ponencia)/
+
 function Item({ item }: { item: ProgramItem }) {
   const { program } = site
   return (
@@ -26,7 +29,7 @@ function Item({ item }: { item: ProgramItem }) {
       <div className="flex flex-col gap-3">
         {item.entries.map((entry) => (
           <div key={entry.title}>
-            <p className="leading-snug font-semibold text-pretty">{entry.title}</p>
+            <p className={`leading-snug font-semibold text-pretty ${HIGHLIGHT.test(entry.title) ? 'text-claro' : ''}`}>{entry.title}</p>
             {entry.notes?.map((note) => (
               <p key={note} className="mt-1 text-sm leading-snug text-pretty">
                 {note}
@@ -96,7 +99,7 @@ export function Program() {
   )
 
   return (
-    <Section id="agenda" className="py-24 sm:py-32">
+    <Section id="agenda" className="pt-16 pb-24 sm:pt-20 sm:pb-32">
       <div className="edge">
         <div ref={card} className="rounded-3xl bg-salvia p-5 text-acento-contraste sm:p-8 lg:p-10">
           {/* Móvil: barra fija (título + días) bajo el nav, con el fondo de la tarjeta

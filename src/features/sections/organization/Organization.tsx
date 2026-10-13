@@ -84,7 +84,7 @@ export function Organization() {
   const { organization } = site
   return (
     // overflow-x-clip: la ilustración entra desde fuera de la página sin crear scroll lateral (no rompe los sticky).
-    <Section id="por-que" className="overflow-x-clip py-24 sm:py-32">
+    <Section id="por-que" className="overflow-x-clip pt-24 pb-8 sm:pt-32 sm:pb-12">
       <div className="wrap">
         {/* Escritorio: cabecera a la izquierda y la ilustración en el hueco de la derecha. */}
         <div className="lg:grid lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-center lg:gap-16">

@@ -14,7 +14,7 @@ export function Venue() {
   const { title, name, address, link, directions, image } = site.venue
   const directionsUrl = mapsUrl(directions.mapsQuery)
   return (
-    <Section id="sede" className="py-24 sm:py-32">
+    <Section id="sede" className="pt-10 pb-10 sm:py-32">
       <div className="wrap">
         <DisplayHeading>{title}</DisplayHeading>
 

@@ -34,7 +34,7 @@ export function Participants() {
   return (
     <Section
       id="ponentes"
-      className="py-24 [--card:16rem] [--card-open:min(calc(var(--card)*5_+_4rem),calc(100vw_-_2*var(--wrap-inset)))] sm:py-32 sm:[--card:17rem]"
+      className="pt-24 pb-10 [--card:16rem] [--card-open:min(calc(var(--card)*5_+_4rem),calc(100vw_-_2*var(--wrap-inset)))] sm:py-32 sm:[--card:17rem]"
     >
       <header className="wrap">
         <DisplayHeading>{participants.title}</DisplayHeading>

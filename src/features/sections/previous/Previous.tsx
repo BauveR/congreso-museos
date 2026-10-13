@@ -125,7 +125,7 @@ export function Previous() {
   const [paper, setPaper] = useState<Participant | null>(null)
 
   return (
-    <Section id="previos" className="py-24 sm:py-32 lg:pb-0">
+    <Section id="previos" className="pt-24 pb-10 sm:py-32 lg:pb-0">
       <div className="wrap">
         <DisplayHeading>{previous.title}</DisplayHeading>
         <ScrollLitText paragraphs={previous.body} className="mt-8" />

@@ -51,7 +51,7 @@ function Art() {
   // A su tamaño real: ampliarla en ImageKit pesa más sin ganar detalle.
   const picture = imagekitPicture(art.src, [art.width], 60)
   return (
-    <EnterFromSide className="mx-auto mt-10 w-[min(70vw,18rem)] lg:mx-0 lg:mt-0 lg:w-full lg:max-w-[26rem] lg:justify-self-end">
+    <EnterFromSide className="mx-auto mt-6 w-[min(70vw,18rem)] lg:mx-0 lg:mt-0 lg:w-full lg:max-w-[26rem] lg:justify-self-end">
       <picture aria-hidden>
         <source type="image/avif" srcSet={picture.avif} />
         <img src={picture.src} srcSet={picture.webp} alt="" width={art.width} height={art.height} loading="lazy" decoding="async" className="h-auto w-full" />
@@ -85,7 +85,7 @@ export function Organization() {
   const { organization } = site
   return (
     // overflow-x-clip: la ilustración entra desde fuera de la página sin crear scroll lateral (no rompe los sticky).
-    <Section id="por-que" className="overflow-x-clip pt-24 pb-8 sm:pt-32 sm:pb-12">
+    <Section id="por-que" className="overflow-x-clip pt-10 pb-8 sm:pt-32 sm:pb-12">
       <div className="wrap">
         {/* Escritorio: cabecera a la izquierda y la ilustración en el hueco de la derecha. */}
         <div className="lg:grid lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-center lg:gap-16">
@@ -99,8 +99,8 @@ export function Organization() {
         </div>
 
         {/* Pausa de lectura tras la cabecera antes de que entren los tramos
-            (relativa al alto de pantalla: algo menos en móvil). */}
-        <div className="mt-[calc(var(--svh)*30)] flex flex-col gap-24 lg:mt-[calc(var(--svh)*50)] lg:gap-32">
+            (en escritorio, relativa al alto de pantalla; en móvil, corta). */}
+        <div className="mt-8 flex flex-col gap-24 lg:mt-[calc(var(--svh)*50)] lg:gap-32">
           {organization.steps.map((step) => (
             <div key={step.title} className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
               {/* Móvil: `contents` hace que título y texto sean hijos del tramo, así el

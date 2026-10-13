@@ -44,7 +44,7 @@ export function Differences() {
 
   return (
     // overflow-x-clip: el cierre entra desde fuera de la pantalla sin crear scroll horizontal.
-    <Section id="distinto" className="overflow-x-clip py-24 sm:py-32">
+    <Section id="distinto" className="overflow-x-clip pt-10 pb-10 sm:py-32">
       <div className="wrap">
         <DisplayHeading color="text-claro" className="uppercase">
           {heading}

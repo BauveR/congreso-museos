@@ -8,7 +8,7 @@ import { Gallery } from './Gallery'
  */
 export function GallerySection() {
   return (
-    <Section id="cinetico" className="overflow-x-clip py-24 sm:py-32">
+    <Section id="cinetico" className="overflow-x-clip py-10 sm:py-32">
       <Gallery />
     </Section>
   )

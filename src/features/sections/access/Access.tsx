@@ -66,7 +66,7 @@ export function Access() {
   )
 
   return (
-    <Section id="acceso" ref={section} className="min-h-[calc(var(--svh)*100)] overflow-x-clip py-24 sm:py-32">
+    <Section id="acceso" ref={section} className="min-h-[calc(var(--svh)*100)] overflow-x-clip pt-10 pb-24 sm:py-32">
       {near ? (
         <ErrorBoundary fallback={<ConnectionNotice phase="error" onRetry={() => window.location.reload()} />}>
           <Suspense fallback={placeholder}>

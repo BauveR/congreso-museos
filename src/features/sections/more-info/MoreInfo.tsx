@@ -123,7 +123,7 @@ export function MoreInfo() {
   )
 
   return (
-    <Section id="saber-mas" className="py-24 sm:py-32 lg:pb-0">
+    <Section id="saber-mas" className="py-10 sm:py-32 lg:pb-0">
       <div className="wrap">
         <DisplayHeading>{moreInfo.title}</DisplayHeading>
         <ScrollLitText paragraphs={moreInfo.body} className="mt-8" />
@@ -133,7 +133,7 @@ export function MoreInfo() {
 
       {/* Alegatorios: mismo estilo que la cabecera de la sección (título en Kola y
           texto que se enciende con el scroll). */}
-      <div className="wrap mt-24">
+      <div className="wrap mt-12 sm:mt-24">
         <DisplayHeading as="h3">{moreInfo.sideLabel}</DisplayHeading>
         <ScrollLitText paragraphs={[moreInfo.sideLead]} className="mt-8" />
       </div>

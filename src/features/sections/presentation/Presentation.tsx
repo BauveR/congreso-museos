@@ -32,7 +32,7 @@ export function Presentation() {
   const organizers = organizing.groups.reduce((sum, g) => sum + g.members.length, 0)
 
   return (
-    <Section id="presentacion" className="py-24 sm:py-32">
+    <Section id="presentacion" className="pt-24 pb-10 sm:py-32">
       <div className="wrap grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
         <div>
           {/* Sin título visible; se mantiene para lectores de pantalla. */}

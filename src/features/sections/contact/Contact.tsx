@@ -18,9 +18,9 @@ export function Contact() {
   const picture = imagekitPicture(contact.art.src, [contact.art.width], 60)
   return (
     // overflow-x-clip: la ilustración entra desde fuera de la página sin crear scroll lateral.
-    <Section id="contacto" className="overflow-x-clip py-24 sm:py-32">
+    <Section id="contacto" className="overflow-x-clip pt-10 pb-24 sm:py-32">
       <div className="wrap">
-        <div className="theme-dark grid items-center gap-12 rounded-3xl px-6 py-12 sm:px-12 sm:py-16 lg:grid-cols-2 lg:gap-16">
+        <div className="theme-dark grid items-center gap-8 rounded-3xl px-6 py-12 sm:px-12 sm:py-16 lg:grid-cols-2 lg:gap-16">
           <div>
             <DisplayHeading>{contact.title}</DisplayHeading>
             <ScrollLitText paragraphs={[contact.intro]} className="mt-6" />

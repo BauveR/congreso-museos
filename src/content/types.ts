@@ -110,8 +110,11 @@ export interface HeroContent {
   backdrop: { landscape: string; clouds: [string, string] }
   /** Nombre de la lista de logos (lectores de pantalla). */
   logosLabel: string
-  /** Línea de logos de las instituciones, bajo los botones (blancos sobre transparente). */
-  logos: (ImageAsset & { /** Alto en pantalla: cada archivo trae distinto margen alrededor. */ size: 'sm' | 'lg' })[]
+  /** Línea de logos de las instituciones bajo los botones, por grupos con su rótulo (blancos sobre transparente). */
+  logoGroups: {
+    label: string
+    logos: (ImageAsset & { /** Alto en pantalla: cada archivo trae distinto margen alrededor. */ size: 'sm' | 'md' | 'lg' | 'xl' | 'wide' })[]
+  }[]
 }
 
 export interface CommitteeMember {

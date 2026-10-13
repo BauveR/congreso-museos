@@ -30,6 +30,7 @@ export const participants: ParticipantsContent = {
       items: [
         {
           kicker: 'Conferencia inaugural',
+          org: 'Ministerio de Cultura, Madrid',
           authors: [],
         },
         {

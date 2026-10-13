@@ -1,10 +1,12 @@
+import { InstitutionLogos } from '../../../components/InstitutionLogos'
 import { site } from '../../../content/site'
 
-/** Pie: redes, aviso legal y privacidad (el contacto tiene su propia sección). */
+/** Pie en verde oscuro: logos de las instituciones, redes, aviso legal y privacidad (el contacto tiene su propia sección). */
 export function Footer() {
   const { footer } = site
   return (
-    <footer className="border-t border-borde py-12">
+    <footer className="theme-dark py-12">
+      <InstitutionLogos className="wrap mb-10 border-b border-borde/40 pb-10" />
       <div className="wrap flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <p className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-texto-suave">
           <span>{footer.legal}</span>

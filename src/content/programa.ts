@@ -28,7 +28,7 @@ export const program: ProgramContent = {
           items: [
             t('10:00 h', 'Recepción'),
             t('10:45 h', 'Inauguración institucional', ['Gobierno de Canarias y Cabildo Insular de La Gomera']),
-            t('11:15 h', 'Ponencia inaugural', ['XXXXXXX (Ministerio de Cultura, Madrid): título pendiente']),
+            t('11:15 h', 'Ponencia inaugural', ['Por confirmar', 'Ministerio de Cultura, Madrid']),
             t('11:45 h', 'Descanso'),
             t('12:15 h', 'Presentación y explicación organizativa', [
               'Juan Carlos Hernández Marrero (Cabildo, La Gomera): Un congreso sobre museos en La Gomera… ¿Qué hacemos aquí?',

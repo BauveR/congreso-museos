@@ -86,9 +86,22 @@ export const site: SiteContent = {
       ],
     },
     logosLabel: 'Instituciones',
-    logos: [
-      { src: '/media/logos/gobierno-de-canarias.webp', alt: 'Gobierno de Canarias', width: 556, height: 322, size: 'lg' },
-      { src: '/media/logos/cabildo-de-la-gomera.webp', alt: 'Cabildo Insular de La Gomera', width: 231, height: 73, size: 'sm' },
+    logoGroups: [
+      {
+        label: 'Organizan',
+        logos: [
+          { src: '/media/logos/gobierno-de-canarias-2030.webp', alt: 'Canarias 2030 · Gobierno de Canarias', width: 413, height: 96, size: 'wide' },
+          { src: '/media/logos/cabildo-de-la-gomera.webp', alt: 'Cabildo Insular de La Gomera', width: 231, height: 73, size: 'md' },
+        ],
+      },
+      {
+        label: 'Colaboran',
+        logos: [
+          // Texto pasado a blanco (el original es gris oscuro y no se vería sobre el verde).
+          { src: '/media/logos/ayuntamiento-san-sebastian-de-la-gomera.webp', alt: 'Ayuntamiento de San Sebastián de La Gomera', width: 265, height: 116, size: 'lg' },
+          { src: '/media/logos/icdc.webp', alt: 'Instituto Canario de Desarrollo Cultural', width: 381, height: 82, size: 'sm' },
+        ],
+      },
     ],
     poster: {
       src: '/media/poster.svg',
@@ -195,6 +208,8 @@ export const site: SiteContent = {
         { name: 'Carlos Pallés Darias', affiliation: 'OAMC, Santa Cruz de Tenerife' },
         { name: 'Lorea Arija Bartolomé', affiliation: 'OAMC, Santa Cruz de Tenerife' },
         { name: 'Ruth Azcárate Miguel', affiliation: 'Casa de Carta-MHAT, Valle de Guerra' },
+        { name: 'Eliseo G. Izquierdo', affiliation: 'LM Arte Colección, San Cristóbal de La Laguna' },
+        { name: 'Elena Acosta Guerrero', affiliation: '' }, // afiliación pendiente
       ],
     },
     organizing: {

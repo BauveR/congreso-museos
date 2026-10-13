@@ -1,4 +1,5 @@
 import { ButtonLink } from '../../../components/ButtonLink'
+import { InstitutionLogos } from '../../../components/InstitutionLogos'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { HeroBackdrop } from './HeroBackdrop'
@@ -29,7 +30,10 @@ export function Hero() {
         <HeroWordmark edition={hero.edition} name={hero.eventName} headline={hero.headline} />
         <div className="mt-[calc(var(--svh)*5)] flex flex-col gap-6">
           <p data-hero-after="" className="font-display text-[clamp(0.875rem,1.2vw,1.3rem)] leading-tight font-bold uppercase">
-            {hero.location}, <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
+            <span className="block">{hero.location}</span>
+            <time dateTime={hero.dateTime} className="block">
+              {hero.dateLabel}
+            </time>
           </p>
         </div>
       </div>
@@ -51,21 +55,7 @@ export function Hero() {
             </div>
           </div>
           {/* Instituciones: línea de logos bajo los botones. */}
-          <ul data-hero-after="" aria-label={hero.logosLabel} className="edge relative z-10 mt-6 flex flex-wrap items-center gap-x-8 gap-y-3 lg:mt-6 lg:gap-x-10">
-            {hero.logos.map((logo) => (
-              <li key={logo.src}>
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  width={logo.width}
-                  height={logo.height}
-                  loading="lazy"
-                  decoding="async"
-                  className={`w-auto ${logo.size === 'lg' ? 'h-[3.3rem] lg:h-[3.6rem]' : 'h-[1.8rem] lg:h-[2.1rem]'}`}
-                />
-              </li>
-            ))}
-          </ul>
+          <InstitutionLogos data-hero-after="" className="edge relative z-10 mt-6" />
         </div>
       </div>
     </Section>

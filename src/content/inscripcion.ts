@@ -126,6 +126,24 @@ export const registrationText = {
     cancelled: 'Tu inscripción se ha cancelado.',
     newRegistration: 'Volver a inscribirme',
   },
+
+  /** Panel de la inscripción: cada parte se modifica por separado (RegistrationPanel). */
+  panel: {
+    title: 'Tu inscripción',
+    change: 'Modificar',
+    days: 'Días y actividades',
+    data: 'Tus datos',
+    certificate: 'Certificado de asistencia',
+    health: 'Accesibilidad y alimentación',
+    image: 'Uso de tu imagen',
+    imageYes: 'Autorizado',
+    imageNo: 'No autorizado',
+    nothing: 'Nada indicado',
+    accessibility: 'Accesibilidad',
+    allergens: 'Alérgenos',
+    otherAllergy: 'Otra alergia',
+    diet: 'Preferencia',
+  },
 }
 
 /** Acceso y estado de la inscripción en la landing (tras el umbral). */

@@ -31,6 +31,9 @@ const FIELD_ORDER = [
   'idDocument.number', 'accessibility', 'allergens', 'otherAllergy', 'consents.healthData', 'consents.privacy',
 ]
 
+/** Partes que se pueden modificar por separado desde el panel de la inscripción. */
+export type FormPart = 'datos' | 'dias' | 'certificado' | 'salud' | 'imagen'
+
 interface Props {
   email: string
   sessions: PublicSession[]
@@ -41,6 +44,11 @@ interface Props {
   onSubmit: (input: FormInput) => Promise<void>
   /** Escritorio ancho (landing): secciones en dos columnas equilibradas. */
   wide?: boolean
+  /**
+   * Solo estas partes (modificar desde el panel). El resto de valores se
+   * envía tal como está guardado, y la protección de datos ya está aceptada.
+   */
+  parts?: readonly FormPart[]
 }
 
 /**
@@ -51,7 +59,10 @@ interface Props {
 const WIDE = 'lg:block lg:columns-2 lg:gap-x-16 lg:[&>*]:mb-10 lg:[&>*:empty]:mb-0 lg:[&>section]:break-inside-avoid'
 const SPAN = 'lg:[column-span:all]'
 
-export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUpdate, onSubmit, wide = false }: Props) {
+export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUpdate, onSubmit, wide: wideProp = false, parts }: Props) {
+  const has = (part: FormPart) => !parts || parts.includes(part)
+  // Una parte sola no se reparte en dos columnas.
+  const wide = wideProp && !parts
   const span = wide ? SPAN : ''
   /** En dos columnas anchas, pares de campos lado a lado. */
   const pair = wide ? 'grid gap-5 lg:grid-cols-2' : 'contents'
@@ -132,6 +143,14 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
     )
   }
 
+  const healthConsent = (
+    <div>
+      <Choice id={fieldDomId('consents.healthData')} label={t.consents.healthData} checked={values.consents.healthData} onChange={(e) => set('consents', { ...values.consents, healthData: e.target.checked })} aria-invalid={Boolean(err('consents.healthData'))} aria-describedby={err('consents.healthData') ? `${fieldDomId('consents.healthData')}-error` : undefined} />
+      {err('consents.healthData') && <p id={`${fieldDomId('consents.healthData')}-error`} className="text-sm font-semibold text-error">{err('consents.healthData')}</p>}
+    </div>
+  )
+  const imageConsent = <Choice label={t.consents.image} checked={values.consents.image} onChange={(e) => set('consents', { ...values.consents, image: e.target.checked })} />
+
   return (
     <form onSubmit={submit} noValidate className={`flex flex-col gap-10 ${wide ? WIDE : ''}`}>
       <div ref={summaryRef} tabIndex={-1} aria-live="assertive" className={span}>
@@ -150,6 +169,8 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
         </label>
       </div>
 
+      {has('datos') && (
+        <>
       <FormSection title={t.sections.personal}>
         <div className="grid gap-5 sm:grid-cols-2">
           <TextInput id="firstName" label={f.firstName} value={values.firstName} onChange={(e) => set('firstName', e.target.value)} error={err('firstName')} autoComplete="given-name" maxLength={LIMITS.name} required />
@@ -187,7 +208,10 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
           ))}
         </SelectInput>
       </FormSection>
+        </>
+      )}
 
+      {has('dias') && (
       <FormSection title={t.sections.attendance}>
         <ChoiceGroup id="sessionIds" legend={t.sections.attendance} help={f.attendanceHelp} error={err('sessionIds')}>
           <div className={wide ? 'grid gap-3 lg:grid-cols-3' : 'contents'}>{days.map((s, i) => sessionChoice(s, i))}</div>
@@ -198,7 +222,9 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
           </ChoiceGroup>
         )}
       </FormSection>
+      )}
 
+      {has('certificado') && (
       <FormSection title={t.sections.certificate}>
         <ChoiceGroup id="certificate" legend={f.certificate}>
           <div className="flex gap-6">
@@ -219,7 +245,10 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
           </div>
         )}
       </FormSection>
+      )}
 
+      {has('salud') && (
+        <>
       <FormSection title={t.sections.accessibility}>
         <TextArea id="accessibility" label={f.accessibility} optional={f.optional} value={values.accessibility} onChange={(e) => set('accessibility', e.target.value)} error={err('accessibility')} maxLength={LIMITS.accessibility} />
       </FormSection>
@@ -243,7 +272,18 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
         </SelectInput>
         </div>
       </FormSection>
+        </>
+      )}
 
+      {/* Parte suelta: solo los consentimientos que le tocan (la privacidad ya está aceptada). */}
+      {parts && (has('imagen') || (has('salud') && hasHealthData)) && (
+        <div className="flex flex-col gap-3">
+          {has('salud') && hasHealthData && healthConsent}
+          {has('imagen') && imageConsent}
+        </div>
+      )}
+
+      {!parts && (
       <FormSection title={t.sections.privacy} className={span}>
         <dl className="grid gap-x-4 gap-y-2 rounded-xl border border-borde p-4 text-sm sm:grid-cols-[9rem_1fr]">
           {t.privacyInfo.map(([term, desc]) => (
@@ -261,19 +301,15 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
           </p>
         </dl>
         <div className="flex flex-col gap-3">
-          {hasHealthData && (
-            <div>
-              <Choice id={fieldDomId('consents.healthData')} label={t.consents.healthData} checked={values.consents.healthData} onChange={(e) => set('consents', { ...values.consents, healthData: e.target.checked })} aria-invalid={Boolean(err('consents.healthData'))} aria-describedby={err('consents.healthData') ? `${fieldDomId('consents.healthData')}-error` : undefined} />
-              {err('consents.healthData') && <p id={`${fieldDomId('consents.healthData')}-error`} className="text-sm font-semibold text-error">{err('consents.healthData')}</p>}
-            </div>
-          )}
-          <Choice label={t.consents.image} checked={values.consents.image} onChange={(e) => set('consents', { ...values.consents, image: e.target.checked })} />
+          {hasHealthData && healthConsent}
+          {imageConsent}
           <div>
             <Choice id={fieldDomId('consents.privacy')} label={t.consents.privacy} checked={values.consents.privacy} onChange={(e) => set('consents', { ...values.consents, privacy: e.target.checked })} aria-invalid={Boolean(err('consents.privacy'))} aria-describedby={err('consents.privacy') ? `${fieldDomId('consents.privacy')}-error` : undefined} required />
             {err('consents.privacy') && <p id={`${fieldDomId('consents.privacy')}-error`} className="text-sm font-semibold text-error">{err('consents.privacy')}</p>}
           </div>
         </div>
       </FormSection>
+      )}
 
       <button
         type="submit"

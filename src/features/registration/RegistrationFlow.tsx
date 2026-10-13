@@ -7,8 +7,8 @@ import { useAuth } from '../../lib/auth/context'
 import { useLoadPhase } from '../../lib/connectivity'
 import { reportError } from '../../lib/diagnostics'
 import { initialValues, type FormInput, type PublicSession } from './formValues'
-import { RegistrationForm } from './RegistrationForm'
-import { RegistrationSummary } from './RegistrationSummary'
+import { RegistrationForm, type FormPart } from './RegistrationForm'
+import { RegistrationPanel } from './RegistrationPanel'
 import { buttonClass } from '../../components/button'
 
 const t = registrationText
@@ -20,7 +20,8 @@ interface SavedRegistration {
 
 /** `justSaved`: se acaba de guardar (hay que informar del correo); si no, es una inscripción previa. */
 type View =
-  | { kind: 'form' }
+  /** part: modificar solo esa parte desde el panel; sin ella, el formulario completo (alta). */
+  | { kind: 'form'; part?: FormPart }
   /** emailSent: null = no se envió a propósito (cambios menores o cupo diario agotado). */
   | { kind: 'done'; justSaved: boolean; created: boolean; emailSent: boolean | null }
   | { kind: 'cancelled' }
@@ -40,8 +41,8 @@ interface RegistrationFlowProps {
 }
 
 /**
- * Inscripción con sesión iniciada: formulario, resumen (con modificar y
- * cancelar) y cancelada. La usan la página /inscripcion y la landing.
+ * Inscripción con sesión iniciada: formulario, panel (cada parte se modifica
+ * por separado; y cancelar) y cancelada. La usan la página /inscripcion y la landing.
  */
 export function RegistrationFlow({ onSaved, onViewChange, wide = false }: RegistrationFlowProps) {
   const auth = useAuth()
@@ -169,16 +170,16 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
             <p className="mt-2 text-texto-suave">{view.emailSent ? t.success.emailSent(saved.email) : t.success.emailFailed}</p>
           )}
         </div>
-        <h3 className="mb-3 font-bold">{t.success.summary}</h3>
-        <RegistrationSummary data={saved.data} sessions={sessions} className="mb-8" />
+        <h3 className="mb-4 text-xl font-bold">{t.panel.title}</h3>
         {!open && !auth.isAdmin && <p className="mb-4 text-sm text-texto-suave">{t.closedChanges}</p>}
-        <div className="flex flex-wrap gap-3">
-          {/* Con el plazo cerrado, «Modificar» llevaría a un aviso sin salida: solo cancelar. */}
-          {(open || auth.isAdmin) && (
-            <button type="button" className={primary} onClick={() => setView({ kind: 'form' })}>
-              {t.success.edit}
-            </button>
-          )}
+        {/* Con el plazo cerrado, «Modificar» llevaría a un aviso sin salida: solo cancelar. */}
+        <RegistrationPanel
+          data={saved.data}
+          email={saved.email}
+          sessions={sessions}
+          onEdit={open || auth.isAdmin ? (part) => setView({ kind: 'form', part }) : undefined}
+        />
+        <div className="mt-8 flex flex-wrap gap-3">
           {!confirmCancel ? (
             <button type="button" className={secondary} onClick={() => setConfirmCancel(true)}>
               {t.success.cancel}
@@ -233,7 +234,7 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
         </button>
       )}
       <RegistrationForm
-        key={saved ? 'update' : 'create'}
+        key={saved ? `update-${view.kind === 'form' ? (view.part ?? 'all') : ''}` : 'create'}
         email={auth.user.email}
         sessions={sessions}
         ownSessionIds={saved?.data.sessionIds ?? []}
@@ -241,6 +242,7 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
         isUpdate={Boolean(saved)}
         onSubmit={submit}
         wide={wide}
+        parts={saved && view.kind === 'form' && view.part ? [view.part] : undefined}
       />
     </>
   )

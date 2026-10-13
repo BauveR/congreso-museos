@@ -25,7 +25,7 @@ export function Hero() {
           alt=""
           width={1176}
           height={484}
-          className="mb-6 h-auto w-[min(48vw,16rem)] lg:mb-6 lg:w-[min(19.2rem,calc(var(--svh)*30))]"
+          className="mb-4 h-auto w-[min(40vw,16rem)] sm:mb-6 lg:w-[min(19.2rem,calc(var(--svh)*30))]"
         />
         <HeroWordmark edition={hero.edition} name={hero.eventName} headline={hero.headline} />
         <div className="mt-[calc(var(--svh)*5)] flex flex-col gap-6">
@@ -43,19 +43,26 @@ export function Hero() {
         <div className="relative">
           <HeroBackdrop />
           <div className="edge relative z-10 grid gap-6 lg:grid-cols-[auto_auto] lg:items-end lg:justify-between lg:gap-16">
-            <div data-hero-after="" className="order-last lg:order-none">
+            {/* En móvil sin «Desliza para explorar»: el gesto es natural y así los logos caben en la primera pantalla. */}
+            <div data-hero-after="" className="order-last hidden sm:block lg:order-none">
               <ScrollHint lines={hero.scrollHint} />
             </div>
-            <div data-hero-after="" className="flex flex-col gap-3 sm:flex-row">
+            {/* Móvil: los dos botones en una fila (mitad y mitad, sin ancho mínimo); desde sm, como antes. */}
+            <div data-hero-after="" className="grid grid-cols-2 gap-3 sm:flex sm:flex-row">
               {hero.ctas.map((cta, i) => (
-                <ButtonLink key={cta.href} href={cta.href} variant={i === 0 ? 'primary' : 'secondary'} className="xl:min-w-72">
+                <ButtonLink
+                  key={cta.href}
+                  href={cta.href}
+                  variant={i === 0 ? 'primary' : 'secondary'}
+                  className="max-sm:min-w-0 max-sm:px-3 xl:min-w-72"
+                >
                   {cta.label}
                 </ButtonLink>
               ))}
             </div>
           </div>
           {/* Instituciones: línea de logos bajo los botones. */}
-          <InstitutionLogos data-hero-after="" className="edge relative z-10 mt-6" />
+          <InstitutionLogos data-hero-after="" className="edge relative z-10 mt-5 sm:mt-6" />
         </div>
       </div>
     </Section>

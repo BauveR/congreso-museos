@@ -44,7 +44,7 @@ export function Hero() {
             </div>
             <div data-hero-after="" className="flex flex-col gap-3 sm:flex-row">
               {hero.ctas.map((cta, i) => (
-                <ButtonLink key={cta.href} href={cta.href} icon={cta.icon} variant={i === 0 ? 'primary' : 'secondary'} className="xl:min-w-72">
+                <ButtonLink key={cta.href} href={cta.href} variant={i === 0 ? 'primary' : 'secondary'} className="xl:min-w-72">
                   {cta.label}
                 </ButtonLink>
               ))}
@@ -61,7 +61,7 @@ export function Hero() {
                   height={logo.height}
                   loading="lazy"
                   decoding="async"
-                  className={`w-auto ${logo.size === 'lg' ? 'h-11 lg:h-12' : 'h-6 lg:h-7'}`}
+                  className={`w-auto ${logo.size === 'lg' ? 'h-[3.3rem] lg:h-[3.6rem]' : 'h-[1.8rem] lg:h-[2.1rem]'}`}
                 />
               </li>
             ))}

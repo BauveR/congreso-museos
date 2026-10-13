@@ -45,11 +45,11 @@ export function Venue() {
               </address>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <ButtonLink href={directionsUrl} target="_blank" rel="noopener noreferrer" icon="map">
+              <ButtonLink href={directionsUrl} target="_blank" rel="noopener noreferrer">
                 {directions.label}
                 <span className="sr-only"> (Google Maps, se abre en otra pestaña)</span>
               </ButtonLink>
-              <ButtonLink href={link.href} target="_blank" rel="noopener noreferrer" icon="arrow" variant="secondary">
+              <ButtonLink href={link.href} target="_blank" rel="noopener noreferrer" variant="secondary">
                 {link.label}
                 <span className="sr-only"> (se abre en otra pestaña)</span>
               </ButtonLink>

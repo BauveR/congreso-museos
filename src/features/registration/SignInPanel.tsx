@@ -2,10 +2,10 @@ import { useState, type FormEvent } from 'react'
 import { TextInput, Choice } from '../../components/form'
 import { registrationText } from '../../content/inscripcion'
 import { useAuth } from '../../lib/auth/context'
+import { buttonClass } from '../../components/button'
 
 const t = registrationText.signIn
-const button =
-  'inline-flex h-12 items-center justify-center rounded-lg bg-acento px-6 text-sm font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60'
+const button = buttonClass()
 
 /** Inicio de sesión: Google o enlace por correo (Firebase); formulario simulado en mock. */
 export function SignInPanel({ allowAdmin = false }: { allowAdmin?: boolean }) {
@@ -107,7 +107,7 @@ export function SignInPanel({ allowAdmin = false }: { allowAdmin?: boolean }) {
           required
           autoComplete="email"
         />
-        <button type="submit" className={`${button} bg-transparent text-texto ring-1 ring-acento-texto hover:bg-acento-texto/10`} disabled={busy}>
+        <button type="submit" className={buttonClass({ variant: 'secondary' })} disabled={busy}>
           {t.emailSend}
         </button>
       </form>

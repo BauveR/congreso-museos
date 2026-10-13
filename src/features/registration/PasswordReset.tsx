@@ -5,6 +5,7 @@ import { accessText, registrationText } from '../../content/inscripcion'
 import { useAuth } from '../../lib/auth/context'
 import { authErrorCode } from '../../lib/auth/types'
 import { reportError } from '../../lib/diagnostics'
+import { buttonClass } from '../../components/button'
 
 const t = accessText
 const r = accessText.reset
@@ -12,10 +13,8 @@ const r = accessText.reset
 /** Segundos antes de poder reenviar el enlace (evita envíos repetidos y el bloqueo de Firebase). */
 const RESEND_AFTER = 60
 
-const primary =
-  'inline-flex h-12 w-full items-center justify-center rounded-lg bg-acento px-6 text-sm font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60'
-const secondary =
-  'inline-flex h-12 w-full items-center justify-center rounded-lg border border-acento-texto px-6 text-sm font-bold tracking-wide uppercase hover:bg-acento-texto/10 disabled:opacity-60'
+const primary = buttonClass({ full: true })
+const secondary = buttonClass({ variant: 'secondary', full: true })
 const link = 'min-h-11 text-sm font-semibold text-acento-texto underline underline-offset-4'
 
 /**

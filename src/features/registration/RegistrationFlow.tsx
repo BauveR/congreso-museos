@@ -9,6 +9,7 @@ import { reportError } from '../../lib/diagnostics'
 import { initialValues, type FormInput, type PublicSession } from './formValues'
 import { RegistrationForm } from './RegistrationForm'
 import { RegistrationSummary } from './RegistrationSummary'
+import { buttonClass } from '../../components/button'
 
 const t = registrationText
 
@@ -24,10 +25,8 @@ type View =
   | { kind: 'done'; justSaved: boolean; created: boolean; emailSent: boolean | null }
   | { kind: 'cancelled' }
 
-const primary =
-  'inline-flex h-12 items-center justify-center rounded-lg bg-acento px-6 text-sm font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60'
-const secondary =
-  'inline-flex h-12 items-center justify-center rounded-lg border border-acento-texto px-6 text-sm font-bold tracking-wide uppercase hover:bg-acento-texto/10 disabled:opacity-60'
+const primary = buttonClass()
+const secondary = buttonClass({ variant: 'secondary' })
 
 export type RegistrationViewKind = View['kind'] | 'loading' | 'error'
 
@@ -188,7 +187,7 @@ export function RegistrationFlow({ onSaved, onViewChange, wide = false }: Regist
             <div className="flex w-full flex-col gap-3 rounded-xl border border-error p-4" role="alertdialog" aria-label={t.success.cancelQuestion}>
               <p>{t.success.cancelQuestion}</p>
               <div className="flex flex-wrap gap-3">
-                <button type="button" className={`${secondary} border-error text-error`} disabled={busy} onClick={() => void cancel()}>
+                <button type="button" className={buttonClass({ variant: 'danger' })} disabled={busy} onClick={() => void cancel()}>
                   {t.success.cancelConfirm}
                 </button>
                 <button type="button" className={secondary} onClick={() => setConfirmCancel(false)}>

@@ -1,13 +1,12 @@
-import { Copy, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 import { accessText } from '../../content/inscripcion'
 import { chromeIntentUrl, registrationLink, type InAppBrowser } from '../../lib/inAppBrowser'
 import { storedPreviewKey } from '../../lib/previewKey'
+import { buttonClass } from '../../components/button'
 
 const t = accessText.inApp
 
-const action =
-  'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-acento-texto px-4 text-sm font-bold hover:bg-acento-texto/10'
+const action = buttonClass({ variant: 'secondary', size: 'sm' })
 
 /** Espera máxima del portapapeles: a veces se queda pendiente sin responder (permisos, apps). */
 const CLIPBOARD_WAIT_MS = 1500
@@ -52,12 +51,10 @@ export function InAppBrowserNotice({ id, browser }: { id: string; browser: InApp
       <div className="mt-3 flex flex-wrap gap-2">
         {browser.platform === 'android' && (
           <a href={chromeIntentUrl(href)} className={action}>
-            <ExternalLink aria-hidden className="size-4" />
             {t.openChrome}
           </a>
         )}
         <button type="button" className={action} onClick={() => void copyLink(href).then(setCopied)}>
-          <Copy aria-hidden className="size-4" />
           {t.copy}
         </button>
       </div>

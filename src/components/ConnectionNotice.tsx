@@ -1,6 +1,6 @@
-import { RotateCw } from 'lucide-react'
 import { connectionText as t, legal } from '../content/inscripcion'
 import type { LoadPhase } from '../lib/connectivity'
+import { buttonClass } from './button'
 
 const CONTACT_EMAIL = /^[^\s@[\]]+@[^\s@]+\.[^\s@]+$/
 
@@ -28,9 +28,8 @@ export function ConnectionNotice({ phase, onRetry, loadingText = t.loading }: { 
           <button
             type="button"
             onClick={onRetry}
-            className="mt-4 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-acento px-5 text-xs font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85"
+            className={`mt-4 ${buttonClass({ size: 'sm' })}`}
           >
-            <RotateCw aria-hidden className="size-4" />
             {t.retry}
           </button>
           {/* Solo con un correo real (mientras sea el marcador pendiente, no se muestra). */}

@@ -1,5 +1,6 @@
 import { X } from 'lucide-react'
 import { useEffect, useId, useRef, type PointerEvent, type ReactNode } from 'react'
+import { buttonClass } from './button'
 
 /** Distancia (px) de arrastre hacia abajo que cierra la hoja. */
 const DRAG_CLOSE = 90
@@ -137,7 +138,7 @@ export function ReadingSheet({ open, kicker, title, before, closeLabel, onClose,
             <button
               type="button"
               onClick={close}
-              className="inline-flex h-12 w-full items-center justify-center rounded-lg border border-acento-texto text-sm font-bold tracking-wide uppercase hover:bg-acento-texto/10"
+              className={buttonClass({ variant: 'secondary', full: true })}
             >
               {closeLabel}
             </button>

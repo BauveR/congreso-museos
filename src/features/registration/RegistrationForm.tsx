@@ -20,6 +20,7 @@ import { toInput, type FormInput, type FormValues, type PublicSession } from './
 import { registrationText } from '../../content/inscripcion'
 import { ApiError } from '../../lib/api'
 import { reportError } from '../../lib/diagnostics'
+import { buttonClass } from '../../components/button'
 
 const t = registrationText
 const f = t.fields
@@ -277,7 +278,7 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
       <button
         type="submit"
         disabled={submitting}
-        className={`inline-flex h-12 items-center justify-center self-start rounded-lg bg-acento px-8 ${span} text-sm font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60`}
+        className={`${buttonClass()} self-start px-8 ${span}`}
       >
         {submitting ? t.submitting : isUpdate ? t.submitUpdate : t.submitCreate}
       </button>

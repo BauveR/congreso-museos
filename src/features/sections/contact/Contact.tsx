@@ -24,7 +24,7 @@ export function Contact() {
           <div>
             <DisplayHeading>{contact.title}</DisplayHeading>
             <ScrollLitText paragraphs={[contact.intro]} className="mt-6" />
-            <ButtonLink href={contact.cta.href} icon={contact.cta.icon} className="mt-10">
+            <ButtonLink href={contact.cta.href} className="mt-10">
               {contact.cta.label}
             </ButtonLink>
             <p className="mt-8 text-texto-suave">

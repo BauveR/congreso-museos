@@ -3,11 +3,11 @@ import { site } from '../../../content/site'
 import type { Participant } from '../../../content/types'
 import { NamePlate, type PlateTone } from './NamePlate'
 import { hasDetails } from './plate'
+import { buttonClass } from '../../../components/button'
 
 /** Tarjetas visibles al cambiar de grupo; «Ver N más» muestra el resto. */
 const FIRST = 6
 
-const big = 'inline-flex h-12 w-full items-center justify-center rounded-lg text-sm font-bold tracking-wide uppercase'
 
 interface ParticipantListProps {
   toneOf: (groupId: string) => PlateTone
@@ -30,7 +30,7 @@ function Row({ item, tone, onOpen }: { item: Participant; tone: PlateTone; onOpe
         </div>
       </div>
       {readable && (
-        <button type="button" onClick={onOpen} aria-haspopup="dialog" className={`${big} mt-4 bg-acento text-acento-contraste`}>
+        <button type="button" onClick={onOpen} aria-haspopup="dialog" className={`${buttonClass({ full: true })} mt-4`}>
           {ui.readMore}
           {item.title && <span className="sr-only">: {item.title}</span>}
         </button>
@@ -80,7 +80,7 @@ export function ParticipantList({ toneOf, onOpen }: ParticipantListProps) {
       </ul>
 
       {rest > 0 && (
-        <button type="button" onClick={() => setVisible(current.items.length)} className={`${big} mt-4 border border-acento-texto hover:bg-acento-texto/10`}>
+        <button type="button" onClick={() => setVisible(current.items.length)} className={`${buttonClass({ variant: 'secondary', full: true })} mt-4`}>
           {participants.showMore(rest)}
         </button>
       )}

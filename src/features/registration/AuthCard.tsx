@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight, Check, Circle, Eye, EyeOff } from 'lucide-react'
+import { ArrowDown, Check, Circle, Eye, EyeOff } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { checkPassword, PASSWORD_MIN, passwordOk, type PasswordChecks } from '../../../shared/password'
 import { FieldShell, TextInput } from '../../components/form'
@@ -13,6 +13,7 @@ import { reportConnectivity } from '../../lib/connectivity'
 import { reportError } from '../../lib/diagnostics'
 import { chromeIntentUrl, detectInAppBrowser, registrationLink, shouldAutoOpenChrome } from '../../lib/inAppBrowser'
 import { storedPreviewKey } from '../../lib/previewKey'
+import { buttonClass } from '../../components/button'
 
 /** sessionStorage, o nada si el navegador lo bloquea. */
 function tabStorage(): Storage | null {
@@ -28,11 +29,9 @@ const t = accessText
 type Mode = 'signUp' | 'signIn'
 
 /** Llamadas a crear cuenta con correo (en el rojo del sitio, para que destaquen). */
-const institutional =
-  'inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-error px-5 py-2 text-center text-sm font-bold text-error hover:bg-error/10'
+const institutional = buttonClass({ variant: 'danger', full: true })
 
-const primary =
-  'inline-flex h-12 w-full items-center justify-center rounded-lg bg-acento px-6 text-sm font-bold tracking-wide text-acento-contraste uppercase hover:bg-acento/85 disabled:opacity-60'
+const primary = buttonClass({ full: true })
 
 
 
@@ -97,9 +96,9 @@ function PasswordRules({ id, checks, touched }: { id: string; checks: PasswordCh
     [checks.notPersonal, t.passwordRules.notPersonal],
   ] as const
   return (
-    <div id={id} className={`-mt-1 rounded-lg border p-3 text-sm ${touched && !passwordOk(checks) ? 'border-error' : 'border-borde'}`}>
-      <p className="mb-2 font-bold">{t.passwordRules.title}</p>
-      <ul className="flex flex-col gap-1">
+    <div id={id} className={`-mt-1 rounded-lg border p-2.5 text-xs sm:p-3 sm:text-sm ${touched && !passwordOk(checks) ? 'border-error' : 'border-borde'}`}>
+      <p className="mb-1 font-bold sm:mb-2">{t.passwordRules.title}</p>
+      <ul className="flex flex-col gap-0.5 sm:gap-1">
         {rules.map(([ok, label]) => (
           <li key={label} className={`flex items-center gap-2 ${ok ? 'text-texto' : touched ? 'text-error' : 'text-texto-suave'}`}>
             {ok ? <Check aria-hidden className="size-4 shrink-0 text-acento-texto" /> : <Circle aria-hidden className="size-3.5 shrink-0" />}
@@ -115,7 +114,8 @@ function PasswordRules({ id, checks, touched }: { id: string; checks: PasswordCh
 }
 
 /**
- * Acceso: Google o cuenta con correo y contraseña. Pestañas «Crear cuenta»
+ * Acceso: Google o cuenta con correo y contraseña. En móvil, más compacta
+ * (nombre y apellidos en una fila, menos aire) para verse casi entera sin bajar. Pestañas «Crear cuenta»
  * (nombre, apellidos, correo y contraseña) y «Ya tengo cuenta» (correo y
  * contraseña, con recuperación). Errores de Firebase traducidos.
  * `framed={false}`: sin tarjeta propia (la pone el contenedor).
@@ -274,7 +274,7 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
         aria-describedby={inApp ? 'inAppNotice' : undefined}
         title={googleBlocked ? t.inApp.googleUnavailable : undefined}
         onClick={() => void run(auth.signInWithGoogle, { google: true })}
-        className="mt-6 inline-flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-[#747775] bg-white px-6 text-sm font-semibold text-[#1f1f1f] hover:bg-[#f2f2f2] disabled:opacity-60"
+        className="mt-4 inline-flex h-12 w-full items-center justify-center gap-3 rounded-full border border-[#747775] sm:mt-6 bg-white px-6 text-sm font-semibold text-[#1f1f1f] hover:bg-[#f2f2f2] disabled:opacity-60"
       >
         <GoogleLogo />
         {t.google}
@@ -286,7 +286,6 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
           <p className="mt-1 text-sm text-texto-suave">{t.googleHelpBody}</p>
           <button type="button" onClick={toSignUp} className={`${institutional} mt-3`}>
             {t.googleHelpButton}
-            <ArrowRight aria-hidden className="size-4 shrink-0" />
           </button>
         </div>
       )}
@@ -294,24 +293,23 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
       {mode === 'signIn' && !showGoogleHelp && (
         <button type="button" onClick={toSignUp} className={`${institutional} mt-4`}>
           {t.institutionalCta}
-          <ArrowRight aria-hidden className="size-4 shrink-0" />
         </button>
       )}
 
-      <p className="my-6 flex items-center gap-4 text-xs font-bold tracking-widest text-texto-suave uppercase before:h-px before:flex-1 before:bg-borde after:h-px after:flex-1 after:bg-borde">
+      <p className="my-4 flex items-center gap-4 text-xs sm:my-6 font-bold tracking-widest text-texto-suave uppercase before:h-px before:flex-1 before:bg-borde after:h-px after:flex-1 after:bg-borde">
         {t.or}
       </p>
 
       {mode === 'signUp' && (
-        <p className="-mt-2 mb-5 flex items-start gap-3 rounded-lg bg-error/10 p-3 text-sm leading-snug">
+        <p className="-mt-1 mb-3 flex items-start gap-2.5 rounded-lg bg-error/10 p-2.5 text-[0.8125rem] leading-snug sm:-mt-2 sm:mb-5 sm:gap-3 sm:p-3 sm:text-sm">
           <ArrowDown aria-hidden className="mt-0.5 size-5 shrink-0 animate-bounce text-error motion-reduce:animate-none" />
           {t.signUpHint}
         </p>
       )}
 
-      <form onSubmit={submit} className="flex flex-col gap-4">
+      <form onSubmit={submit} className="flex flex-col gap-3 sm:gap-4">
         {mode === 'signUp' && (
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <TextInput id="authFirstName" label={t.firstName} value={firstName} onChange={(e) => setFirstName(e.target.value)} required autoComplete="given-name" />
             <TextInput id="authLastName" label={t.lastName} value={lastName} onChange={(e) => setLastName(e.target.value)} required autoComplete="family-name" />
           </div>
@@ -336,7 +334,7 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
                     key={action}
                     type="button"
                     onClick={() => recover(action, shownError.email)}
-                    className="inline-flex min-h-11 items-center rounded-lg border border-acento-texto px-4 text-sm font-bold hover:bg-acento-texto/10"
+                    className={buttonClass({ variant: 'secondary', size: 'sm' })}
                   >
                     {t.errorActions[action]}
                   </button>
@@ -346,7 +344,7 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
           </div>
         )}
 
-        <button type="submit" className={`${primary} mt-2`} disabled={busy}>
+        <button type="submit" className={`${primary} mt-1 sm:mt-2`} disabled={busy}>
           {mode === 'signUp' ? t.submitSignUp : t.submitSignIn}
         </button>
         {mode === 'signIn' && (

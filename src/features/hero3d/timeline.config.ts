@@ -19,7 +19,7 @@ const pose = (p: Partial<Pose>): Pose => ({ x: 0, y: 0, scale: 1, ...p })
 /** En móvil el objeto queda centrado; en escritorio se desplaza a los lados. */
 export const timeline: Record<Breakpoint, Keyframes> = {
   mobile: {
-    hero: pose({ y: 0.05, scale: 0.9 }),
+    hero: pose({ y: 0.05, scale: 0.75 }),
     presentacion: pose({ y: 0.2, scale: 0.7 }),
     distinto: pose({ y: -0.1, scale: 0.65 }),
     'por-que': pose({ scale: 0.6 }),
@@ -34,7 +34,7 @@ export const timeline: Record<Breakpoint, Keyframes> = {
     contacto: pose({ scale: 0.6 }),
   },
   desktop: {
-    hero: pose({ x: 0.15, y: 0.1, scale: 1.1 }),
+    hero: pose({ x: 0.15, y: 0.1, scale: 0.95 }),
     presentacion: pose({ x: 0.6, scale: 0.8 }),
     distinto: pose({ x: -0.55, y: 0.15, scale: 0.75 }),
     // Detrás de la ilustración de la cabecera (a la derecha): su centro cae entre 0,49 (1920 px)
@@ -64,7 +64,7 @@ export const sectionColors: Record<SectionId, string> = {
   // y se mantiene en Organización hasta «Contenidos».
   distinto: '#2f6b45',
   'por-que': '#2f6b45', // verde bosque (ver distinto)
-  ponentes: '#e8eadf', // blanco cálido
+  ponentes: '#d1e132', // lima (sigue igual en la galería)
   cinetico: '#d1e132', // lima: momento fuerte
   sede: '#d3cd67', // ocre (como la arena y la piedra)
   umbral: '#f2f1ec', // se funde con el velo claro de la transición

@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { useMotionEffect, type Motion } from '../../../app/motion'
 import { useReducedMotion } from '../../../hooks/useReducedMotion'
 import { IntroMark } from '../../../components/IntroMark'
@@ -173,22 +174,27 @@ export function HeroWordmark({ edition, name, headline }: HeroWordmarkProps) {
 
   return (
     <>
-      {/* Símbolos gigantes de la intro: capa fija sobre la cortina (z 70). El tamaño de
-          fuente del span manda (la animación escala por la proporción de fuentes). */}
-      <div
-        ref={layerRef}
-        aria-hidden
-        data-reveal=""
-        className="pointer-events-none fixed inset-0 z-[80] motion-reduce:hidden"
-      >
-        {INTRO_LETTERS.map((position) => (
-          <span key={position.left} className="absolute block overflow-hidden" style={position}>
-            <span className="block text-[min(42svh,30vw)] leading-none text-intro-letra">
-              <IntroMark className="block h-[0.7em] w-auto" />
+      {/* Símbolos gigantes de la intro: capa fija sobre la cortina (z 70). Va en un portal a
+          <body>, al mismo nivel que la cortina: dentro del hero, su z-index quedaba atrapado en el
+          contexto de apilamiento del contenedor y los símbolos se pintaban por debajo de la cortina.
+          El tamaño de fuente del span manda (la animación escala por la proporción de fuentes). */}
+      {createPortal(
+        <div
+          ref={layerRef}
+          aria-hidden
+          data-reveal=""
+          className="pointer-events-none fixed inset-0 z-[80] motion-reduce:hidden"
+        >
+          {INTRO_LETTERS.map((position) => (
+            <span key={position.left} className="absolute block overflow-hidden" style={position}>
+              <span className="block text-[min(42svh,30vw)] leading-none text-intro-letra">
+                <IntroMark className="block h-[0.7em] w-auto" />
+              </span>
             </span>
-          </span>
-        ))}
-      </div>
+          ))}
+        </div>,
+        document.body,
+      )}
 
       <h1
         ref={titleRef}

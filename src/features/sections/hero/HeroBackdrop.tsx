@@ -18,9 +18,13 @@ const cloudSrcSet = (url: string, nativeWidth: number) =>
  */
 const LANDSCAPE_WIDTHS = [640, 960, 1280, 1920, 2560] as const
 const LANDSCAPE_QUALITY = 45
-/** En escritorio la ilustración ocupa el 70 % del ancho (lg:inset-x-[15%]): se pide la imagen a ese tamaño. */
-const DESKTOP_SCALE = 0.7
-const LANDSCAPE_SIZES = `(min-width: 64rem) ${DESKTOP_SCALE * 100}vw, 100vw`
+/**
+ * La ilustración ocupa el 80 % del ancho en móvil (inset-x-[10%]) y el 56 %
+ * en escritorio (lg:inset-x-[22%]): se pide la imagen a ese tamaño.
+ */
+const MOBILE_SCALE = 0.8
+const DESKTOP_SCALE = 0.56
+const LANDSCAPE_SIZES = `(min-width: 64rem) ${DESKTOP_SCALE * 100}vw, ${MOBILE_SCALE * 100}vw`
 
 /**
  * Posición de cada nube en el lienzo original de 1600×800 (en %), su
@@ -64,14 +68,14 @@ export function HeroBackdrop() {
   )
 
   return (
-    <div ref={root} data-hero-after="" aria-hidden className="pointer-events-none absolute inset-x-0 bottom-full z-0 aspect-2/1 lg:inset-x-[15%]">
+    <div ref={root} data-hero-after="" aria-hidden className="pointer-events-none absolute inset-x-[10%] bottom-full z-0 aspect-2/1 lg:inset-x-[22%]">
       {CLOUDS.map((c, i) => (
         // Capa exterior: la mueve el scroll (data-cloud = hacia qué lado sale); imagen interior: la deriva continua.
         <div key={c.left} data-cloud={c.exit} className="absolute" style={{ left: c.left, top: c.top, width: c.width }}>
           <img
             src={withTransform(clouds[i] ?? '', 'f-png')}
             srcSet={cloudSrcSet(clouds[i] ?? '', c.px)}
-            sizes={`(min-width: 64rem) calc(${c.width.replace('%', 'vw')} * ${DESKTOP_SCALE}), ${c.width.replace('%', 'vw')}`}
+            sizes={`(min-width: 64rem) calc(${c.width.replace('%', 'vw')} * ${DESKTOP_SCALE}), calc(${c.width.replace('%', 'vw')} * ${MOBILE_SCALE})`}
             alt=""
             decoding="async"
             className="block w-full animate-cloud motion-reduce:animate-none"

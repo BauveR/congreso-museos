@@ -52,6 +52,12 @@ describe('cabeceras de la web', () => {
     }
   })
 
+  it('HTTPS obligatorio (HSTS) en todas las rutas, sin preload (fácil de retirar)', () => {
+    for (const page of ['/', '/api/sessions', '/__/auth/handler']) {
+      expect(headersFor(page)['Strict-Transport-Security'], page).toBe('max-age=63072000')
+    }
+  })
+
   it('COOP permite la ventana de Google (same-origin la rompería)', () => {
     expect(headersFor('/')['Cross-Origin-Opener-Policy']).toBe('same-origin-allow-popups')
   })

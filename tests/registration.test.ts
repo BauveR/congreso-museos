@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { fieldErrors, isValidDni, isValidNie, isValidPhone, registrationSchema } from '../shared/registration.js'
+import { fieldErrors, isValidDni, isValidNie, isValidPhone, normalizePhone, registrationSchema } from '../shared/registration.js'
 import { validInput } from './fixtures.js'
 
 
@@ -29,6 +29,22 @@ describe('teléfono', () => {
   })
   it('rechaza números cortos, largos o con letras', () => {
     for (const phone of ['12345', '+34 61234567890123', '612abc678', '']) expect(isValidPhone(phone), phone).toBe(false)
+  })
+  it('se guarda en un formato único (internacional, sin espacios)', () => {
+    const cases: [string, string][] = [
+      ['612 34 56 78', '+34612345678'],
+      ['922-123-456', '+34922123456'],
+      ['+34 612 34 56 78', '+34612345678'],
+      ['(+34) 922-123-456', '+34922123456'],
+      ['0034 612 345 678', '+34612345678'],
+      ['+44 20 7946 0958', '+442079460958'],
+      // Extranjero sin prefijo: no se le inventa país.
+      ['2079460958', '2079460958'],
+    ]
+    for (const [input, stored] of cases) expect(normalizePhone(input), input).toBe(stored)
+  })
+  it('el esquema devuelve el teléfono ya normalizado', () => {
+    expect(registrationSchema.parse({ ...validInput(), phone: '612 34 56 78' }).phone).toBe('+34612345678')
   })
 })
 

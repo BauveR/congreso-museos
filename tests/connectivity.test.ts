@@ -20,8 +20,9 @@ let ipCounter = 0
 /** Cada test con su IP: el límite de peticiones vive en memoria entre tests. */
 const nextIp = () => `10.0.0.${++ipCounter}`
 
-const beacon = (body: string, ip = nextIp()) =>
-  telemetry.POST(new Request('http://localhost/api/telemetry', { method: 'POST', headers: { 'x-forwarded-for': ip }, body }))
+/** Aviso desde la propia web (mismo origen), salvo que se indique otro. */
+const beacon = (body: string, ip = nextIp(), from: Record<string, string> = { origin: 'http://localhost' }) =>
+  telemetry.POST(new Request('http://localhost/api/telemetry', { method: 'POST', headers: { 'x-forwarded-for': ip, ...from }, body }))
 
 const getCounts = (auth?: string) =>
   adminConnectivity.GET(new Request('http://localhost/api/admin/connectivity', { headers: auth ? { authorization: `Bearer ${auth}` } : {} }))
@@ -48,6 +49,14 @@ describe('contador anónimo de conexión', () => {
     expect((await beacon(JSON.stringify({ event: 'visit', uid: 'x'.repeat(300) }))).status).toBe(413)
     expect((await beacon('no es json')).status).toBe(400)
     expect((await beacon('null')).status).toBe(400)
+  })
+
+  it('solo acepta avisos de la propia web (Origin o, si falta, Referer)', async () => {
+    const visit = JSON.stringify({ event: 'visit' })
+    expect((await beacon(visit, nextIp(), { origin: 'https://otra-web.example' })).status).toBe(403)
+    expect((await beacon(visit, nextIp(), {})).status).toBe(403)
+    expect((await beacon(visit, nextIp(), { referer: 'http://localhost/inscripcion' })).status).toBe(204)
+    expect((await beacon(visit, nextIp(), { referer: 'https://otra-web.example/' })).status).toBe(403)
   })
 
   it('limita las peticiones por IP', async () => {

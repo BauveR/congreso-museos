@@ -113,6 +113,20 @@ export function isValidPhone(value: string): boolean {
   return digits.length >= 9 && digits.length <= 15
 }
 
+/**
+ * Teléfono en un formato único (internacional, sin espacios): «+34612345678».
+ * «0034…» pasa a «+34…» y un número español de 9 cifras (6, 7, 8 o 9 al
+ * inicio) recibe «+34». Uno extranjero sin prefijo se deja en cifras, sin
+ * inventarle país. Se aplica después de validar (isValidPhone).
+ */
+export function normalizePhone(value: string): string {
+  const digits = value.replace(/\D/g, '')
+  if (/^\(?\+/.test(value)) return `+${digits}`
+  if (digits.startsWith('00')) return `+${digits.slice(2)}`
+  if (/^[6-9]\d{8}$/.test(digits)) return `+34${digits}`
+  return digits
+}
+
 const text = (min: number, max: number, message: string) =>
   z
     .string()
@@ -134,7 +148,8 @@ export const registrationSchema = z
     phone: z
       .string()
       .transform(cleanText)
-      .refine(isValidPhone, 'Teléfono no válido (9 a 15 dígitos, con prefijo si es internacional)'),
+      .refine(isValidPhone, 'Teléfono no válido (9 a 15 dígitos, con prefijo si es internacional)')
+      .transform(normalizePhone),
     city: text(2, LIMITS.city, 'Indica tu ciudad de procedencia'),
     organization: text(2, LIMITS.organization, 'Indica tu entidad, institución u organización'),
     jobTitle: text(2, LIMITS.jobTitle, 'Indica tu cargo o profesión'),

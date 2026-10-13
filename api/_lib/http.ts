@@ -21,6 +21,24 @@ export function json(body: unknown, status = 200, headers: Record<string, string
   })
 }
 
+/**
+ * ¿La petición sale de la propia web? Su Origin (o, si el navegador no lo
+ * manda, su Referer) debe tener el mismo host que la petición: así vale en
+ * producción, en las vistas previas de Vercel y en local sin lista de dominios.
+ * Frena que otras webs envíen datos desde el navegador de sus visitantes; un
+ * script puede falsear estas cabeceras, para eso está además el límite por IP.
+ */
+export function isSameOrigin(request: Request): boolean {
+  const source = request.headers.get('origin') ?? request.headers.get('referer')
+  if (!source) return false
+  const host = request.headers.get('x-forwarded-host') ?? new URL(request.url).host
+  try {
+    return new URL(source).host === host
+  } catch {
+    return false
+  }
+}
+
 /** Lee el cuerpo JSON con límite de tamaño (evita cuerpos enormes). */
 export async function readJson(request: Request, maxBytes = 32_000): Promise<unknown> {
   const text = await request.text()

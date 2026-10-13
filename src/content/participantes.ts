@@ -35,7 +35,18 @@ export const participants: ParticipantsContent = {
         {
           kicker: 'Conferencia marco. Red de Museos de Canarias',
           org: 'ULL',
-          authors: [{ name: 'Javier Marrero Acosta' }],
+          authors: [
+            {
+              name: 'Javier Marrero Acosta',
+              bio: [
+                'Catedrático de Didáctica y Organización Escolar de la Universidad de La Laguna jubilado. Sus líneas de trabajo e investigación se centran principalmente en el estudio y análisis del Poder, saberes y subjetividad en Educación. Es autor de varias publicaciones y colaboraciones en revistas. Ha participado en diversas acciones de formación museística, entre ellas en el Máster en Museología y Gestión Cultural, dirigido por Fernando Esteve de la Universidad de La Laguna. También es miembro del Foro de Sevilla.',
+              ],
+            },
+          ],
+          title: 'Construir, habitar y pensar la realidad de Museos y Centros Expositivos de Canarias',
+          abstract: [
+            'La realidad museística de Canarias reclama un análisis de sus condiciones, potencialidades, influencia y perspectivas de futuro. El objetivo de esta ponencia es contribuir a repensar la situación museística que tenemos con la finalidad de construir, habitar y pensar otras claves para su desarrollo y pervivencia. Una reflexión que parte de la actualización de la información disponible acerca de los centros y museos, con la mirada puesta en su desarrollo patrimonial, así como en las condiciones que permitan, en un futuro próximo, atender las necesidades de su desarrollo en Canarias. Sentar las bases de un proceso de actualización, revisión, mejora, inscripción y expansión de la actividad museística de las islas.',
+          ],
         },
         {
           kicker: 'Conferencia de clausura',
@@ -221,7 +232,15 @@ export const participants: ParticipantsContent = {
         {
           kicker: MESA_II,
           org: 'Casa Museo Cayetano Gómez Felipe',
-          authors: [{ name: 'Milagros Álvarez Sosa' }],
+          authors: [
+            {
+              name: 'Milagros Álvarez Sosa',
+              bio: [
+                'Licenciada en Historia y doctora en Historia Antigua. Actualmente es directora de la Casa Museo Cayetano Gómez Felipe y conservadora de su colección. Dirigió trabajos de arqueología en el Valle de los Nobles en Luxor (Egipto), además de publicar diferentes artículos científicos y divulgativos sobre Egiptología centrados en su especialización.',
+                'En estos últimos años se ha centrado principalmente en trabajos de museografía, comisariando exposiciones temporales centradas en el estudio de las tradiciones y costumbres de nuestros antepasados. También es autora de publicaciones educativas, que buscan el acercamiento de los jóvenes a la historia.',
+              ],
+            },
+          ],
           title: 'La melancolía de los objetos. Experiencias emocionales en lo aparentemente irrelevante',
           abstract: [
             'Los que trabajamos en un museo, los especialistas y el público interactuamos con los objetos de manera diferente. Por esta razón, las respuestas de los visitantes sobre lo que la exposición evoca y lo que proviene de su propio interior (recuerdos y emociones personales) es un área potencialmente importante. Tomando como referencia principal la colección de antigüedades de Cayetano Gómez Felipe, mostraremos las narrativas latentes en objetos supuestamente marginales y que parecen no ser dignos de ser «entronizados» en una vitrina.',

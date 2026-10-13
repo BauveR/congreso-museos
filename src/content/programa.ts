@@ -33,7 +33,7 @@ export const program: ProgramContent = {
             t('12:15 h', 'Presentación y explicación organizativa', [
               'Juan Carlos Hernández Marrero (Cabildo, La Gomera): Un congreso sobre museos en La Gomera… ¿Qué hacemos aquí?',
             ]),
-            t('12:45 h', 'Conferencia', ['Javier E. Marrero Acosta (ULL): título pendiente']),
+            t('12:45 h', 'Conferencia', ['Javier E. Marrero Acosta (ULL): Construir, habitar y pensar la realidad de Museos y Centros Expositivos de Canarias']),
             t('14:00 h', 'Almuerzo'),
           ],
         },

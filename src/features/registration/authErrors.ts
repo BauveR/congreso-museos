@@ -26,7 +26,8 @@ function errorEmail(error: unknown): string | undefined {
  * contraseña; si no coincide la contraseña, recuperarla o crear la cuenta;
  * sin internet, decirlo (no culpar a la red de la institución).
  */
-export function describeAuthError(error: unknown, online = typeof navigator === 'undefined' || navigator.onLine): AuthErrorView {
+// `navigator` tipado sin DOM: también lo usan los tests del emulador, que corren en Node.
+export function describeAuthError(error: unknown, online = (globalThis.navigator as { onLine?: boolean } | undefined)?.onLine !== false): AuthErrorView {
   const code = authErrorCode(error)
   switch (code) {
     case 'auth/email-already-in-use':

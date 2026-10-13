@@ -24,7 +24,7 @@ export function Hero() {
           alt=""
           width={1176}
           height={484}
-          className="mb-6 h-auto w-[min(48vw,16rem)] lg:mb-8 lg:w-[19.2rem]"
+          className="mb-6 h-auto w-[min(48vw,16rem)] lg:mb-6 lg:w-[min(19.2rem,calc(var(--svh)*30))]"
         />
         <HeroWordmark edition={hero.edition} name={hero.eventName} headline={hero.headline} />
         <div className="mt-[calc(var(--svh)*5)] flex flex-col gap-6">
@@ -34,7 +34,7 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="mt-auto pt-12">
+      <div className="mt-auto pt-8">
         {/* Paisaje con nubes, apoyado justo encima de los botones: delante de la esfera y detrás del texto (z-10). */}
         <div className="relative">
           <HeroBackdrop />
@@ -51,7 +51,7 @@ export function Hero() {
             </div>
           </div>
           {/* Instituciones: línea de logos bajo los botones. */}
-          <ul data-hero-after="" aria-label={hero.logosLabel} className="edge relative z-10 mt-8 flex flex-wrap items-center gap-x-8 gap-y-4 lg:mt-10 lg:gap-x-12">
+          <ul data-hero-after="" aria-label={hero.logosLabel} className="edge relative z-10 mt-6 flex flex-wrap items-center gap-x-8 gap-y-3 lg:mt-6 lg:gap-x-10">
             {hero.logos.map((logo) => (
               <li key={logo.src}>
                 <img
@@ -61,7 +61,7 @@ export function Hero() {
                   height={logo.height}
                   loading="lazy"
                   decoding="async"
-                  className={`w-auto ${logo.size === 'lg' ? 'h-12 lg:h-16' : 'h-7 lg:h-9'}`}
+                  className={`w-auto ${logo.size === 'lg' ? 'h-11 lg:h-12' : 'h-6 lg:h-7'}`}
                 />
               </li>
             ))}

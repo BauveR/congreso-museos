@@ -353,10 +353,10 @@ export interface AccessContent {
 }
 
 export interface FooterContent {
-  socialLabel: string
-  social: Link[]
   legal: string
-  privacy: Link
+  /** Páginas legales: aviso legal, privacidad y accesibilidad. */
+  linksLabel: string
+  links: Link[]
 }
 
 export interface UnderConstructionContent {

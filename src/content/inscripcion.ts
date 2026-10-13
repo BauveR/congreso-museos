@@ -1,14 +1,15 @@
 /*
- * Textos de inscripción, panel de administración y privacidad.
- * Los textos legales son GENÉRICOS: sustituir los marcadores [ENTRE
- * CORCHETES] y revisarlos con la entidad organizadora antes de publicar.
+ * Textos de inscripción, panel de administración y privacidad (el aviso
+ * legal y la accesibilidad, en legales.ts). Titular identificado por el
+ * nombre del congreso y su correo; si la entidad organizadora quiere
+ * figurar con su razón social, NIF y dirección, se añaden aquí.
  */
 
 export const legal = {
-  controller: '[NOMBRE DE LA ENTIDAD ORGANIZADORA]',
-  taxId: '[CIF]',
-  address: '[DIRECCIÓN POSTAL]',
-  contactEmail: '[CORREO DE CONTACTO]',
+  controller: 'Organización del V Congreso de Museos de Canarias',
+  contactEmail: 'vcongresodemuseosdecanarias@gmail.com',
+  /** Fecha de la versión vigente de los textos legales. */
+  updated: '13 de octubre de 2026',
 }
 
 export const registrationText = {
@@ -80,10 +81,10 @@ export const registrationText = {
   },
 
   privacyInfo: [
-    ['Responsable', `${legal.controller} (${legal.taxId}).`],
+    ['Responsable', `${legal.controller} (${legal.contactEmail}).`],
     ['Finalidad', 'Gestionar tu inscripción y participación en el congreso, enviarte comunicaciones sobre el mismo y, si lo solicitas, emitir tu certificado de asistencia.'],
     ['Legitimación', 'Tu consentimiento y la ejecución de la relación derivada de tu inscripción. Los datos de salud (accesibilidad y alergias) solo con tu consentimiento explícito.'],
-    ['Destinatarios', 'No se cederán datos a terceros salvo obligación legal. Proveedores tecnológicos (alojamiento y correo) actúan como encargados del tratamiento.'],
+    ['Destinatarios', 'No se cederán datos a terceros salvo obligación legal. Proveedores tecnológicos (alojamiento, base de datos y correo) actúan como encargados del tratamiento.'],
     ['Derechos', `Acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a ${legal.contactEmail}. Puedes reclamar ante la Agencia Española de Protección de Datos.`],
   ] as [string, string][],
   privacyMore: 'Información adicional en la',
@@ -350,14 +351,40 @@ export const diagnosticsText = {
 
 export const privacyPage = {
   title: 'Política de privacidad',
-  updated: 'Texto genérico provisional. Pendiente de revisión por la entidad organizadora.',
+  updated: `Última actualización: ${legal.updated}.`,
   sections: [
-    ['Responsable del tratamiento', `${legal.controller}, ${legal.taxId}, ${legal.address}. Contacto: ${legal.contactEmail}.`],
-    ['Datos que tratamos', 'Datos identificativos y de contacto, datos profesionales, días de asistencia, preferencias de certificado y, solo si nos los facilitas con tu consentimiento explícito, datos de accesibilidad y alergias o intolerancias alimentarias.'],
-    ['Finalidades', 'Gestionar la inscripción y la organización del congreso (aforo, acreditaciones, catering y accesibilidad), comunicarnos contigo sobre el evento, emitir certificados de asistencia y, si lo autorizas, difundir imágenes del congreso.'],
-    ['Base jurídica', 'Tu consentimiento (art. 6.1.a RGPD) y, para los datos de salud, tu consentimiento explícito (art. 9.2.a RGPD). Puedes retirarlo en cualquier momento sin que afecte a la licitud del tratamiento previo.'],
-    ['Conservación', 'Durante la organización del congreso y el tiempo necesario para emitir certificados y atender posibles responsabilidades. Los datos de salud se suprimen al finalizar el evento.'],
-    ['Destinatarios', 'No se ceden datos a terceros salvo obligación legal. Utilizamos proveedores tecnológicos (alojamiento, base de datos y correo electrónico) que actúan como encargados del tratamiento con las garantías exigidas.'],
-    ['Tus derechos', `Puedes ejercer los derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a ${legal.contactEmail}, y presentar una reclamación ante la Agencia Española de Protección de Datos (www.aepd.es).`],
+    ['Responsable del tratamiento', `${legal.controller}. Correo de contacto: ${legal.contactEmail}.`],
+    [
+      'Datos que tratamos',
+      'Datos identificativos y de contacto (nombre, apellidos, correo electrónico, teléfono y ciudad), datos profesionales (entidad y cargo), tipo de participación y días de asistencia. Si pides certificado de asistencia, el tipo y número de tu documento de identidad. Solo si nos los facilitas con tu consentimiento explícito, datos de accesibilidad y de alergias o intolerancias alimentarias, que la ley considera datos de salud.',
+    ],
+    [
+      'Finalidades',
+      'Gestionar tu inscripción y la organización del congreso (aforo, acreditaciones, catering y accesibilidad), comunicarnos contigo sobre el evento, emitir tu certificado de asistencia si lo pides y, solo si lo autorizas, difundir imágenes del congreso en las que aparezcas.',
+    ],
+    [
+      'Base jurídica',
+      'Tu consentimiento al inscribirte (art. 6.1.a del RGPD) y la gestión de la inscripción que solicitas (art. 6.1.b). Para los datos de salud, tu consentimiento explícito (art. 9.2.a). Puedes retirar tus consentimientos en cualquier momento sin que afecte a la licitud del tratamiento anterior.',
+    ],
+    [
+      'Conservación',
+      'Los datos de la inscripción se conservan mientras dura la organización del congreso y el tiempo necesario para emitir los certificados y atender posibles responsabilidades. Los datos de salud se suprimen al terminar el congreso y el documento de identidad, una vez emitido el certificado. Puedes cancelar tu inscripción desde la web en cualquier momento: se borran también tus datos privados.',
+    ],
+    [
+      'Destinatarios',
+      'No cedemos tus datos a terceros salvo obligación legal. Usamos proveedores tecnológicos que actúan como encargados del tratamiento: Vercel (alojamiento de la web), Google Firebase (cuentas de acceso y base de datos, alojada en la Unión Europea) y Resend (envío de correos). Algunos tienen sede en Estados Unidos: las transferencias se amparan en el Marco de Privacidad de Datos UE-EE. UU. o en las cláusulas contractuales tipo de la Comisión Europea.',
+    ],
+    [
+      'Cookies y almacenamiento local',
+      'La web no usa cookies de publicidad ni de seguimiento. Guarda en tu navegador solo lo imprescindible para funcionar: la sesión de tu cuenta, si la inicias, y preferencias técnicas (por ejemplo, haber abierto ya la web en otro navegador). Al iniciar sesión con Google se aplican además las condiciones de Google.',
+    ],
+    [
+      'Seguridad',
+      'Las comunicaciones van cifradas (HTTPS), las inscripciones solo pueden leerlas la persona interesada y la organización, y el documento de identidad se guarda aparte, con acceso restringido.',
+    ],
+    [
+      'Tus derechos',
+      `Puedes ejercer los derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a ${legal.contactEmail}, y presentar una reclamación ante la Agencia Española de Protección de Datos (www.aepd.es).`,
+    ],
   ] as [string, string][],
 }

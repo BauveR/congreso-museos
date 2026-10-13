@@ -11,7 +11,10 @@ import { UnderConstruction } from './UnderConstruction'
 // Páginas interiores en chunks aparte: Firebase y el formulario no pesan en la landing.
 const RegistrationPage = lazy(() => import('../features/registration/RegistrationPage'))
 const AdminPage = lazy(() => import('../features/admin/AdminPage'))
-const PrivacyPage = lazy(() => import('../features/legal/PrivacyPage'))
+const legalPages = () => import('../features/legal/pages')
+const PrivacyPage = lazy(() => legalPages().then((m) => ({ default: m.PrivacyPage })))
+const LegalNoticePage = lazy(() => legalPages().then((m) => ({ default: m.LegalNoticePage })))
+const AccessibilityPage = lazy(() => legalPages().then((m) => ({ default: m.AccessibilityPage })))
 
 function Home() {
   const { enabled } = site.underConstruction
@@ -42,6 +45,8 @@ export function App() {
             <Route path="/inscripcion" element={<RegistrationPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/privacidad" element={<PrivacyPage />} />
+            <Route path="/aviso-legal" element={<LegalNoticePage />} />
+            <Route path="/accesibilidad" element={<AccessibilityPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>

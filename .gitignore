@@ -143,3 +143,9 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# macOS
+.DS_Store
+
+# Originales de imágenes (no se publican: se sirven optimizados desde ImageKit o public/media)
+originales/

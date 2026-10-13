@@ -422,7 +422,7 @@ export const site: SiteContent = {
     },
   },
 
-  // Contacto (datos provisionales: sustituir correo y dirección reales).
+  // Contacto.
   contact: {
     // Objeto en gris (PNG de 200×357 en ImageKit): se sirve a su tamaño, sin ampliar.
     art: {
@@ -436,14 +436,14 @@ export const site: SiteContent = {
     email: 'vcongresodemuseosdecanarias@gmail.com',
   },
 
+  // Redes sociales: se añadirán cuando estén los perfiles.
   footer: {
-    socialLabel: 'Redes sociales',
-    social: [
-      { label: 'Instagram', href: '#' },
-      { label: 'LinkedIn', href: '#' },
-      { label: 'YouTube', href: '#' },
+    legal: '© 2026 V Congreso de Museos de Canarias',
+    linksLabel: 'Información legal',
+    links: [
+      { label: 'Aviso legal', href: '/aviso-legal' },
+      { label: 'Política de privacidad', href: '/privacidad' },
+      { label: 'Accesibilidad', href: '/accesibilidad' },
     ],
-    legal: '© 2026 V Congreso de Museos de Canarias. Contenido provisional.',
-    privacy: { label: 'Política de privacidad', href: '/privacidad' },
   },
 }

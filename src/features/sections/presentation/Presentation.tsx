@@ -9,9 +9,9 @@ function MemberList({ members }: { members: CommitteeMember[] }) {
   return (
     <ul className="flex flex-col gap-3">
       {members.map((m) => (
-        <li key={m.name + m.affiliation}>
+        <li key={m.name + (m.affiliation ?? '')}>
           <span className="block font-semibold text-texto">{m.name}</span>
-          <span className="block text-sm leading-snug text-texto-suave">{m.affiliation}</span>
+          {m.affiliation && <span className="block text-sm leading-snug text-texto-suave">{m.affiliation}</span>}
         </li>
       ))}
     </ul>

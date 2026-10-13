@@ -221,6 +221,8 @@ export const accessText = {
 
 export const adminText = {
   pageTitle: 'Administración',
+  /** Botón para cuentas admin junto a «Sesión iniciada como…» (AdminLink). */
+  openPanel: 'Panel de administración',
   forbidden: 'Esta cuenta no tiene acceso de administración.',
   tabs: { stats: 'Resumen', sessions: 'Días y aforo', registrations: 'Inscritos' },
 

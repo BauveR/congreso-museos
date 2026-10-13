@@ -16,8 +16,6 @@ interface ImportMetaEnv {
   readonly VITE_USE_EMULATORS?: string
   /** Clave de sitio de reCAPTCHA Enterprise para App Check (pública). */
   readonly VITE_RECAPTCHA_SITE_KEY?: string
-  readonly VITE_IMAGEKIT_URL_ENDPOINT?: string
-  readonly VITE_IMAGEKIT_PUBLIC_KEY?: string
 }
 
 interface ImportMeta {

@@ -3,6 +3,7 @@ import { TextInput, Choice } from '../../components/form'
 import { registrationText } from '../../content/inscripcion'
 import { useAuth } from '../../lib/auth/context'
 import { buttonClass } from '../../components/button'
+import { AdminLink } from '../admin/AdminLink'
 
 const t = registrationText.signIn
 const button = buttonClass()
@@ -132,6 +133,7 @@ export function SignedInBar() {
       <button type="button" onClick={() => void auth.signOut()} className="font-bold text-acento-texto underline underline-offset-4">
         {t.signOut}
       </button>
+      <AdminLink className="ml-auto" />
     </p>
   )
 }

@@ -2,15 +2,18 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { loadMotion } from '../../../app/motion'
 import { ConnectionNotice } from '../../../components/ConnectionNotice'
 import { DisplayHeading } from '../../../components/DisplayHeading'
+import { EnterFromSide } from '../../../components/EnterFromSide'
 import { ScrollLitText } from '../../../components/ScrollLitText'
 import { accessText, registrationText } from '../../../content/inscripcion'
 import { site } from '../../../content/site'
 import { AuthProvider } from '../../../lib/auth/AuthProvider'
 import { useAuth } from '../../../lib/auth/context'
 import { useLoadPhase } from '../../../lib/connectivity'
+import { AdminLink } from '../../admin/AdminLink'
 import { DiagnosticsButton } from '../../admin/DiagnosticsButton'
 import { AuthCard } from '../../registration/AuthCard'
 import { RegistrationFlow, type RegistrationViewKind } from '../../registration/RegistrationFlow'
+import { AccessGallery } from './AccessGallery'
 
 /** Duración (s) del cambio de altura de la tarjeta. */
 const MORPH = 0.6
@@ -20,8 +23,9 @@ const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)'
 /**
  * Una sola tarjeta que se transforma, sin salir de la página: acceso (crear
  * cuenta / entrar) → formulario de inscripción → resumen (modificar o
- * cancelar). Sin sesión: texto a la izquierda y la tarjeta de acceso a la
- * derecha. Con sesión: la tarjeta se despliega a ancho completo (edge) con
+ * cancelar). Sin sesión: texto a la izquierda (en escritorio, con el slider
+ * de fotos de los alegatorios, que entra desde la izquierda) y la tarjeta de
+ * acceso a la derecha. Con sesión: la tarjeta se despliega a ancho completo (edge) con
  * el formulario. Al cambiar de contenido anima su altura desde la anterior
  * y el contenido nuevo aparece con un fundido.
  */
@@ -70,6 +74,9 @@ function AccessFlow() {
         <header className="lg:pt-6">
           <DisplayHeading>{access.title}</DisplayHeading>
           <ScrollLitText paragraphs={[access.intro]} className="mt-6" />
+          <EnterFromSide from="left" className="mt-12 hidden max-w-xl lg:block">
+            <AccessGallery />
+          </EnterFromSide>
         </header>
       )}
 
@@ -95,6 +102,7 @@ function AccessFlow() {
                 <button type="button" onClick={() => void auth.signOut()} className="min-h-11 font-bold text-acento-texto underline underline-offset-4">
                   {registrationText.signIn.signOut}
                 </button>
+                <AdminLink className="ml-auto" />
               </p>
               <RegistrationFlow key={auth.user.uid} onSaved={onSaved} onViewChange={onViewChange} wide />
             </div>

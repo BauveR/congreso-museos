@@ -1,5 +1,5 @@
 import { DisplayHeading } from '../../../components/DisplayHeading'
-import { EnterFromRight } from '../../../components/EnterFromRight'
+import { EnterFromSide } from '../../../components/EnterFromSide'
 import { Expandable, ExpandableText } from '../../../components/ExpandableText'
 import { RichText } from '../../../components/RichText'
 import { ScrollLit } from '../../../components/ScrollLitText'
@@ -40,7 +40,8 @@ function Card({ card }: { card: OrganizationCard }) {
 }
 
 /**
- * Ilustración de la cabecera (escritorio, en el hueco a la derecha del texto).
+ * Ilustración de la cabecera: en escritorio, en el hueco a la derecha del
+ * texto; en móvil, centrada bajo él y más pequeña.
  * Al llegar a la sección entra deslizándose desde fuera de la página (por la
  * derecha) hasta su sitio, una vez. Con reduced
  * motion, quieta. Oculta para lectores de pantalla (decorativa).
@@ -50,12 +51,12 @@ function Art() {
   // A su tamaño real: ampliarla en ImageKit pesa más sin ganar detalle.
   const picture = imagekitPicture(art.src, [art.width], 60)
   return (
-    <EnterFromRight className="hidden w-full max-w-[26rem] justify-self-end lg:block">
+    <EnterFromSide className="mx-auto mt-10 w-[min(70vw,18rem)] lg:mx-0 lg:mt-0 lg:w-full lg:max-w-[26rem] lg:justify-self-end">
       <picture aria-hidden>
         <source type="image/avif" srcSet={picture.avif} />
         <img src={picture.src} srcSet={picture.webp} alt="" width={art.width} height={art.height} loading="lazy" decoding="async" className="h-auto w-full" />
       </picture>
-    </EnterFromRight>
+    </EnterFromSide>
   )
 }
 

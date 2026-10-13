@@ -1,6 +1,6 @@
 import { ButtonLink } from '../../../components/ButtonLink'
 import { DisplayHeading } from '../../../components/DisplayHeading'
-import { EnterFromRight } from '../../../components/EnterFromRight'
+import { EnterFromSide } from '../../../components/EnterFromSide'
 import { ScrollLitText } from '../../../components/ScrollLitText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
@@ -33,8 +33,8 @@ export function Contact() {
               </a>
             </p>
           </div>
-          {/* Centrada en la mitad derecha (no pegada al borde); entra desde fuera de la página. */}
-          <EnterFromRight className="hidden justify-self-center lg:block">
+          {/* Centrada en la mitad derecha (no pegada al borde) y, en móvil, bajo el texto y más pequeña; entra desde fuera de la página. */}
+          <EnterFromSide className="justify-self-center">
             <picture aria-hidden>
               <source type="image/avif" srcSet={picture.avif} />
               <img
@@ -45,10 +45,10 @@ export function Contact() {
                 height={contact.art.height}
                 loading="lazy"
                 decoding="async"
-                className="h-auto w-[12.5rem]"
+                className="h-auto w-[7.5rem] lg:w-[12.5rem]"
               />
             </picture>
-          </EnterFromRight>
+          </EnterFromSide>
         </div>
       </div>
     </Section>

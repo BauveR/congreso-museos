@@ -119,8 +119,8 @@ export interface HeroContent {
 
 export interface CommitteeMember {
   name: string
-  /** Cargo, institución y lugar. */
-  affiliation: string
+  /** Cargo, institución y lugar (sin ella, solo el nombre). */
+  affiliation?: string
 }
 
 export interface CommitteesContent {
@@ -206,7 +206,8 @@ export interface ParticipantsContent {
 
 /** Foto de la galería: ruta del original (ver services/imagekit.ts) y texto alternativo. */
 export interface GalleryImage {
-  file: string
+  /** URL completa del original en ImageKit (se pide redimensionado). */
+  src: string
   alt: string
 }
 
@@ -335,11 +336,20 @@ export interface MoreInfoContent {
   close: string
 }
 
+/** Foto del slider junto a la inscripción (alegatorios). */
+export interface AccessPhoto {
+  /** URL completa del original en ImageKit. */
+  src: string
+  alt: string
+}
+
 export interface AccessContent {
   title: string
   intro: string
   /** Texto mientras carga el estado de la sesión. */
   loading: string
+  /** Slider de fotos en el hueco junto a la tarjeta (solo escritorio, sin sesión). */
+  gallery: { label: string; prev: string; next: string; photos: AccessPhoto[] }
 }
 
 export interface FooterContent {

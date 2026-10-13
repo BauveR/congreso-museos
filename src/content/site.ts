@@ -209,7 +209,7 @@ export const site: SiteContent = {
         { name: 'Lorea Arija Bartolomé', affiliation: 'OAMC, Santa Cruz de Tenerife' },
         { name: 'Ruth Azcárate Miguel', affiliation: 'Casa de Carta-MHAT, Valle de Guerra' },
         { name: 'Eliseo G. Izquierdo', affiliation: 'LM Arte Colección, San Cristóbal de La Laguna' },
-        { name: 'Elena Acosta Guerrero', affiliation: '' }, // afiliación pendiente
+        { name: 'Elena Acosta Guerrero' },
       ],
     },
     organizing: {
@@ -367,15 +367,15 @@ export const site: SiteContent = {
     label: 'Imágenes del IV Congreso de Museos de Canarias',
     prev: 'Fotos anteriores',
     next: 'Fotos siguientes',
-    // Originales de 4000 px fuera de la web; aquí, la ruta que tendrán en ImageKit.
+    // Originales en ImageKit (se piden al ancho de pantalla, ver Gallery.tsx).
     images: [
-      { file: 'galeria/Cmuseos.Viernes-163.jpg', alt: 'Foto de grupo de las personas participantes en el escenario, ante la pantalla del IV Congreso de Museos de Canarias.' },
-      { file: 'galeria/Cmuseos.Viernes-57.jpg', alt: 'Un ponente de pie interviene en una mesa redonda; a su lado, tres participantes sentados le escuchan.' },
-      { file: 'galeria/Cmuseos.Jueves-183.jpg', alt: 'Una ponente presenta «Diversidad de la colección» ante el público en una sala de conferencias.' },
-      { file: 'galeria/Cmuseos.Jueves-199.jpg', alt: 'Asistentes conversan en una sala de exposición con fotografías en blanco y negro colgadas.' },
-      { file: 'galeria/Cmuseos.Viernes-31.jpg', alt: 'Dos ponentes en el estrado junto a una proyección con una cita de César Manrique.' },
-      { file: 'galeria/Cmuseos.Viernes-19.jpg', alt: 'Una ponente habla desde el atril junto a una proyección con ilustraciones y textos históricos.' },
-      { file: 'galeria/Cmuseos.Viernes-194.jpg', alt: 'Público atento en las butacas del auditorio durante una sesión.' },
+      { src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/Cmuseos.Viernes-163.jpeg', alt: 'Foto de grupo de las personas participantes en el escenario, ante la pantalla del IV Congreso de Museos de Canarias.' },
+      { src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/Cmuseos.Viernes-57.jpeg', alt: 'Un ponente de pie interviene en una mesa redonda; a su lado, tres participantes sentados le escuchan.' },
+      { src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/Cmuseos.Jueves-183.jpeg', alt: 'Una ponente presenta «Diversidad de la colección» ante el público en una sala de conferencias.' },
+      { src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/Cmuseos.Jueves-199.jpeg', alt: 'Asistentes conversan en una sala de exposición con fotografías en blanco y negro colgadas.' },
+      { src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/Cmuseos.Viernes-31.jpeg', alt: 'Dos ponentes en el estrado junto a una proyección con una cita de César Manrique.' },
+      { src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/Cmuseos.Viernes-19.jpeg', alt: 'Una ponente habla desde el atril junto a una proyección con ilustraciones y textos históricos.' },
+      { src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/Cmuseos.Viernes-194.jpeg', alt: 'Público atento en las butacas del auditorio durante una sesión.' },
     ],
   },
 
@@ -397,6 +397,29 @@ export const site: SiteContent = {
     intro:
       'Crea tu cuenta para reservar tu plaza. Con ella podrás consultar, modificar o cancelar tu inscripción cuando quieras.',
     loading: 'Cargando…',
+    gallery: {
+      label: 'Imágenes de los alegatorios',
+      prev: 'Foto anterior',
+      next: 'Foto siguiente',
+      photos: [
+        {
+          src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/Alegatorio%20II.1%20El%20componente%20intangible.%20El%20mundo%20de%20los%20que%20no%20se%20ve%20(Ithaisa%20Darias%20silbando).jpeg',
+          alt: 'Primer plano de Ithaisa Darias silbando con los dedos en la boca y la otra mano haciendo de bocina.',
+        },
+        {
+          src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/Alegatorio%20III.2%20Repensando...%20el%20museo%20como%20recurso%20turi%CC%81stico%20o%20institucio%CC%81n%20cultural%20(celebracio%CC%81n%20V%20Foro%20de%20los%20Museos%20de%20La%20Gomera.%20MAG%202025).jpeg',
+          alt: 'Concierto de violín y violonchelo en el patio de un museo, con el público sentado alrededor.',
+        },
+        {
+          src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/Alegatorio%20I.2%20Etica%20y%20discursos%20en%20el%20contexto%20insular%20(Cra%CC%81neos%20en%20exposicio%CC%81n%20permanente%20MAG).jpeg',
+          alt: 'Detalle de varios cráneos humanos alineados en una vitrina.',
+        },
+        {
+          src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/Alegatorio%20I.1%20Museos%20en%20plural.%20El%20reto%20de%20la%20juventud%20(Taller%20de%20Antropologi%CC%81a%20Fi%CC%81sica%20en%20MAG.%20IES%20San%20Sebastia%CC%81n).jpeg',
+          alt: 'Estudiantes con guantes examinan un cráneo sobre una mesa y toman notas.',
+        },
+      ],
+    },
   },
 
   // Contacto (datos provisionales: sustituir correo y dirección reales).

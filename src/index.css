@@ -173,6 +173,11 @@
 }
 
 /* Ancho completo con margen lateral fluido (nav y hero, como en lenis.dev). */
+/* Alto de pantalla estable: lo fija lib/stableViewport.ts; svh mientras tanto (o sin JS). */
+:root {
+  --svh: 1svh;
+}
+
 @utility edge {
   width: 100%;
   padding-inline: var(--wrap-gutter);

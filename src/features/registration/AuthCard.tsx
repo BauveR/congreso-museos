@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowRight, Check, Circle, Eye, EyeOff } from 'lucide-react'
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { checkPassword, PASSWORD_MIN, passwordOk, type PasswordChecks } from '../../../shared/password'
 import { FieldShell, TextInput } from '../../components/form'
 import { fieldDomId } from '../../components/formIds'
@@ -11,7 +11,17 @@ import { InAppBrowserNotice } from './InAppBrowserNotice'
 import { PasswordReset } from './PasswordReset'
 import { reportConnectivity } from '../../lib/connectivity'
 import { reportError } from '../../lib/diagnostics'
-import { detectInAppBrowser } from '../../lib/inAppBrowser'
+import { chromeIntentUrl, detectInAppBrowser, registrationLink, shouldAutoOpenChrome } from '../../lib/inAppBrowser'
+import { storedPreviewKey } from '../../lib/previewKey'
+
+/** sessionStorage, o nada si el navegador lo bloquea. */
+function tabStorage(): Storage | null {
+  try {
+    return window.sessionStorage
+  } catch {
+    return null
+  }
+}
 
 const t = accessText
 
@@ -116,6 +126,24 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
   // Navegador dentro de una app (no cambia durante la visita).
   const [inApp] = useState(() => (typeof navigator === 'undefined' ? null : detectInAppBrowser(navigator.userAgent)))
   const googleBlocked = Boolean(inApp?.certain)
+  const root = useRef<HTMLDivElement>(null)
+
+  // Android dentro de una app identificada: al llegar a la tarjeta de acceso (visible, no
+  // solo cargada), se abre esta página en Chrome, una sola vez. Si la app lo impide, queda el aviso con el botón.
+  useEffect(() => {
+    const el = root.current
+    if (!el || inApp?.platform !== 'android' || !inApp.certain) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return
+        observer.disconnect()
+        if (shouldAutoOpenChrome(tabStorage())) window.location.href = chromeIntentUrl(registrationLink(window.location.href, storedPreviewKey()))
+      },
+      { threshold: 0.25 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [inApp])
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -231,7 +259,7 @@ export function AuthCard({ framed = true, className = '' }: { framed?: boolean; 
   }
 
   return (
-    <div className={`${framed ? 'rounded-3xl border border-borde bg-superficie p-5 sm:p-8' : ''} ${className}`}>
+    <div ref={root} className={`${framed ? 'rounded-3xl border border-borde bg-superficie p-5 sm:p-8' : ''} ${className}`}>
       <div className="flex gap-1 rounded-full border border-borde p-1">
         {tab('signUp', t.tabs.signUp)}
         {tab('signIn', t.tabs.signIn)}

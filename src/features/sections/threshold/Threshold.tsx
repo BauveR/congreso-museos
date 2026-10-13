@@ -93,12 +93,12 @@ export function Threshold() {
   )
 
   return (
-    <Section id="umbral" ref={section} className="-mb-[100svh] h-[360svh] motion-reduce:mb-0 motion-reduce:h-auto">
-      <div className="sticky top-0 flex h-svh items-center justify-center overflow-hidden motion-reduce:static motion-reduce:h-auto motion-reduce:py-24">
+    <Section id="umbral" ref={section} className="-mb-[calc(var(--svh)*100)] h-[calc(var(--svh)*360)] motion-reduce:mb-0 motion-reduce:h-auto">
+      <div className="sticky top-0 flex h-[calc(var(--svh)*100)] items-center justify-center overflow-hidden motion-reduce:static motion-reduce:h-auto motion-reduce:py-24">
         <p
           ref={word}
           aria-hidden
-          className="px-(--wrap-gutter) font-wordmark text-[min(15vw,22svh)] leading-[1.15] font-normal whitespace-nowrap text-claro uppercase"
+          className="px-(--wrap-gutter) font-wordmark text-[min(15vw,calc(var(--svh)*22))] leading-[1.15] font-normal whitespace-nowrap text-claro uppercase"
         >
           {threshold.word}
         </p>

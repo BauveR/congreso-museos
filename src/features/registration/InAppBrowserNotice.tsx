@@ -1,7 +1,8 @@
 import { Copy, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 import { accessText } from '../../content/inscripcion'
-import { chromeIntentUrl, type InAppBrowser } from '../../lib/inAppBrowser'
+import { chromeIntentUrl, registrationLink, type InAppBrowser } from '../../lib/inAppBrowser'
+import { storedPreviewKey } from '../../lib/previewKey'
 
 const t = accessText.inApp
 
@@ -40,7 +41,8 @@ async function copyLink(href: string): Promise<boolean> {
 export function InAppBrowserNotice({ id, browser }: { id: string; browser: InAppBrowser }) {
   /** null: sin intentar; true: copiado; false: la app no deja copiar (se muestra el enlace para copiarlo a mano). */
   const [copied, setCopied] = useState<boolean | null>(null)
-  const href = window.location.href
+  // Enlace a la inscripción (en la portada, directo a su sección).
+  const href = registrationLink(window.location.href, storedPreviewKey())
 
   return (
     <div id={id} role="note" className="mt-6 rounded-lg bg-error/10 p-4 text-sm leading-snug">

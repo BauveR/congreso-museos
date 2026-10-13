@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { chromeIntentUrl, detectInAppBrowser } from './inAppBrowser'
+import { chromeIntentUrl, detectInAppBrowser, registrationLink, shouldAutoOpenChrome } from './inAppBrowser'
 
 /* Navegadores dentro de apps, con user agents reales. */
 
@@ -65,5 +65,39 @@ describe('abrir en Chrome (Android)', () => {
         encodeURIComponent(page) +
         ';end',
     )
+  })
+})
+
+describe('enlace a la inscripción para abrir fuera de la app', () => {
+  const site = 'https://www.congresodemuseosdecanarias2026.com'
+
+  it('en la portada apunta a la sección de inscripción (sin «#», que no viaja a Chrome)', () => {
+    expect(registrationLink(`${site}/#acceso`)).toBe(`${site}/?seccion=acceso`)
+  })
+
+  it('en /inscripcion no añade sección', () => {
+    expect(registrationLink(`${site}/inscripcion`)).toBe(`${site}/inscripcion`)
+  })
+
+  it('lleva el acceso anticipado recordado, sin duplicarlo si ya está', () => {
+    expect(registrationLink(`${site}/`, 'CLAVE')).toBe(`${site}/?seccion=acceso&acceso=CLAVE`)
+    expect(registrationLink(`${site}/?acceso=OTRA`, 'CLAVE')).toBe(`${site}/?acceso=OTRA&seccion=acceso`)
+  })
+})
+
+describe('apertura automática de Chrome', () => {
+  const memory = () => {
+    const data = new Map<string, string>()
+    return { getItem: (k: string) => data.get(k) ?? null, setItem: (k: string, v: string) => void data.set(k, v) }
+  }
+
+  it('solo una vez por pestaña (si no hay Chrome, Android vuelve a la app: sin bucle)', () => {
+    const storage = memory()
+    expect(shouldAutoOpenChrome(storage)).toBe(true)
+    expect(shouldAutoOpenChrome(storage)).toBe(false)
+  })
+
+  it('sin almacenamiento, nunca', () => {
+    expect(shouldAutoOpenChrome(null)).toBe(false)
   })
 })

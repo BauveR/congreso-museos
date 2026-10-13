@@ -41,6 +41,40 @@ export function detectInAppBrowser(userAgent: string): InAppBrowser | null {
   return null
 }
 
+/** Parámetro que lleva directamente a la sección de inscripción de la portada (lo atiende Access.tsx). */
+export const SECTION_PARAM = 'seccion'
+
+/**
+ * Esta página, y si es la portada, apuntando a la sección de inscripción (el
+ * «#» no viaja a Chrome). Con `previewKey`, también el acceso anticipado,
+ * que Chrome no tendría (no comparte almacenamiento con la app).
+ */
+export function registrationLink(href: string, previewKey?: string | null): string {
+  const url = new URL(href)
+  url.hash = ''
+  if (url.pathname === '/') url.searchParams.set(SECTION_PARAM, 'acceso')
+  if (previewKey && !url.searchParams.has('acceso')) url.searchParams.set('acceso', previewKey)
+  return url.href
+}
+
+const OPENED_KEY = 'congreso.openedInChrome'
+
+/**
+ * ¿Abrir Chrome automáticamente? Solo una vez por pestaña: si el móvil no
+ * tiene Chrome, Android vuelve a cargar la página dentro de la app y, sin
+ * este freno, se repetiría en bucle. Sin almacenamiento, nunca.
+ */
+export function shouldAutoOpenChrome(storage: Pick<Storage, 'getItem' | 'setItem'> | null): boolean {
+  if (!storage) return false
+  try {
+    if (storage.getItem(OPENED_KEY)) return false
+    storage.setItem(OPENED_KEY, '1')
+    return true
+  } catch {
+    return false
+  }
+}
+
 /**
  * Enlace que abre esta misma página en Chrome desde una app de Android (si no
  * hay Chrome, abre la página igual). Sin el «#…» de la página: un segundo «#»

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { TextInput } from '../../components/form'
 import { accessText, registrationText } from '../../content/inscripcion'
 import { useAuth } from '../../lib/auth/context'
+import { canSendReset, countResetSend } from '../../lib/auth/passwordReset'
 import { authErrorCode } from '../../lib/auth/types'
 import { reportError } from '../../lib/diagnostics'
 import { buttonClass } from '../../components/button'
@@ -12,6 +13,15 @@ const r = accessText.reset
 
 /** Segundos antes de poder reenviar el enlace (evita envíos repetidos y el bloqueo de Firebase). */
 const RESEND_AFTER = 60
+
+/** sessionStorage, o nada si el navegador lo bloquea. */
+function tabStorage(): Storage | null {
+  try {
+    return window.sessionStorage
+  } catch {
+    return null
+  }
+}
 
 const primary = buttonClass({ full: true })
 const secondary = buttonClass({ variant: 'secondary', full: true })
@@ -42,10 +52,16 @@ export function PasswordReset({ initialEmail, onBack }: { initialEmail: string; 
   }, [wait])
 
   const send = async (to: string) => {
+    // Tope de envíos por pestaña: evita el bloqueo temporal de Firebase (too-many-requests).
+    if (!canSendReset(tabStorage())) {
+      setError(r.limit)
+      return
+    }
     setBusy(true)
     setError(null)
     try {
       await auth.resetPassword(to)
+      countResetSend(tabStorage())
       setSentTo(to.trim())
       setWait(RESEND_AFTER)
     } catch (e) {
@@ -87,9 +103,13 @@ export function PasswordReset({ initialEmail, onBack }: { initialEmail: string; 
             {error}
           </p>
         )}
-        <button type="button" className={secondary} disabled={busy || wait > 0} onClick={() => void send(sentTo)}>
-          {wait > 0 ? r.resendIn(wait) : r.resend}
-        </button>
+        {canSendReset(tabStorage()) ? (
+          <button type="button" className={secondary} disabled={busy || wait > 0} onClick={() => void send(sentTo)}>
+            {wait > 0 ? r.resendIn(wait) : r.resend}
+          </button>
+        ) : (
+          !error && <p className="text-sm text-pretty text-texto-suave">{r.limit}</p>
+        )}
         <button
           type="button"
           className={`${link} self-center`}

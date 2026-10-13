@@ -4,6 +4,7 @@ import { reportConnectivity, TIMEOUT_MS } from '../connectivity'
 import { safeStorage } from '../safeStorage'
 import { AuthContext } from './context'
 import { EMAIL_LINK_KEY, getFirebaseAuth } from './firebaseAuth'
+import { sendWithContinueFallback } from './passwordReset'
 import { clearGoogleRedirect, markGoogleRedirect, needsGoogleRedirect, returningFromGoogle } from './redirectFlow'
 import { loadMockUser, mockPasswordAccount, mockToken, mockUid, saveMockUser, type MockUser } from './mockAuth'
 import type { AuthApi, AuthUser, SignUpInput } from './types'
@@ -191,8 +192,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const resetPassword = useCallback(async (email: string) => {
     if (MODE === 'mock') return
     const [{ sendPasswordResetEmail }, auth] = await Promise.all([import('firebase/auth'), getFirebaseAuth()])
-    // Con url, la página de Firebase muestra «Continuar» de vuelta a donde se pidió.
-    await sendPasswordResetEmail(auth, email.trim(), { url: window.location.origin + window.location.pathname })
+    // Con url, la página de Firebase muestra «Continuar» de vuelta a donde se pidió;
+    // si Firebase no acepta esa dirección (dominio no autorizado), se envía sin ella.
+    const settings = { url: window.location.origin + window.location.pathname }
+    await sendWithContinueFallback((withUrl) => sendPasswordResetEmail(auth, email.trim(), withUrl ? settings : undefined))
   }, [])
 
   const clearRedirectError = useCallback(() => setRedirectError(null), [])

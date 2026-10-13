@@ -189,6 +189,9 @@ export const accessText = {
     resend: 'Reenviar enlace',
     resendIn: (s: number) => `Reenviar en ${s} s`,
     otherEmail: 'Usar otro correo',
+    /** Tope de envíos por pestaña alcanzado (lib/auth/passwordReset.ts). */
+    limit:
+      'Ya te hemos enviado varios enlaces. Espera unos minutos a que llegue alguno (revisa spam y promociones) o escríbenos desde la sección de contacto y te ayudamos.',
   },
   mockNote: 'Modo de pruebas: las cuentas se guardan solo en este navegador.',
   errors: {

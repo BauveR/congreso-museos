@@ -4,6 +4,7 @@ import { ConnectionNotice } from '../components/ConnectionNotice'
 import { ErrorBoundary } from '../components/ErrorBoundary'
 import { site } from '../content/site'
 import { Landing } from './Landing'
+import { usePageMeta } from '../lib/pageMeta'
 import { usePreviewAccess } from './previewAccess'
 import { SmoothScroll } from './providers/SmoothScroll'
 import { UnderConstruction } from './UnderConstruction'
@@ -20,6 +21,7 @@ function Home() {
   const { enabled } = site.underConstruction
   // En construcción: solo con el enlace de acceso anticipado (previewAccess).
   const access = usePreviewAccess(enabled)
+  usePageMeta()
   if (enabled && !access) return access === null ? null : <UnderConstruction />
   return (
     <SmoothScroll>

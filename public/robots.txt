@@ -1,0 +1,7 @@
+# V Congreso de Museos de Canarias
+User-agent: *
+Allow: /
+# Panel de administración: sin interés para buscadores.
+Disallow: /admin
+
+Sitemap: https://www.congresodemuseosdecanarias2026.com/sitemap.xml

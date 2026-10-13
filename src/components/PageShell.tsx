@@ -2,10 +2,12 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router'
 import { registrationText } from '../content/inscripcion'
 import { site } from '../content/site'
+import { usePageMeta } from '../lib/pageMeta'
 import { SiteLogo } from './SiteLogo'
 
-/** Marco de las páginas interiores (inscripción, administración, legal). */
-export function PageShell({ title, wide = false, children }: { title: string; wide?: boolean; children: ReactNode }) {
+/** Marco de las páginas interiores (inscripción, administración, legal), con su título de pestaña y dirección canónica. */
+export function PageShell({ title, wide = false, noindex = false, children }: { title: string; wide?: boolean; noindex?: boolean; children: ReactNode }) {
+  usePageMeta(title, { noindex })
   return (
     <div className="min-h-svh">
       <header className="border-b border-borde">

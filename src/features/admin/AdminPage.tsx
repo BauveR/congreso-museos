@@ -645,7 +645,7 @@ function AdminDashboard() {
 export default function AdminPage() {
   return (
     <AuthProvider>
-      <PageShell title={t.pageTitle} wide>
+      <PageShell title={t.pageTitle} wide noindex>
         <AdminDashboard />
       </PageShell>
       <DiagnosticsButton />

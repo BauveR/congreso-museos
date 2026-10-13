@@ -11,7 +11,7 @@ const daysAgo = (n: number) => new Date(Date.now() - n * 86_400_000).toISOString
 /**
  * Contadores anónimos de conexión (ver shared/connectivity.ts): visitas,
  * cargas lentas, fallos y recargas tras despliegue, en 7 y 30 días, con el
- * porcentaje sobre las visitas.
+ * porcentaje sobre las visitas. Plegada por defecto (consulta ocasional).
  */
 export function ConnectivityPanel() {
   const { getIdToken } = useAuth()
@@ -38,8 +38,11 @@ export function ConnectivityPanel() {
   const pct = (n: number, of: number) => (of ? Math.round((n / of) * 100) : 0)
 
   return (
-    <section className="rounded-2xl border border-borde p-5">
-      <h3 className="font-semibold">{t.title}</h3>
+    <details className="group rounded-2xl border border-borde p-5">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
+        <h3 className="font-semibold">{t.title}</h3>
+        <span aria-hidden className="text-texto-suave transition-transform group-open:rotate-180">▾</span>
+      </summary>
       <p className="mt-1 text-sm text-pretty text-texto-suave">{t.help}</p>
       {failed && <p className="mt-4 text-sm text-error">{t.error}</p>}
       {month && week && (month.visit === 0 ? (
@@ -67,6 +70,6 @@ export function ConnectivityPanel() {
           </tbody>
         </table>
       ))}
-    </section>
+    </details>
   )
 }

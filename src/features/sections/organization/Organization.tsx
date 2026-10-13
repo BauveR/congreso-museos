@@ -1,10 +1,12 @@
 import { DisplayHeading } from '../../../components/DisplayHeading'
+import { EnterFromRight } from '../../../components/EnterFromRight'
 import { Expandable, ExpandableText } from '../../../components/ExpandableText'
 import { RichText } from '../../../components/RichText'
 import { ScrollLit } from '../../../components/ScrollLitText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import type { OrganizationCard, RichBlock } from '../../../content/types'
+import { imagekitPicture } from '../../../services/imagekit'
 
 function Card({ card }: { card: OrganizationCard }) {
   return (
@@ -37,6 +39,26 @@ function Card({ card }: { card: OrganizationCard }) {
   )
 }
 
+/**
+ * Ilustración de la cabecera (escritorio, en el hueco a la derecha del texto).
+ * Al llegar a la sección entra deslizándose desde fuera de la página (por la
+ * derecha) hasta su sitio, una vez. Con reduced
+ * motion, quieta. Oculta para lectores de pantalla (decorativa).
+ */
+function Art() {
+  const { art } = site.organization
+  // A su tamaño real: ampliarla en ImageKit pesa más sin ganar detalle.
+  const picture = imagekitPicture(art.src, [art.width], 60)
+  return (
+    <EnterFromRight className="hidden w-full max-w-[26rem] justify-self-end lg:block">
+      <picture aria-hidden>
+        <source type="image/avif" srcSet={picture.avif} />
+        <img src={picture.src} srcSet={picture.webp} alt="" width={art.width} height={art.height} loading="lazy" decoding="async" className="h-auto w-full" />
+      </picture>
+    </EnterFromRight>
+  )
+}
+
 /** Texto del tramo: en móvil, el primer bloque visible y el resto con «Leer más». */
 function StepBody({ blocks }: { blocks: RichBlock[] }) {
   const [first, ...rest] = blocks
@@ -61,18 +83,23 @@ function StepBody({ blocks }: { blocks: RichBlock[] }) {
 export function Organization() {
   const { organization } = site
   return (
-    <Section id="por-que" className="py-24 sm:py-32">
+    // overflow-x-clip: la ilustración entra desde fuera de la página sin crear scroll lateral (no rompe los sticky).
+    <Section id="por-que" className="overflow-x-clip py-24 sm:py-32">
       <div className="wrap">
-        <header className="max-w-prose">
-          <DisplayHeading>{organization.title}</DisplayHeading>
-          <ScrollLit className="mt-6">
-            <ExpandableText paragraphs={organization.intro} className="leading-relaxed text-pretty" />
-          </ScrollLit>
-        </header>
+        {/* Escritorio: cabecera a la izquierda y la ilustración en el hueco de la derecha. */}
+        <div className="lg:grid lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-center lg:gap-16">
+          <header className="max-w-prose">
+            <DisplayHeading>{organization.title}</DisplayHeading>
+            <ScrollLit className="mt-6">
+              <ExpandableText paragraphs={organization.intro} className="leading-relaxed text-pretty" />
+            </ScrollLit>
+          </header>
+          <Art />
+        </div>
 
         {/* Pausa de lectura tras la cabecera antes de que entren los tramos
             (relativa al alto de pantalla: algo menos en móvil). */}
-        <div className="mt-[30svh] flex flex-col gap-24 lg:mt-[50svh] lg:gap-32">
+        <div className="mt-[calc(var(--svh)*30)] flex flex-col gap-24 lg:mt-[calc(var(--svh)*50)] lg:gap-32">
           {organization.steps.map((step) => (
             <div key={step.title} className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
               {/* Móvil: `contents` hace que título y texto sean hijos del tramo, así el

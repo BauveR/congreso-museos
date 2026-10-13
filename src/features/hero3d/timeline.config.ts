@@ -34,10 +34,12 @@ export const timeline: Record<Breakpoint, Keyframes> = {
     contacto: pose({ scale: 0.6 }),
   },
   desktop: {
-    hero: pose({ x: 0.15, y: -0.2, scale: 1.1 }),
+    hero: pose({ x: 0.15, y: 0.1, scale: 1.1 }),
     presentacion: pose({ x: 0.6, scale: 0.8 }),
     distinto: pose({ x: -0.55, y: 0.15, scale: 0.75 }),
-    'por-que': pose({ y: 0.1, scale: 0.6 }),
+    // Detrás de la ilustración de la cabecera (a la derecha): su centro cae entre 0,49 (1920 px)
+    // y 0,67 (1440 px) del semiancho según la pantalla; 0,58 queda detrás en ambos casos.
+    'por-que': pose({ x: 0.58, y: 0, scale: 0.6 }),
     ponentes: pose({ x: -0.5, y: 0.2, scale: 0.6 }),
     cinetico: pose({ x: 0.5, scale: 1 }),
     sede: pose({ x: 0.55, y: -0.1, scale: 0.75 }),

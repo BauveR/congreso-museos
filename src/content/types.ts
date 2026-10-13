@@ -108,6 +108,10 @@ export interface HeroContent {
   poster: ImageAsset
   /** Paisaje fijo al pie del hero y nubes animadas encima: URLs completas de ImageKit (ver services/imagekit.ts). */
   backdrop: { landscape: string; clouds: [string, string] }
+  /** Nombre de la lista de logos (lectores de pantalla). */
+  logosLabel: string
+  /** Línea de logos de las instituciones, bajo los botones (blancos sobre transparente). */
+  logos: (ImageAsset & { /** Alto en pantalla: cada archivo trae distinto margen alrededor. */ size: 'sm' | 'lg' })[]
 }
 
 export interface CommitteeMember {
@@ -148,6 +152,8 @@ export interface OrganizationContent {
   intro: string[]
   /** Tramos: texto fijo a la izquierda y tarjetas que suben a la derecha. */
   steps: { title: string; body: RichBlock[]; cards: OrganizationCard[] }[]
+  /** Ilustración decorativa a la derecha de la cabecera (escritorio), en ImageKit. */
+  art: { src: string; width: number; height: number }
 }
 
 export interface ParticipantAuthor {
@@ -298,7 +304,8 @@ export interface ContactContent {
   intro: string
   cta: Link
   email: string
-  address: string
+  /** Ilustración decorativa a la derecha de la tarjeta (escritorio), en ImageKit. */
+  art: { src: string; width: number; height: number }
 }
 
 export interface TopicBlock {

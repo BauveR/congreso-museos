@@ -14,7 +14,7 @@ import { ScrollHint } from './ScrollHint'
 export function Hero() {
   const { hero } = site
   return (
-    <Section id="hero" className="flex min-h-svh flex-col pt-20 pb-8">
+    <Section id="hero" className="flex min-h-[calc(var(--svh)*100)] flex-col pt-20 pb-8">
       <div className="edge relative z-10 @container">
         {/* Logo del congreso sobre el lema. Decorativo: el h1 ya anuncia el nombre.
             WebP sin pérdida (10,7 KB frente a 28,8 KB del PNG original). */}
@@ -27,8 +27,8 @@ export function Hero() {
           className="mb-6 h-auto w-[min(48vw,16rem)] lg:mb-8 lg:w-[19.2rem]"
         />
         <HeroWordmark edition={hero.edition} name={hero.eventName} headline={hero.headline} />
-        <div className="mt-[5svh] flex flex-col gap-6">
-          <p data-hero-after="" className="font-display text-[clamp(1rem,1.6vw,1.75rem)] leading-tight font-bold uppercase">
+        <div className="mt-[calc(var(--svh)*5)] flex flex-col gap-6">
+          <p data-hero-after="" className="font-display text-[clamp(0.875rem,1.2vw,1.3rem)] leading-tight font-bold uppercase">
             {hero.location}, <time dateTime={hero.dateTime}>{hero.dateLabel}</time>
           </p>
         </div>
@@ -50,6 +50,22 @@ export function Hero() {
               ))}
             </div>
           </div>
+          {/* Instituciones: línea de logos bajo los botones. */}
+          <ul data-hero-after="" aria-label={hero.logosLabel} className="edge relative z-10 mt-8 flex flex-wrap items-center gap-x-8 gap-y-4 lg:mt-10 lg:gap-x-12">
+            {hero.logos.map((logo) => (
+              <li key={logo.src}>
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  width={logo.width}
+                  height={logo.height}
+                  loading="lazy"
+                  decoding="async"
+                  className={`w-auto ${logo.size === 'lg' ? 'h-12 lg:h-16' : 'h-7 lg:h-9'}`}
+                />
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </Section>

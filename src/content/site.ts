@@ -79,12 +79,17 @@ export const site: SiteContent = {
     ],
     // Paisaje (PNG de 4542×1141) y nubes (recortes de «Dream 3», lienzo 1600×800) en ImageKit.
     backdrop: {
-      landscape: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/V%20Congreso%20de%20Museos%20de%20Canarias-15.png',
+      landscape: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/V%20Congreso%20de%20Museos%20de%20Canarias-15.png?updatedAt=1791867772267',
       clouds: [
         'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/nube-1.png',
         'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/nube-2.png',
       ],
     },
+    logosLabel: 'Instituciones',
+    logos: [
+      { src: '/media/logos/gobierno-de-canarias.webp', alt: 'Gobierno de Canarias', width: 556, height: 322, size: 'lg' },
+      { src: '/media/logos/cabildo-de-la-gomera.webp', alt: 'Cabildo Insular de La Gomera', width: 231, height: 73, size: 'sm' },
+    ],
     poster: {
       src: '/media/poster.svg',
       alt: '',
@@ -236,6 +241,12 @@ export const site: SiteContent = {
 
   organization: {
     title: '¿Cómo nos organizaremos?',
+    // Vegetación en lima (PNG de 322×170 en ImageKit): se sirve a su tamaño, sin ampliar.
+    art: {
+      src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/V%20Congreso%20de%20Museos%20de%20Canarias-24.png?updatedAt=1791866845392',
+      width: 322,
+      height: 170,
+    },
     intro: [
       'El V Congreso de Museos de Canarias va a estructurarse en torno a tres ámbitos o bloques de contenidos, que vertebrarán primero seis alegatorios o conversatorios (dos en cada sesión de trabajo) y luego tres mesas temáticas o plenarias (una en cada sesión de trabajo). Por consiguiente, está previsto el desarrollo de dos mesas redondas en paralelo y, con posterioridad, una mesa plenaria de trabajo conjunto para todos los asistentes.',
       'Como es costumbre, las mesas plenarias posibilitarán la presentación o defensa de comunicaciones. Sus contenidos guardan relación con los tres bloques de contenidos, mientras que las mesas redondas o alegatorios contarán con una introducción y conducción por parte de los responsables o coordinadores. De este modo podrá profundizarse en temas concretos, dentro de las muchas posibilidades que genera el marco establecido.',
@@ -379,11 +390,16 @@ export const site: SiteContent = {
 
   // Contacto (datos provisionales: sustituir correo y dirección reales).
   contact: {
+    // Objeto en gris (PNG de 200×357 en ImageKit): se sirve a su tamaño, sin ampliar.
+    art: {
+      src: 'https://ik.imagekit.io/xmo1g5akn/congreso%20de%20museos%20de%20canararias/V%20Congreso%20de%20Museos%20de%20Canarias-29.png?updatedAt=1791866925778',
+      width: 200,
+      height: 357,
+    },
     title: 'Contacto',
     intro: 'Para cualquier consulta sobre el congreso, las inscripciones o las comunicaciones, escríbenos.',
-    cta: { label: 'Escríbenos', href: 'mailto:contacto@example.com', icon: 'mail' },
-    email: 'contacto@example.com',
-    address: 'Dirección de relleno, 00000 Ciudad',
+    cta: { label: 'Escríbenos', href: 'mailto:vcongresodemuseosdecanarias@gmail.com', icon: 'mail' },
+    email: 'vcongresodemuseosdecanarias@gmail.com',
   },
 
   footer: {

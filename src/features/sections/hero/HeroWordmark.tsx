@@ -194,9 +194,14 @@ export function HeroWordmark({ edition, name, headline }: HeroWordmarkProps) {
         ref={titleRef}
         data-reveal=""
         aria-label={`${edition} ${name}. ${headline}`}
-        className="font-wordmark text-[clamp(1.225rem,5.6vw,2.1rem)] leading-[0.95] font-normal tracking-[-0.02em] text-balance text-acento uppercase md:text-[calc(70cqw/26.6)] md:whitespace-nowrap"
+        className="font-wordmark text-[clamp(1rem,4.6vw,1.6rem)] leading-[1.05] font-normal tracking-[-0.02em] text-balance text-acento uppercase md:text-[2cqw] md:whitespace-nowrap"
       >
-        {headline}
+        {/* Dos líneas, cortando tras el punto: «Museos en un tiempo de cambios.» / «Diagnosis y perspectiva». */}
+        {headline.split(/(?<=\.)\s+/).map((line) => (
+          <span key={line} className="block">
+            {line}
+          </span>
+        ))}
       </h1>
     </>
   )

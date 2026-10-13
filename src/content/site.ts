@@ -75,7 +75,7 @@ export const site: SiteContent = {
     scrollHint: ['Desliza', 'para explorar'],
     ctas: [
       { label: 'Inscripciones', href: '#acceso', icon: 'ticket' },
-      { label: 'Agenda', href: '#agenda', icon: 'calendar' },
+      { label: 'Programa', href: '#agenda', icon: 'calendar' },
     ],
     // Paisaje (PNG de 4542×1141) y nubes (recortes de «Dream 3», lienzo 1600×800) en ImageKit.
     backdrop: {
@@ -347,10 +347,6 @@ export const site: SiteContent = {
   },
 
   participants,
-
-  kinetic: {
-    fragments: ['Museos', 'en un tiempo', 'de cambios.', 'Diagnosis', 'y perspectiva.'],
-  },
 
   gallery: {
     label: 'Imágenes del IV Congreso de Museos de Canarias',

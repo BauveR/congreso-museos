@@ -201,11 +201,6 @@ export interface ParticipantsContent {
   showMore: (n: number) => string
 }
 
-export interface KineticContent {
-  /** Fragmentos de la frase; cada uno se revela por separado con el scroll. */
-  fragments: string[]
-}
-
 /** Foto de la galería: ruta del original (ver services/imagekit.ts) y texto alternativo. */
 export interface GalleryImage {
   file: string
@@ -373,7 +368,6 @@ export interface SiteContent {
   committees: CommitteesContent
   organization: OrganizationContent
   participants: ParticipantsContent
-  kinetic: KineticContent
   gallery: GalleryContent
   threshold: ThresholdContent
   previous: PreviousContent

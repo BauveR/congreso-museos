@@ -5,7 +5,7 @@ import { Contact } from '../features/sections/contact/Contact'
 import { Differences } from '../features/sections/differences/Differences'
 import { Footer } from '../features/sections/footer/Footer'
 import { Hero } from '../features/sections/hero/Hero'
-import { KineticHeadline } from '../features/sections/kinetic/KineticHeadline'
+import { GallerySection } from '../features/sections/gallery/GallerySection'
 import { MoreInfo } from '../features/sections/more-info/MoreInfo'
 import { Nav } from '../features/sections/nav/Nav'
 import { Organization } from '../features/sections/organization/Organization'
@@ -44,7 +44,7 @@ export function Landing() {
         <Access />
         <Previous />
         <MoreInfo />
-        <KineticHeadline />
+        <GallerySection />
         <Contact />
       </main>
       <Footer />

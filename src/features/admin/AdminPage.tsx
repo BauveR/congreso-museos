@@ -13,6 +13,7 @@ import { dayColor } from '../../../shared/event'
 import type { Session } from '../../../shared/sessions'
 import { ConnectionNotice } from '../../components/ConnectionNotice'
 import { SelectInput, TextInput } from '../../components/form'
+import { Loader } from '../../components/Loader'
 import { PageShell } from '../../components/PageShell'
 import { ReadingSheet } from '../../components/ReadingSheet'
 import { adminText } from '../../content/inscripcion'
@@ -446,6 +447,7 @@ function RegistrationsPanel({ sessions, onSessionsChanged }: { sessions: Session
         </p>
       )}
 
+      {!rows && !error && <Loader text={t.loadingData} />}
       {rows && rows.length === 0 && <p className="text-texto-suave">{r.empty}</p>}
 
       {/* Móvil: una tarjeta por inscripción, sin scroll lateral. */}
@@ -628,6 +630,7 @@ function AdminDashboard() {
           {error}
         </p>
       )}
+      {!sessions && !error && <Loader text={t.loadingData} />}
       {sessions && tab === 'stats' && (
         <div className="flex flex-col gap-6">
           <StatsPanel sessions={sessions} />

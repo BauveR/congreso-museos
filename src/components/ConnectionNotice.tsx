@@ -1,6 +1,7 @@
 import { connectionText as t, legal } from '../content/inscripcion'
 import type { LoadPhase } from '../lib/connectivity'
 import { buttonClass } from './button'
+import { Loader } from './Loader'
 
 const CONTACT_EMAIL = /^[^\s@[\]]+@[^\s@]+\.[^\s@]+$/
 
@@ -11,11 +12,7 @@ const CONTACT_EMAIL = /^[^\s@[\]]+@[^\s@]+\.[^\s@]+$/
  */
 export function ConnectionNotice({ phase, onRetry, loadingText = t.loading }: { phase: LoadPhase; onRetry: () => void; loadingText?: string }) {
   if (phase === 'loading') {
-    return (
-      <p role="status" className="text-texto-suave">
-        {loadingText}
-      </p>
-    )
+    return <Loader text={loadingText} />
   }
 
   const error = phase === 'error'

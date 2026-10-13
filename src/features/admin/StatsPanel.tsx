@@ -4,6 +4,7 @@ import { adminText } from '../../content/inscripcion'
 import { api } from '../../lib/api'
 import { useAuth } from '../../lib/auth/context'
 import { summarize, type Count } from './stats'
+import { Loader } from '../../components/Loader'
 import type { AdminRegistration } from './types'
 
 const t = adminText.stats
@@ -122,6 +123,7 @@ export function StatsPanel({ sessions }: { sessions: Session[] }) {
         {days.map((s) => dayButton(s.id, s.title))}
       </div>
 
+      {!summary && loading && <Loader text={adminText.loadingData} />}
       {summary && (
         // Al cambiar de día se mantiene el resumen anterior, atenuado, hasta tener el nuevo.
         <div aria-busy={loading} className={`flex flex-col gap-6 transition-opacity ${loading ? 'opacity-60' : ''}`}>

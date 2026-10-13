@@ -2,6 +2,8 @@ import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import { ConnectionNotice } from '../components/ConnectionNotice'
 import { ErrorBoundary } from '../components/ErrorBoundary'
+import { Loader } from '../components/Loader'
+import { connectionText } from '../content/inscripcion'
 import { site } from '../content/site'
 import { Landing } from './Landing'
 import { usePageMeta } from '../lib/pageMeta'
@@ -41,7 +43,8 @@ export function App() {
           </div>
         }
       >
-        <Suspense fallback={null}>
+        {/* Mientras se descarga una página interior (inscripción, administración, legales). */}
+        <Suspense fallback={<Loader text={connectionText.loading} className="wrap py-16" />}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/inscripcion" element={<RegistrationPage />} />

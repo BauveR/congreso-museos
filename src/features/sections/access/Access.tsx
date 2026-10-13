@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { ConnectionNotice } from '../../../components/ConnectionNotice'
 import { ErrorBoundary } from '../../../components/ErrorBoundary'
+import { Loader } from '../../../components/Loader'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import { returningFromGoogle } from '../../../lib/auth/redirectFlow'
@@ -60,9 +61,7 @@ export function Access() {
   }, [near])
 
   const placeholder = (
-    <p role="status" className="wrap text-texto-suave">
-      {site.access.loading}
-    </p>
+    <Loader text={site.access.loading} className="wrap" />
   )
 
   return (

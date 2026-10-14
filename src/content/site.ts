@@ -89,17 +89,13 @@ export const site: SiteContent = {
     logoGroups: [
       {
         label: 'Organizan',
-        logos: [
-          { src: '/media/logos/gobierno-de-canarias-2030.webp', alt: 'Canarias 2030 · Gobierno de Canarias', width: 413, height: 96, size: 'wide' },
-          { src: '/media/logos/cabildo-de-la-gomera.webp', alt: 'Cabildo Insular de La Gomera', width: 231, height: 73, size: 'md' },
-        ],
+        // Una imagen por grupo, con los dos logos ya compuestos.
+        logos: [{ src: '/media/logos/organizan.webp', alt: 'Gobierno de Canarias y Cabildo Insular de La Gomera', width: 849, height: 143, size: 'wide' }],
       },
       {
         label: 'Colaboran',
         logos: [
-          // Texto pasado a blanco (el original es gris oscuro y no se vería sobre el verde).
-          { src: '/media/logos/ayuntamiento-san-sebastian-de-la-gomera.webp', alt: 'Ayuntamiento de San Sebastián de La Gomera', width: 265, height: 116, size: 'lg' },
-          { src: '/media/logos/icdc.webp', alt: 'Instituto Canario de Desarrollo Cultural', width: 381, height: 82, size: 'sm' },
+          { src: '/media/logos/colaboran.webp', alt: 'Ayuntamiento de San Sebastián de La Gomera e Instituto Canario de Desarrollo Cultural', width: 775, height: 158, size: 'lg' },
         ],
       },
     ],

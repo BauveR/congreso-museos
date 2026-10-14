@@ -62,7 +62,7 @@ export function Hero() {
             </div>
           </div>
           {/* Instituciones: línea de logos bajo los botones. */}
-          <InstitutionLogos data-hero-after="" className="edge relative z-10 mt-5 sm:mt-6" />
+          <InstitutionLogos oneRowMobile data-hero-after="" className="edge relative z-10 mt-5 sm:mt-6" />
         </div>
       </div>
     </Section>

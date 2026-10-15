@@ -90,12 +90,12 @@ export const site: SiteContent = {
       {
         label: 'Organizan',
         // Una imagen por grupo, con los dos logos ya compuestos.
-        logos: [{ src: '/media/logos/organizan.webp', alt: 'Gobierno de Canarias y Cabildo Insular de La Gomera', width: 849, height: 143, size: 'wide' }],
+        logos: [{ src: '/media/logos/organizan.webp', alt: 'Gobierno de Canarias y Cabildo Insular de La Gomera', width: 831, height: 156, size: 'wide' }],
       },
       {
         label: 'Colaboran',
         logos: [
-          { src: '/media/logos/colaboran.webp', alt: 'Ayuntamiento de San Sebastián de La Gomera e Instituto Canario de Desarrollo Cultural', width: 775, height: 158, size: 'lg' },
+          { src: '/media/logos/colaboran.webp', alt: 'Ayuntamiento de San Sebastián de La Gomera e Instituto Canario de Desarrollo Cultural', width: 626, height: 161, size: 'lg' },
         ],
       },
     ],

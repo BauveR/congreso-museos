@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react'
+import type { CSSProperties, HTMLAttributes } from 'react'
 import { site } from '../content/site'
 
 /** Alto de cada logo según su tamaño (los de la organización, un punto mayores); en móvil, algo menores para que quepan en la primera pantalla. */
@@ -11,14 +11,17 @@ const LOGO_HEIGHTS = {
   wide: 'h-[2.2rem] sm:h-[2.6rem] lg:h-[3rem]',
 } as const
 
+/** Alto en escritorio (rem) de cada tamaño: reparte la fila única del hero en móvil en la misma proporción. */
+const DESKTOP_REM = { sm: 2.1, md: 2.9, lg: 3.6, xl: 4.15, wide: 3 } as const
+
 /**
  * Línea de logos de las instituciones, por grupos («Organizan», «Colaboran»)
  * con su rótulo encima. Logos blancos: solo sobre fondo oscuro (hero y pie).
  * `centerMobile`: por debajo de md, cada grupo centrado y su rótulo alineado
  * al borde izquierdo de sus logos (pie).
- * `oneRowMobile`: por debajo de sm, los grupos en una sola fila, a partes
- * iguales; los logos se encogen para caber (hero). Con la misma anchura
- * quedan en la proporción de escritorio, donde también miden casi lo mismo.
+ * `oneRowMobile`: por debajo de sm, los grupos en una sola fila; cada uno
+ * ocupa su parte según el ancho que tiene en escritorio y los logos se
+ * encogen para caber (hero), así guardan la proporción de escritorio.
  */
 export function InstitutionLogos({
   className = '',
@@ -31,7 +34,11 @@ export function InstitutionLogos({
   return (
     <div role="group" aria-label={hero.logosLabel} className={`flex flex-wrap gap-x-12 gap-y-3 sm:gap-y-4 lg:gap-x-16 ${layout} ${className}`} {...rest}>
       {hero.logoGroups.map((group) => (
-        <div key={group.label} className={oneRowMobile ? 'max-sm:min-w-0 max-sm:flex-1' : undefined}>
+        <div
+          key={group.label}
+          className={oneRowMobile ? 'max-sm:min-w-0 max-sm:grow-(--grow) max-sm:basis-0' : undefined}
+          style={oneRowMobile ? ({ '--grow': group.logos.reduce((sum, l) => sum + (l.width / l.height) * DESKTOP_REM[l.size], 0) } as CSSProperties) : undefined}
+        >
           <p className="mb-2.5 text-xs font-bold tracking-widest text-texto-suave uppercase sm:mb-3">{group.label}:</p>
           <ul aria-label={group.label} className="flex flex-wrap items-center gap-x-6 gap-y-3 sm:gap-x-8 lg:gap-x-10">
             {group.logos.map((logo) => (

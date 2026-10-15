@@ -95,7 +95,7 @@ export const site: SiteContent = {
       {
         label: 'Colaboran',
         logos: [
-          { src: '/media/logos/colaboran.webp', alt: 'Ayuntamiento de San Sebastián de La Gomera e Instituto Canario de Desarrollo Cultural', width: 626, height: 193, size: 'lg' },
+          { src: '/media/logos/colaboran.webp', alt: 'Ayuntamiento de San Sebastián de La Gomera e Instituto Canario de Desarrollo Cultural', width: 633, height: 161, size: 'lg' },
         ],
       },
     ],

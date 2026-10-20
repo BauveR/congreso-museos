@@ -12,9 +12,11 @@ const photo = (name: string, alt: string, width = 720, height = 540) => ({ src: 
 
 export const activities: ActivitiesContent = {
   title: 'Actividades paralelas',
+  seeMore: 'Ver más',
 
   items: [
     {
+      id: 'parroquia',
       kind: 'Visita',
       title: 'Parroquia de Nuestra Señora de la Asunción',
       place: SAN_SEBASTIAN,
@@ -33,6 +35,7 @@ export const activities: ActivitiesContent = {
       ],
     },
     {
+      id: 'museo-arqueologico',
       kind: 'Visita',
       title: 'Museo Arqueológico de La Gomera',
       place: SAN_SEBASTIAN,
@@ -50,6 +53,7 @@ export const activities: ActivitiesContent = {
       ],
     },
     {
+      id: 'cuscoy',
       kind: 'Exposición',
       title: 'Luis Diego Cuscoy. Arqueología de la mirada',
       place: `Casa de Colón, ${SAN_SEBASTIAN}`,
@@ -68,6 +72,7 @@ export const activities: ActivitiesContent = {
       ],
     },
     {
+      id: 'yapci-ramos',
       kind: 'Exposición',
       title: 'Yapci Ramos. yo, Guirre',
       place: 'Cabildo de La Gomera',
@@ -86,6 +91,7 @@ export const activities: ActivitiesContent = {
       ],
     },
     {
+      id: 'concierto',
       kind: 'Concierto',
       title: 'PielConPiel',
       images: [

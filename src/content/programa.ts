@@ -94,10 +94,10 @@ export const program: ProgramContent = {
                 {
                   title: 'Actividades en el centro de San Sebastián de La Gomera (visitas libres)',
                   list: [
-                    'Videoinstalación Yo, Guirre de Yapci Ramos (Cabildo de La Gomera)',
-                    'Exposición Arqueología de la mirada. La obra fotográfica de Luis Diego Cuscoy (Casa de Colón)',
-                    'Colección permanente Museo Arqueológico de La Gomera',
-                    'Parroquia de Nuestra Señora de la Asunción',
+                    { label: 'Videoinstalación Yo, Guirre de Yapci Ramos (Cabildo de La Gomera)', activity: 'yapci-ramos' },
+                    { label: 'Exposición Arqueología de la mirada. La obra fotográfica de Luis Diego Cuscoy (Casa de Colón)', activity: 'cuscoy' },
+                    { label: 'Colección permanente Museo Arqueológico de La Gomera', activity: 'museo-arqueologico' },
+                    { label: 'Parroquia de Nuestra Señora de la Asunción', activity: 'parroquia' },
                   ],
                 },
               ],
@@ -208,7 +208,16 @@ export const program: ProgramContent = {
               },
             ),
             t('19:30 h', 'Actividades en el centro de San Sebastián de La Gomera (visitas libres)'),
-            t('20:00 h', 'Concierto Pieles', ['Plaza de la Parroquia de Nuestra Señora de la Asunción, San Sebastián de La Gomera']),
+            {
+              time: '20:00 h',
+              entries: [
+                {
+                  title: 'Concierto Pieles',
+                  notes: ['Plaza de la Parroquia de Nuestra Señora de la Asunción, San Sebastián de La Gomera'],
+                  activity: 'concierto',
+                },
+              ],
+            },
           ],
         },
       ],

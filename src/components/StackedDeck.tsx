@@ -1,7 +1,8 @@
 import { X } from 'lucide-react'
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react'
 import { createPortal } from 'react-dom'
 import { loadMotion, useMotionEffect } from '../app/motion'
+import { scrollToTarget } from '../app/scrollTo'
 import { site } from '../content/site'
 import { useEnhancedMotion } from '../hooks/useEnhancedMotion'
 
@@ -34,6 +35,8 @@ export interface DeckCardState {
   stacked: boolean
   /** Desplegada sobre toda la pila con todo su texto a la vista (solo en modo pila). */
   expanded: boolean
+  /** Fuera del modo pila: la tarjeta a la que se acaba de llevar (`reveal`), para desplegar su texto. */
+  revealed: boolean
   toggle: () => void
 }
 
@@ -47,6 +50,12 @@ interface StackedDeckProps<T> {
   /** Desplegada: alto según su contenido (sin pasar de la pantalla) en lugar de toda la pantalla. */
   fitOpen?: boolean
   className?: string
+  ref?: Ref<StackedDeckHandle>
+}
+
+/** Desde fuera: llevar el scroll a una tarjeta y desplegarla (p. ej. un enlace del programa). */
+export interface StackedDeckHandle {
+  reveal: (index: number) => void
 }
 
 /** Ratón con la rueda animada: indica «desplázate» (patrón habitual en escritorio). */
@@ -72,7 +81,7 @@ function MouseHint() {
  * - Móvil y reduced motion: tarjetas una debajo de otra (`expanded` siempre
  *   false: cada sección usa su hoja de lectura).
  */
-export function StackedDeck<T>({ items, getKey, renderItem, cardClassName, fitOpen = false, className = '' }: StackedDeckProps<T>) {
+export function StackedDeck<T>({ items, getKey, renderItem, cardClassName, fitOpen = false, className = '', ref }: StackedDeckProps<T>) {
   const { ui } = site
   const stage = useRef<HTMLDivElement>(null)
   const list = useRef<HTMLOListElement>(null)
@@ -82,6 +91,8 @@ export function StackedDeck<T>({ items, getKey, renderItem, cardClassName, fitOp
   const [heights, setHeights] = useState<number[]>([])
   /** Tarjeta desplegada. */
   const [open, setOpen] = useState<number | null>(null)
+  /** Fuera del modo pila: la tarjeta pedida con `reveal`. */
+  const [revealed, setRevealed] = useState<number | null>(null)
   const [viewport, setViewport] = useState(0)
 
   useEffect(() => {
@@ -157,6 +168,33 @@ export function StackedDeck<T>({ items, getKey, renderItem, cardClassName, fitOp
 
   const toggle = useCallback((i: number) => setOpen((current) => (current === i ? null : i)), [])
 
+  // Pila: el scroll va al punto en que la tarjeta ya ha entrado (dentro del
+  // tramo fijado) y, al llegar, se despliega. Sin pila: a la tarjeta, y se marca.
+  useImperativeHandle(
+    ref,
+    () => ({
+      reveal: (i: number) => {
+        setOpen(null)
+        if (!stacked) {
+          const li = list.current?.children[i] as HTMLElement | undefined
+          if (!li) return
+          // Volver a marcarla aunque ya lo estuviera (se pudo plegar después).
+          setRevealed(null)
+          requestAnimationFrame(() => setRevealed(i))
+          scrollToTarget(li)
+          return
+        }
+        void loadMotion().then(({ ScrollTrigger }) => {
+          const pin = ScrollTrigger.getAll().find((st) => st.trigger === stage.current)
+          if (!pin) return
+          const entered = i === 0 ? 0 : (i - 1 + ENTER) * SCROLL_PER_CARD * window.innerHeight
+          scrollToTarget(Math.ceil(pin.start + entered + 2), () => setOpen(i))
+        })
+      },
+    }),
+    [stacked],
+  )
+
   // Desplegada: Esc o seguir con el scroll la cierran (el scroll nunca se bloquea).
   useEffect(() => {
     if (open === null) return
@@ -227,7 +265,7 @@ export function StackedDeck<T>({ items, getKey, renderItem, cardClassName, fitOp
               stacked ? 'absolute overflow-hidden transition-[left,top,width,height] duration-500 ease-out motion-reduce:transition-none lg:p-10' : ''
             }`}
           >
-            <div>{renderItem(item, i, { stacked, expanded: stacked && open === i, toggle: () => toggle(i) })}</div>
+            <div>{renderItem(item, i, { stacked, expanded: stacked && open === i, revealed: !stacked && revealed === i, toggle: () => toggle(i) })}</div>
           </li>
         ))}
       </ol>

@@ -265,8 +265,10 @@ export interface ProgramEntry {
   title: string
   /** Líneas de detalle: ponente, responsables, coordinación… */
   notes?: string[]
-  /** Elementos listados (p. ej. lugares de las visitas libres). */
-  list?: string[]
+  /** Elementos listados (p. ej. lugares de las visitas libres); con `activity`, botón a su tarjeta. */
+  list?: (string | { label: string; activity: string })[]
+  /** Id de la actividad paralela: botón «Ver más» que lleva a su tarjeta desplegada. */
+  activity?: string
 }
 
 /** Comunicación de una mesa plenaria. */
@@ -369,6 +371,8 @@ export interface UnderConstructionContent {
 
 /** Actividad paralela: tarjeta con su texto y dos fotos. */
 export interface ParallelActivity {
+  /** Id (ancla y enlace desde el programa). */
+  id: string
   /** Tipo (visita, exposición, concierto). */
   kind: string
   title: string
@@ -384,6 +388,8 @@ export interface ParallelActivity {
 export interface ActivitiesContent {
   title: string
   items: ParallelActivity[]
+  /** Botón del programa que lleva a cada actividad. */
+  seeMore: string
 }
 
 export interface SiteContent {

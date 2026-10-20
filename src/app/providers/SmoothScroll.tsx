@@ -1,6 +1,7 @@
 import 'lenis/dist/lenis.css'
 import { useRef, type ReactNode } from 'react'
 import { requestSnap } from '../../features/hero3d/scrollState'
+import { setLenis } from '../scrollTo'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { useMotionEffect } from '../motion'
 
@@ -24,6 +25,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     ({ gsap, Lenis, ScrollTrigger }) => {
       const lenis = new Lenis({ autoRaf: false, syncTouch: false })
       lenis.on('scroll', ScrollTrigger.update)
+      setLenis(lenis)
 
       const tick = (time: number) => lenis.raf(time * 1000)
       gsap.ticker.add(tick)
@@ -71,6 +73,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       return () => {
         document.removeEventListener('click', onClick)
         gsap.ticker.remove(tick)
+        setLenis(null)
         lenis.destroy()
       }
     },

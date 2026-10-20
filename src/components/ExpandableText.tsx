@@ -16,6 +16,8 @@ interface ExpandableProps {
   lessLabel?: string
   /** Color del botón (por defecto acento; cambiarlo sobre fondos de color). */
   buttonClassName?: string
+  /** Abierto desde el principio (p. ej. al llegar desde un enlace). */
+  defaultOpen?: boolean
   className?: string
 }
 
@@ -35,11 +37,12 @@ export function Expandable({
   moreLabel = site.ui.readMore,
   lessLabel = site.ui.readLess,
   buttonClassName = 'text-acento-texto',
+  defaultOpen = false,
   className = '',
 }: ExpandableProps) {
   const id = useId()
   const desktop = useBreakpoint() === 'desktop'
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(defaultOpen)
   const collapsible = Boolean(rest) && !(expandOnDesktop && desktop)
   const expanded = !collapsible || open
 

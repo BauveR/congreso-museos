@@ -1,3 +1,4 @@
+import { ArrowDown } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useMotionEffect } from '../../../app/motion'
 import { DisplayHeading } from '../../../components/DisplayHeading'
@@ -6,6 +7,7 @@ import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import type { ProgramItem } from '../../../content/types'
 import { useReducedMotion } from '../../../hooks/useReducedMotion'
+import { activityAnchor, openActivity } from '../activities/openActivity'
 
 /*
  * Programa: tarjeta a ancho completo (edge) con fondo salvia que entra desde
@@ -21,6 +23,25 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion'
 /** Actividades destacadas en blanco: alegatorios, mesas plenarias, conferencias y ponencias. */
 const HIGHLIGHT = /^(Alegatorio|Mesa plenaria|Conferencia|Ponencia)/
 
+/** Botón claro a la tarjeta (desplegada) de una actividad paralela. */
+function ActivityLink({ id, label }: { id: string; label: string }) {
+  const { activities } = site
+  return (
+    <a
+      href={`#${activityAnchor(id)}`}
+      onClick={(e) => {
+        e.preventDefault()
+        openActivity(id)
+      }}
+      className="mt-1.5 inline-flex w-fit items-center gap-1.5 rounded-full bg-acento-contraste px-3 py-1.5 text-xs font-bold tracking-wide text-salvia uppercase transition-colors hover:bg-acento-contraste/85"
+    >
+      {activities.seeMore}
+      <span className="sr-only">: {label}</span>
+      <ArrowDown aria-hidden className="size-3.5" />
+    </a>
+  )
+}
+
 function Item({ item }: { item: ProgramItem }) {
   const { program } = site
   return (
@@ -35,11 +56,19 @@ function Item({ item }: { item: ProgramItem }) {
                 {note}
               </p>
             ))}
+            {entry.activity && <ActivityLink id={entry.activity} label={entry.title} />}
             {entry.list && (
-              <ul className="mt-2 flex list-disc flex-col gap-1 pl-4 text-sm leading-snug">
-                {entry.list.map((place) => (
-                  <li key={place}>{place}</li>
-                ))}
+              <ul className="mt-2 flex list-disc flex-col gap-2 pl-4 text-sm leading-snug">
+                {entry.list.map((place) =>
+                  typeof place === 'string' ? (
+                    <li key={place}>{place}</li>
+                  ) : (
+                    <li key={place.label}>
+                      <span className="block">{place.label}</span>
+                      <ActivityLink id={place.activity} label={place.label} />
+                    </li>
+                  ),
+                )}
               </ul>
             )}
           </div>

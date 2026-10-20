@@ -1,10 +1,12 @@
+import { useEffect, useRef } from 'react'
 import { DisplayHeading } from '../../../components/DisplayHeading'
 import { ExpandButton } from '../../../components/ExpandButton'
 import { Expandable } from '../../../components/ExpandableText'
 import { Section } from '../../../components/Section'
-import { StackedDeck, type DeckCardState } from '../../../components/StackedDeck'
+import { StackedDeck, type DeckCardState, type StackedDeckHandle } from '../../../components/StackedDeck'
 import { site } from '../../../content/site'
 import type { ImageAsset, ParallelActivity } from '../../../content/types'
+import { activityAnchor, onOpenActivity } from './openActivity'
 
 /*
  * Actividades paralelas: tarjetas grandes apiladas con el scroll, como las de
@@ -12,6 +14,7 @@ import type { ImageAsset, ParallelActivity } from '../../../content/types'
  * lleva su texto y el hueco de sus dos fotos.
  * - Escritorio: «Leer más» despliega la tarjeta sobre la pila con todo el texto.
  * - Móvil: tarjetas una debajo de otra; el resto del texto, desplegable.
+ * - Desde el programa («Ver más»): el scroll llega a la tarjeta y la despliega.
  */
 
 const pad = (n: number) => String(n).padStart(2, '0')
@@ -59,7 +62,7 @@ function Blocks({ blocks }: { blocks: ParallelActivity['body'] }) {
 
 function ActivityCard({ item, index, deck }: { item: ParallelActivity; index: number; deck: DeckCardState }) {
   const { ui } = site
-  const { stacked, expanded } = deck
+  const { stacked, expanded, revealed } = deck
   const [first, ...rest] = item.body
   const lead = first?.paragraphs[0]
   const after: ParallelActivity['body'] = [...(first ? [{ ...first, paragraphs: first.paragraphs.slice(1) }] : []), ...rest]
@@ -94,7 +97,7 @@ function ActivityCard({ item, index, deck }: { item: ParallelActivity; index: nu
   // Desplegada (escritorio): todo el texto a la vista, en columnas, con las fotos al principio.
   if (expanded) {
     return (
-      <article>
+      <article id={activityAnchor(item.id)}>
         {header}
         <div className="mt-6 columns-[19rem] gap-10 text-sm leading-relaxed [&>*]:mb-4 [&>*]:break-inside-avoid">
           <Photos item={item} />
@@ -105,7 +108,7 @@ function ActivityCard({ item, index, deck }: { item: ParallelActivity; index: nu
   }
 
   return (
-    <article>
+    <article id={activityAnchor(item.id)}>
       {header}
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-12">
         <div className="leading-relaxed">
@@ -116,6 +119,9 @@ function ActivityCard({ item, index, deck }: { item: ParallelActivity; index: nu
             </>
           ) : (
             <Expandable
+              // Al llegar desde el programa, el texto ya desplegado.
+              key={revealed ? 'revealed' : 'closed'}
+              defaultOpen={revealed}
               head={<p>{lead}</p>}
               rest={more ? <div className="flex flex-col gap-4 pt-4"><Blocks blocks={after} /></div> : undefined}
               expandOnDesktop={false}
@@ -131,6 +137,17 @@ function ActivityCard({ item, index, deck }: { item: ParallelActivity; index: nu
 
 export function Activities() {
   const { activities } = site
+  const deck = useRef<StackedDeckHandle>(null)
+
+  useEffect(
+    () =>
+      onOpenActivity((id) => {
+        const index = activities.items.findIndex((a) => a.id === id)
+        if (index >= 0) deck.current?.reveal(index)
+      }),
+    [activities.items],
+  )
+
   return (
     <Section id="actividades" className="pt-10 pb-10 sm:py-32 lg:pb-0">
       <div className="wrap">
@@ -138,6 +155,7 @@ export function Activities() {
       </div>
 
       <StackedDeck
+        ref={deck}
         items={activities.items}
         getKey={(item) => item.title}
         cardClassName="bg-piedra text-acento-contraste"

@@ -1,4 +1,5 @@
 import { cleanEnv } from '../../shared/env'
+import { activities } from './actividades'
 import { participants } from './participantes'
 import { previous } from './previos'
 import { moreInfo } from './saberMas'
@@ -243,7 +244,7 @@ export const site: SiteContent = {
         {
           role: 'Prensa y comunicación',
           members: [
-          { name: 'Olga Patricia Maset Paredes', affiliation: 'Viceconsejería de Cultura y Patrimonio Cultural, Gobierno de Canarias' },
+          { name: 'Olga Patricia Masset Paredes', affiliation: 'Viceconsejería de Cultura y Patrimonio Cultural, Gobierno de Canarias' },
           { name: 'Claudia Pais García', affiliation: 'Personal técnico de Gestión y Planeamiento Territorial y Medioambiental-Gesplan' },
           ],
         },
@@ -359,6 +360,7 @@ export const site: SiteContent = {
   },
 
   participants,
+  activities,
 
   gallery: {
     label: 'Imágenes del IV Congreso de Museos de Canarias',

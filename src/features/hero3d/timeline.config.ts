@@ -23,6 +23,7 @@ export const timeline: Record<Breakpoint, Keyframes> = {
     presentacion: pose({ y: 0.2, scale: 0.7 }),
     distinto: pose({ y: -0.1, scale: 0.65 }),
     'por-que': pose({ scale: 0.6 }),
+    actividades: pose({ y: -0.2, scale: 0.5 }),
     ponentes: pose({ y: 0.3, scale: 0.5 }),
     cinetico: pose({ scale: 0.9 }),
     sede: pose({ y: 0.25, scale: 0.6 }),
@@ -40,6 +41,7 @@ export const timeline: Record<Breakpoint, Keyframes> = {
     // Detrás de la ilustración de la cabecera (a la derecha): su centro cae entre 0,49 (1920 px)
     // y 0,67 (1440 px) del semiancho según la pantalla; 0,58 queda detrás en ambos casos.
     'por-que': pose({ x: 0.58, y: 0, scale: 0.6 }),
+    actividades: pose({ x: 0.55, y: -0.15, scale: 0.6 }),
     ponentes: pose({ x: -0.5, y: 0.2, scale: 0.6 }),
     cinetico: pose({ x: 0.5, scale: 1 }),
     sede: pose({ x: 0.55, y: -0.1, scale: 0.75 }),
@@ -64,6 +66,7 @@ export const sectionColors: Record<SectionId, string> = {
   // y se mantiene en Organización hasta «Contenidos».
   distinto: '#2f6b45',
   'por-que': '#2f6b45', // verde bosque (ver distinto)
+  actividades: '#89976f', // salvia (entre la agenda y la lima de participantes)
   ponentes: '#d1e132', // lima (sigue igual en la galería)
   cinetico: '#d1e132', // lima: momento fuerte
   sede: '#d3cd67', // ocre (como la arena y la piedra)

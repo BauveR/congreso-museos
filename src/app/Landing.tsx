@@ -1,5 +1,6 @@
 import { site } from '../content/site'
 import { Background } from '../features/hero3d/Background'
+import { Activities } from '../features/sections/activities/Activities'
 import { Access } from '../features/sections/access/Access'
 import { Contact } from '../features/sections/contact/Contact'
 import { Differences } from '../features/sections/differences/Differences'
@@ -38,6 +39,7 @@ export function Landing() {
         <Differences />
         <Organization />
         <Program />
+        <Activities />
         <Participants />
         <Venue />
         <Threshold />

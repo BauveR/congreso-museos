@@ -44,6 +44,8 @@ interface StackedDeckProps<T> {
   renderItem: (item: T, index: number, state: DeckCardState) => ReactNode
   /** Fondo, borde y color de las tarjetas. */
   cardClassName: string
+  /** Desplegada: alto según su contenido (sin pasar de la pantalla) en lugar de toda la pantalla. */
+  fitOpen?: boolean
   className?: string
 }
 
@@ -70,7 +72,7 @@ function MouseHint() {
  * - Móvil y reduced motion: tarjetas una debajo de otra (`expanded` siempre
  *   false: cada sección usa su hoja de lectura).
  */
-export function StackedDeck<T>({ items, getKey, renderItem, cardClassName, className = '' }: StackedDeckProps<T>) {
+export function StackedDeck<T>({ items, getKey, renderItem, cardClassName, fitOpen = false, className = '' }: StackedDeckProps<T>) {
   const { ui } = site
   const stage = useRef<HTMLDivElement>(null)
   const list = useRef<HTMLOListElement>(null)
@@ -115,6 +117,9 @@ export function StackedDeck<T>({ items, getKey, renderItem, cardClassName, class
   const cardPx = common === null ? max : Math.min(common, max)
   /** Desplegada: todo el escenario visible (desde la primera tarjeta). */
   const openPx = stacked && viewport ? availablePx(0) : 0
+  /** Con `fitOpen`: lo que mide su contenido, cubriendo al menos la pila y sin pasar de openPx. */
+  const pilePx = cardPx + (count - 1) * STACK_Y_REM * (viewport ? remPx() : 0)
+  const openHeight = fitOpen && open !== null && heights[open] ? Math.min(openPx, Math.max(heights[open], pilePx)) : openPx
 
   // Cambia la altura del escenario: recalcular posiciones de todos los triggers.
   useEffect(() => {
@@ -198,7 +203,7 @@ export function StackedDeck<T>({ items, getKey, renderItem, cardClassName, class
     if (!stacked) return undefined
     return open === i
       ? // Desplegada: cubre toda la pila, por encima de las demás.
-        { left: 'var(--wrap-inset)', top: 0, width: full, height: `${openPx}px`, zIndex: 20 }
+        { left: 'var(--wrap-inset)', top: 0, width: full, height: `${openHeight}px`, zIndex: 20 }
       : {
           left: `calc(var(--wrap-inset) + ${i} * ${stackX})`,
           top: `calc(${i} * ${stackY})`,

@@ -9,6 +9,7 @@ export type SectionId =
   | 'distinto'
   | 'por-que'
   | 'ponentes'
+  | 'actividades'
   | 'cinetico'
   | 'umbral'
   | 'sede'
@@ -366,6 +367,25 @@ export interface UnderConstructionContent {
   body: string
 }
 
+/** Actividad paralela: tarjeta con su texto y dos fotos. */
+export interface ParallelActivity {
+  /** Tipo (visita, exposición, concierto). */
+  kind: string
+  title: string
+  /** Lugar y fechas, si los hay. */
+  place?: string
+  dates?: string
+  /** Dos fotos; mientras falten, la tarjeta muestra dos huecos. */
+  images?: ImageAsset[]
+  /** Bloques de texto; `heading` opcional (p. ej. la compañía del concierto). */
+  body: { heading?: string; paragraphs: string[] }[]
+}
+
+export interface ActivitiesContent {
+  title: string
+  items: ParallelActivity[]
+}
+
 export interface SiteContent {
   meta: { title: string; description: string; lang: string }
   a11y: { skipLink: string }
@@ -381,6 +401,7 @@ export interface SiteContent {
   committees: CommitteesContent
   organization: OrganizationContent
   participants: ParticipantsContent
+  activities: ActivitiesContent
   gallery: GalleryContent
   threshold: ThresholdContent
   previous: PreviousContent

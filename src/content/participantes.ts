@@ -30,8 +30,19 @@ export const participants: ParticipantsContent = {
       items: [
         {
           kicker: 'Conferencia inaugural',
-          org: 'Ministerio de Cultura, Madrid',
-          authors: [],
+          org: 'Museo de América, Ministerio de Cultura, Madrid',
+          authors: [
+            {
+              name: 'Beatriz Robledo Sanz',
+              bio: [
+                'Doctora en Historia por la Universidad Complutense de Madrid, desde 2008 pertenece al Cuerpo Facultativo de Conservadores de Museos. Actualmente es subdirectora del Museo de América y responsable del Departamento de Etnología, donde se conservan relevantes colecciones de expediciones científicas españolas del siglo XVIII y XIX recolectadas en América, Filipinas y Oceanía. Ha participado en proyectos nacionales e internacionales y comisariado diferentes exposiciones centradas en temática etnográfica, abordando, entre otras cuestiones, la importancia de la tradición textil en comunidades indígenas como Tejiendo identidades, símbolos y tradición en la indumentaria maya (2015) o Al encuentro del Gran espíritu. El Congreso indio de 1898 (2017) sobre comunidades nativas de Norteamérica, en colaboración con The J. Paul Getty Museum de Los Ángeles.',
+              ],
+            },
+          ],
+          title: 'Repensando el futuro. Líneas estratégicas para un nuevo programa expositivo en el Museo de América',
+          abstract: [
+            'El discurso museológico actual del Museo de América se inauguró en 1994. En aquel momento supuso un importante cambio de orientación respecto al planteamiento tradicional de los años sesenta, ya que presentaba un enfoque de carácter antropológico. Tres décadas más tarde, consideramos necesario actualizar su contenido en función de los cambios que observamos en nuestra sociedad, de manera que refleje algunas de las preocupaciones del mundo contemporáneo y hagan del museo un lugar de encuentro, participación y reflexión crítica. A modo de ejemplo o testimonio, durante la presentación se mostrarán las líneas estratégicas propuestas para la renovación de su exposición permanente.',
+          ],
         },
         {
           kicker: 'Conferencia marco. Red de Museos de Canarias',

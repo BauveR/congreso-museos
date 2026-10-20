@@ -38,6 +38,8 @@
   --color-salvia-texto: var(--color-salvia);
   /* Ocre: tarjetas de pósteres (con texto oscuro, 11:1). */
   --color-ocre: #d3cd67;
+  /* Piedra: tarjetas de actividades paralelas (con texto oscuro, 10:1). */
+  --color-piedra: #b7bbb0;
   /* Lima: nombre destacado en las comunicaciones de varios autores. */
   --color-lima: #c8d832;
   /* Intro del hero: fondo de la cortina y color de las letras gigantes. */

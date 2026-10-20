@@ -47,6 +47,8 @@ export function App() {
         <Suspense fallback={<Loader text={connectionText.loading} className="wrap py-16" />}>
           <Routes>
             <Route path="/" element={<Home />} />
+            {/* Enlace para compartir una actividad paralela: la portada con su ficha abierta. */}
+            <Route path="/actividades/:id" element={<Home />} />
             <Route path="/inscripcion" element={<RegistrationPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/privacidad" element={<PrivacyPage />} />

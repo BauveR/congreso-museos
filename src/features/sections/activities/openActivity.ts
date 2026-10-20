@@ -5,8 +5,14 @@
 
 const EVENT = 'open-activity'
 
-/** Ancla de cada actividad (también sirve como enlace normal). */
+/** Ancla de cada tarjeta. */
 export const activityAnchor = (id: string) => `actividad-${id}`
+
+/** Dirección para compartir cada actividad (con su propia vista previa en WhatsApp). */
+export const activityPath = (id: string) => `/actividades/${id}`
+
+/** Id de la actividad si la dirección es la de una actividad. */
+export const activityFromPath = (path: string) => /^\/actividades\/([a-z0-9-]+)\/?$/.exec(path)?.[1] ?? null
 
 export function openActivity(id: string) {
   window.dispatchEvent(new CustomEvent<string>(EVENT, { detail: id }))

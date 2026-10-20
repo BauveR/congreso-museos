@@ -390,6 +390,18 @@ export interface ActivitiesContent {
   items: ParallelActivity[]
   /** Botón del programa que lleva a cada actividad. */
   seeMore: string
+  /** Hoja de lectura: cierre, anterior / siguiente y enlace a la sección. */
+  close: string
+  navLabel: string
+  prev: string
+  next: string
+  seeAll: string
+  /** Botón de compartir y su confirmación al copiar el enlace. */
+  share: string
+  copied: string
+  /** Tarjeta con el día y la hora en el programa, y su enlace. */
+  inProgram: string
+  seeInProgram: string
 }
 
 export interface SiteContent {

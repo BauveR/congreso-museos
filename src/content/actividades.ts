@@ -1,7 +1,9 @@
-import type { ActivitiesContent } from './types'
+// Con extensión: este archivo también lo importa vite.config.ts (resolución de Node).
+import type { ActivitiesContent } from './types.ts'
 
 /*
- * Actividades paralelas (entre el programa y los participantes). Cada una
+ * Actividades paralelas (entre el programa y los participantes), en el orden
+ * en que aparecen en el programa. Cada una
  * lleva dos fotos (WebP en public/media/actividades/).
  */
 
@@ -13,41 +15,32 @@ const photo = (name: string, alt: string, width = 720, height = 540) => ({ src: 
 export const activities: ActivitiesContent = {
   title: 'Actividades paralelas',
   seeMore: 'Ver más',
+  close: 'Cerrar',
+  navLabel: 'Otras actividades',
+  prev: 'Anterior',
+  next: 'Siguiente',
+  seeAll: 'Ver todas las actividades',
+  share: 'Compartir',
+  copied: 'Enlace copiado',
+  inProgram: 'En el programa',
+  seeInProgram: 'Ver en el programa',
 
   items: [
     {
-      id: 'parroquia',
-      kind: 'Visita',
-      title: 'Parroquia de Nuestra Señora de la Asunción',
-      place: SAN_SEBASTIAN,
+      id: 'yapci-ramos',
+      kind: 'Exposición',
+      title: 'Yapci Ramos. yo, Guirre',
+      place: 'Cabildo de La Gomera',
+      dates: '5 de septiembre-21 de noviembre de 2026',
       images: [
-        photo('parroquia-1', 'Fachada blanca de la iglesia de la Asunción, con su torre de piedra rojiza y dos portadas laterales, ante la plaza.'),
-        photo('parroquia-2', 'Interior de la iglesia: nave con arcos de piedra rojiza, bancos de madera y el retablo del altar mayor al fondo.'),
+        photo('yapci-1', 'La artista, con un traje plateado desplegado como alas, sobre fondo negro.'),
+        photo('yapci-2', 'La artista, vestida de blanco, salta con la lanza del Salto del Pastor sobre una ladera rocosa.'),
       ],
       body: [
         {
           paragraphs: [
-            'El edificio que sirve de sede a la Parroquia de Nuestra Señora de la Asunción en San Sebastián de La Gomera, matriz de la isla y por antigüedad uno de los primeros recintos de culto que tuvo el archipiélago en los territorios o dominios de señorío, se revela como un referente patrimonial de primer orden por la notoriedad de su fábrica y el conjunto de bienes que conserva en el interior. En este caso, continente y contenido son reflejo de una trayectoria dilatada y convulsa a lo largo del tiempo.',
-            'Dichas razones avalan por sí solas su alta consideración, pero, además, se da la coyuntura de que el inmueble ha sido testigo y protagonista circunstancial de los sucesos más relevantes que ocurrieron en La Gomera durante las épocas Moderna y Contemporánea. A día de hoy es también un referente identitario de la localidad y de la propia isla, por lo que no extraña que reciba todo tipo de atenciones y se someta a análisis muy diversos por circunstancias que atañen a lo arqueológico, lo histórico, lo artístico y lo propiamente devocional.',
-            'Esa suma de valores avalará su declaración como Bien de Interés Cultural con la categoría de «Monumento», en cuyo trámite o procedimiento administrativo trabajan desde 2025 el Cabildo Insular de La Gomera y el Gobierno de Canarias.',
-          ],
-        },
-      ],
-    },
-    {
-      id: 'museo-arqueologico',
-      kind: 'Visita',
-      title: 'Museo Arqueológico de La Gomera',
-      place: SAN_SEBASTIAN,
-      images: [
-        photo('museo-1', 'Fachada roja del edificio del museo en una calle empedrada del casco de San Sebastián.'),
-        photo('museo-2', 'Sala del museo con paneles, fotografías y una pieza expuesta en el centro sobre suelo de madera.'),
-      ],
-      body: [
-        {
-          paragraphs: [
-            'La razón de ser del museo se basa en tres cuestiones. La primera es la muestra permanente del conocimiento general que tenemos sobre nuestras antiguas comunidades. Buena parte de la misión del museo la entendemos dentro de un concepto muy amplio de educación, dirigido a toda la comunidad en la que el personal del museo está incluido. La segunda es la conservación de los objetos, que incluye la información sobre cualquier aspecto de esta cultura, tanto material (objetos o lugares), como inmaterial. Y la tercera es la investigación, planteada en necesaria red con otras instituciones, empresas, asociaciones o particulares.',
-            'Nuestra misión está gobernada por valores como implicación, trabajo en red, humildad, comunidad, exploración, territorio y sobre todo cercanía. Este museo es solo un punto de partida, una oportunidad en el territorio. En realidad, en su valor inmaterial radica su riqueza: esto es lo que hacemos, descubrimos, conservamos, aprendemos y compartimos.',
+            'En yo, Guirre, Yapci Ramos explora las relaciones entre cuerpo, memoria y territorio desde sus raíces gomeras. A través del aprendizaje del Silbo Gomero y del Salto del Pastor, la artista incorpora saberes transmitidos entre generaciones y emprende una transformación en la que confluyen la mujer y el ave. El guirre, desaparecido de La Gomera, expande la mirada; el silbo, la voz; y el cuerpo.',
+            'La exposición reúne estos tres elementos como símbolos de ascensión, vinculados a la singular geografía de la isla y a su legado cultural. Entre el arraigo y el vuelo, la obra propone una reflexión sobre la pertenencia y la libertad que surge al atravesar y asumir los propios límites.',
           ],
         },
       ],
@@ -72,20 +65,38 @@ export const activities: ActivitiesContent = {
       ],
     },
     {
-      id: 'yapci-ramos',
-      kind: 'Exposición',
-      title: 'Yapci Ramos. yo, Guirre',
-      place: 'Cabildo de La Gomera',
-      dates: '5 de septiembre-21 de noviembre de 2026',
+      id: 'museo-arqueologico',
+      kind: 'Visita',
+      title: 'Museo Arqueológico de La Gomera',
+      place: SAN_SEBASTIAN,
       images: [
-        photo('yapci-1', 'La artista, con un traje plateado desplegado como alas, sobre fondo negro.'),
-        photo('yapci-2', 'La artista, vestida de blanco, salta con la lanza del Salto del Pastor sobre una ladera rocosa.'),
+        photo('museo-1', 'Fachada roja del edificio del museo en una calle empedrada del casco de San Sebastián.'),
+        photo('museo-2', 'Sala del museo con paneles, fotografías y una pieza expuesta en el centro sobre suelo de madera.'),
       ],
       body: [
         {
           paragraphs: [
-            'En yo, Guirre, Yapci Ramos explora las relaciones entre cuerpo, memoria y territorio desde sus raíces gomeras. A través del aprendizaje del Silbo Gomero y del Salto del Pastor, la artista incorpora saberes transmitidos entre generaciones y emprende una transformación en la que confluyen la mujer y el ave. El guirre, desaparecido de La Gomera, expande la mirada; el silbo, la voz; y el cuerpo.',
-            'La exposición reúne estos tres elementos como símbolos de ascensión, vinculados a la singular geografía de la isla y a su legado cultural. Entre el arraigo y el vuelo, la obra propone una reflexión sobre la pertenencia y la libertad que surge al atravesar y asumir los propios límites.',
+            'La razón de ser del museo se basa en tres cuestiones. La primera es la muestra permanente del conocimiento general que tenemos sobre nuestras antiguas comunidades. Buena parte de la misión del museo la entendemos dentro de un concepto muy amplio de educación, dirigido a toda la comunidad en la que el personal del museo está incluido. La segunda es la conservación de los objetos, que incluye la información sobre cualquier aspecto de esta cultura, tanto material (objetos o lugares), como inmaterial. Y la tercera es la investigación, planteada en necesaria red con otras instituciones, empresas, asociaciones o particulares.',
+            'Nuestra misión está gobernada por valores como implicación, trabajo en red, humildad, comunidad, exploración, territorio y sobre todo cercanía. Este museo es solo un punto de partida, una oportunidad en el territorio. En realidad, en su valor inmaterial radica su riqueza: esto es lo que hacemos, descubrimos, conservamos, aprendemos y compartimos.',
+          ],
+        },
+      ],
+    },
+    {
+      id: 'parroquia',
+      kind: 'Visita',
+      title: 'Parroquia de Nuestra Señora de la Asunción',
+      place: SAN_SEBASTIAN,
+      images: [
+        photo('parroquia-1', 'Fachada blanca de la iglesia de la Asunción, con su torre de piedra rojiza y dos portadas laterales, ante la plaza.'),
+        photo('parroquia-2', 'Interior de la iglesia: nave con arcos de piedra rojiza, bancos de madera y el retablo del altar mayor al fondo.'),
+      ],
+      body: [
+        {
+          paragraphs: [
+            'El edificio que sirve de sede a la Parroquia de Nuestra Señora de la Asunción en San Sebastián de La Gomera, matriz de la isla y por antigüedad uno de los primeros recintos de culto que tuvo el archipiélago en los territorios o dominios de señorío, se revela como un referente patrimonial de primer orden por la notoriedad de su fábrica y el conjunto de bienes que conserva en el interior. En este caso, continente y contenido son reflejo de una trayectoria dilatada y convulsa a lo largo del tiempo.',
+            'Dichas razones avalan por sí solas su alta consideración, pero, además, se da la coyuntura de que el inmueble ha sido testigo y protagonista circunstancial de los sucesos más relevantes que ocurrieron en La Gomera durante las épocas Moderna y Contemporánea. A día de hoy es también un referente identitario de la localidad y de la propia isla, por lo que no extraña que reciba todo tipo de atenciones y se someta a análisis muy diversos por circunstancias que atañen a lo arqueológico, lo histórico, lo artístico y lo propiamente devocional.',
+            'Esa suma de valores avalará su declaración como Bien de Interés Cultural con la categoría de «Monumento», en cuyo trámite o procedimiento administrativo trabajan desde 2025 el Cabildo Insular de La Gomera y el Gobierno de Canarias.',
           ],
         },
       ],

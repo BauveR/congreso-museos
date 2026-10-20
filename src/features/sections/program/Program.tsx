@@ -1,13 +1,15 @@
-import { ArrowDown } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { ArrowRight } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { useMotionEffect } from '../../../app/motion'
+import { scrollToTarget } from '../../../app/scrollTo'
 import { DisplayHeading } from '../../../components/DisplayHeading'
 import { Expandable } from '../../../components/ExpandableText'
 import { Section } from '../../../components/Section'
 import { site } from '../../../content/site'
 import type { ProgramItem } from '../../../content/types'
 import { useReducedMotion } from '../../../hooks/useReducedMotion'
-import { activityAnchor, openActivity } from '../activities/openActivity'
+import { activityPath, openActivity } from '../activities/openActivity'
+import { onShowInProgram } from './showInProgram'
 
 /*
  * Programa: tarjeta a ancho completo (edge) con fondo salvia que entra desde
@@ -28,8 +30,11 @@ function ActivityLink({ id, label }: { id: string; label: string }) {
   const { activities } = site
   return (
     <a
-      href={`#${activityAnchor(id)}`}
+      href={activityPath(id)}
+      data-activity-slot={id}
       onClick={(e) => {
+        // Clic normal: la ficha encima del programa (con Cmd/Ctrl, la página en otra pestaña).
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
         e.preventDefault()
         openActivity(id)
       }}
@@ -37,7 +42,7 @@ function ActivityLink({ id, label }: { id: string; label: string }) {
     >
       {activities.seeMore}
       <span className="sr-only">: {label}</span>
-      <ArrowDown aria-hidden className="size-3.5" />
+      <ArrowRight aria-hidden className="size-3.5" />
     </a>
   )
 }
@@ -45,7 +50,7 @@ function ActivityLink({ id, label }: { id: string; label: string }) {
 function Item({ item }: { item: ProgramItem }) {
   const { program } = site
   return (
-    <li className="grid grid-cols-[4.25rem_1fr] gap-x-3 border-t border-acento-contraste/20 py-4 first:border-t-0 first:pt-0">
+    <li data-program-item className="grid grid-cols-[4.25rem_1fr] gap-x-3 border-t border-acento-contraste/20 py-4 first:border-t-0 first:pt-0">
       <span className="pt-0.5 text-sm font-bold tabular-nums">{item.time}</span>
       <div className="flex flex-col gap-3">
         {item.entries.map((entry) => (
@@ -111,6 +116,24 @@ export function Program() {
     const top = list.current?.getBoundingClientRect().top ?? 0
     if (top < barBottom) window.scrollBy({ top: top - barBottom })
   }
+
+  // Vuelta desde una actividad paralela: su día y el scroll a su hora (en móvil,
+  // bajo la barra fija de días). Si sale en varios días, el primero.
+  useEffect(
+    () =>
+      onShowInProgram((id) => {
+        const link = document.querySelector<HTMLElement>(`[data-activity-slot="${id}"]`)
+        const dayIndex = program.days.findIndex((d) => link?.closest(`#programa-${d.date}`))
+        if (!link || dayIndex < 0) return
+        setDay(dayIndex)
+        requestAnimationFrame(() => {
+          const row = link.closest<HTMLElement>('[data-program-item]') ?? link
+          const sticky = bar.current && getComputedStyle(bar.current).position === 'sticky' ? bar.current.offsetHeight : 0
+          scrollToTarget(row, () => link.focus({ preventScroll: true }), sticky + 16)
+        })
+      }),
+    [program.days],
+  )
 
   // La tarjeta entra desde abajo al llegar a la sección (una vez).
   useMotionEffect(

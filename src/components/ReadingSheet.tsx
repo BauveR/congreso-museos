@@ -17,29 +17,38 @@ interface ReadingSheetProps {
   before?: ReactNode
   closeLabel: string
   onClose: () => void
+  /** Botones junto a la X de la cabecera (p. ej. compartir). */
+  actions?: ReactNode
+  /** Dirección propia mientras está abierta (enlace para compartir); al cambiar, se sustituye y el texto vuelve arriba. */
+  url?: string
   children: ReactNode
 }
 
 /**
  * Hoja de lectura (bottom sheet) para textos largos, el patrón de Google
- * Maps, Apple Maps o Airbnb para fichas largas; en escritorio, centrada y
- * con ancho de lectura. Sobre <dialog>
+ * Maps, Apple Maps o Airbnb para fichas largas; en escritorio, ventana
+ * centrada en la pantalla, con ancho de lectura. Sobre <dialog>
  * modal nativo: foco atrapado, Escape y semántica de diálogo.
  * - Se cierra con el botón grande de abajo, la X, tocando fuera, arrastrando
  *   el asa o con «atrás».
  * - Scroll propio (data-lenis-prevent) y la página bloqueada detrás.
  */
-export function ReadingSheet({ open, kicker, title, before, closeLabel, onClose, children }: ReadingSheetProps) {
+export function ReadingSheet({ open, kicker, title, before, closeLabel, onClose, actions, url, children }: ReadingSheetProps) {
   const titleId = useId()
   const dialog = useRef<HTMLDialogElement>(null)
   const panel = useRef<HTMLDivElement>(null)
   const body = useRef<HTMLDivElement>(null)
   const drag = useRef<{ y: number; dy: number } | null>(null)
   const onCloseRef = useRef(onClose)
+  const urlRef = useRef(url)
 
   useEffect(() => {
     onCloseRef.current = onClose
   }, [onClose])
+
+  useEffect(() => {
+    urlRef.current = url
+  }, [url])
 
   useEffect(() => {
     const el = dialog.current
@@ -50,11 +59,18 @@ export function ReadingSheet({ open, kicker, title, before, closeLabel, onClose,
     }
     if (!el.open) el.showModal()
     body.current?.scrollTo(0, 0)
-    history.pushState({ [HISTORY_KEY]: true }, '')
+    history.pushState({ [HISTORY_KEY]: true }, '', urlRef.current)
     const onPop = () => onCloseRef.current()
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }, [open])
+
+  // Otra ficha en la misma hoja (anterior / siguiente): su dirección y el texto desde arriba.
+  useEffect(() => {
+    if (!open || !url || !dialog.current?.open) return
+    if (window.location.pathname !== url) history.replaceState(history.state, '', url)
+    body.current?.scrollTo(0, 0)
+  }, [open, url])
 
   /** Cerrar quitando también la entrada del historial (que dispara onClose). */
   const close = () => {
@@ -99,7 +115,7 @@ export function ReadingSheet({ open, kicker, title, before, closeLabel, onClose,
       {open && (
         <div
           ref={panel}
-          className="absolute inset-x-0 bottom-0 mx-auto flex max-h-[92svh] w-full max-w-3xl animate-sheet-in flex-col rounded-t-3xl bg-fondo shadow-2xl motion-reduce:animate-none"
+          className="absolute inset-x-0 bottom-0 mx-auto flex max-h-[92svh] w-full max-w-3xl animate-sheet-in flex-col rounded-t-3xl bg-fondo shadow-2xl motion-reduce:animate-none lg:inset-y-0 lg:my-auto lg:h-fit lg:max-h-[85svh] lg:rounded-3xl"
         >
           <div
             onPointerDown={onPointerDown}
@@ -113,15 +129,17 @@ export function ReadingSheet({ open, kicker, title, before, closeLabel, onClose,
               <p className="pt-2 text-xs font-bold tracking-widest text-texto-suave uppercase">
                 {kicker}
               </p>
-              <button
-                type="button"
-                onClick={close}
-                onPointerDown={(e) => e.stopPropagation()}
-                aria-label={closeLabel}
-                className="-mt-1 -mr-2 grid size-11 shrink-0 place-items-center rounded-full"
-              >
-                <X aria-hidden className="size-6" />
-              </button>
+              <div className="-mt-1 flex shrink-0 items-center gap-1" onPointerDown={(e) => e.stopPropagation()}>
+                {actions}
+                <button
+                  type="button"
+                  onClick={close}
+                  aria-label={closeLabel}
+                  className="-mr-2 grid size-11 shrink-0 place-items-center rounded-full"
+                >
+                  <X aria-hidden className="size-6" />
+                </button>
+              </div>
             </div>
           </div>
 

@@ -180,8 +180,11 @@ export function StackedDeck<T>({ items, getKey, renderItem, cardClassName, fitOp
           if (!li) return
           // Volver a marcarla aunque ya lo estuviera (se pudo plegar después).
           setRevealed(null)
-          requestAnimationFrame(() => setRevealed(i))
-          scrollToTarget(li)
+          // Tras plegarse la anterior (cambia el alto de arriba), ir al inicio de la tarjeta.
+          requestAnimationFrame(() => {
+            setRevealed(i)
+            requestAnimationFrame(() => scrollToTarget(li))
+          })
           return
         }
         void loadMotion().then(({ ScrollTrigger }) => {

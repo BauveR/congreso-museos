@@ -173,14 +173,14 @@ export const program: ProgramContent = {
                 },
                 {
                   title: 'Alegatorio III.2: Repensando… ¿recurso turístico o institución cultural?',
-                  notes: ['Responsables: Isidoro Hernández (MUAB) / Maite Aldunate (Diócesis de Canarias)'],
+                  notes: ['Responsables: Isidoro Hernández (Museo Arqueológico de Fuerteventura) / Maite Aldunate (Diócesis de Canarias)'],
                 },
               ],
             },
             t(
               '17:30 h',
               'Mesa plenaria III: Contexto e interacción',
-              ['Coordinadores: Isidoro Hernández (MUAB) / Maite Aldunate (Diócesis de Canarias)'],
+              ['Coordinadores: Isidoro Hernández (Museo Arqueológico de Fuerteventura) / Maite Aldunate (Diócesis de Canarias)'],
               {
                 talks: [
                   {

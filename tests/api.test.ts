@@ -5,6 +5,7 @@ import * as adminSessions from '../api/admin/sessions.js'
 import { MemoryStore } from '../api/_lib/store/memory.js'
 import * as registration from '../api/registration.js'
 import * as sessions from '../api/sessions.js'
+import { registrationSchema } from '../shared/registration.js'
 import { validInput } from './fixtures.js'
 
 /*
@@ -73,6 +74,25 @@ describe('API de inscripción', () => {
 
     expect((await call(registration.DELETE, { method: 'DELETE', auth: ana })).status).toBe(200)
     expect((await call(registration.DELETE, { method: 'DELETE', auth: ana })).status).toBe(404)
+  })
+
+  it('certificado: solo con al menos 2 días del congreso; se respetan los que ya lo tenían', async () => {
+    const cert = { certificate: true, idDocument: { type: 'dni', number: '12345678Z' } }
+    const oneDay = await call(registration.POST, { method: 'POST', auth: ana, body: { ...validInput(), ...cert } })
+    expect(oneDay.status).toBe(422)
+    expect((await body(oneDay)).fields).toHaveProperty('certificate')
+
+    const twoDays = { ...validInput(), ...cert, sessionIds: ['dia-19', 'dia-20'] }
+    expect((await call(registration.POST, { method: 'POST', auth: ana, body: twoDays })).status).toBe(201)
+    // Bajar a 1 día con certificado: no (el formulario lo quita antes de enviar).
+    expect((await call(registration.POST, { method: 'POST', auth: ana, body: { ...twoDays, sessionIds: ['dia-19'] } })).status).toBe(422)
+
+    // Inscripción anterior a la regla, con certificado y 1 día: se respeta.
+    const store = globalThis.__congresoMockStore as MemoryStore
+    const legacy = registrationSchema.parse({ ...validInput(), ...cert })
+    await store.saveRegistration('leo', 'leo@example.com', legacy)
+    const leo = token({ uid: 'leo', email: 'leo@example.com' })
+    expect((await call(registration.POST, { method: 'POST', auth: leo, body: { ...validInput(), ...cert, phone: '922000000' } })).status).toBe(200)
   })
 
   it('aforo completo responde 409', async () => {

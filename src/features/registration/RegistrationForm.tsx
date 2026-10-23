@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router'
 import {
   ALLERGENS,
+  certificateAllowed,
   DIET_LABELS,
   DIETS,
   fieldErrors,
@@ -27,7 +28,7 @@ const f = t.fields
 
 /** Orden de los campos para enfocar el primer error. */
 const FIELD_ORDER = [
-  'firstName', 'lastName', 'city', 'phone', 'organization', 'jobTitle', 'participationType', 'sessionIds',
+  'firstName', 'lastName', 'city', 'phone', 'organization', 'jobTitle', 'participationType', 'sessionIds', 'certificate',
   'idDocument.number', 'accessibility', 'allergens', 'otherAllergy', 'consents.healthData', 'consents.privacy',
 ]
 
@@ -88,6 +89,16 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
 
   const hasHealthData = Boolean(values.accessibility.trim() || values.allergens.length || values.otherAllergy.trim())
 
+  // Certificado: solo con al menos 2 días del congreso (las actividades no cuentan).
+  const dayIds = new Set(sessions.filter((s) => s.kind === 'day').map((s) => s.id))
+  const dayCount = (ids: readonly string[]) => ids.filter((id) => dayIds.has(id)).length
+  const canCertify = certificateAllowed(
+    dayCount(values.sessionIds),
+    isUpdate ? { certificate: initial.certificate, dayCount: dayCount(initial.sessionIds) } : undefined,
+  )
+  /** Lo tenía pedido y, con los días marcados ahora, se quitará al guardar. */
+  const losesCertificate = values.certificate && !canCertify
+
   // Tras un error, foco en el primer campo con error (o en el resumen).
   useEffect(() => {
     const first = FIELD_ORDER.find((key) => errors[key]) ?? Object.keys(errors)[0]
@@ -102,7 +113,7 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
   const submit = async (e: FormEvent) => {
     e.preventDefault()
     setFormError(null)
-    const input = toInput(values)
+    const input = toInput({ ...values, certificate: values.certificate && canCertify })
     const parsed = registrationSchema.safeParse(input)
     if (!parsed.success) {
       setErrors(fieldErrors(parsed.error))
@@ -221,18 +232,20 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
             {activities.map((s) => sessionChoice(s))}
           </ChoiceGroup>
         )}
+        {losesCertificate && !has('certificado') && <CertificateNotice>{f.certificateLost}</CertificateNotice>}
       </FormSection>
       )}
 
       {has('certificado') && (
       <FormSection title={t.sections.certificate}>
-        <ChoiceGroup id="certificate" legend={f.certificate}>
+        <ChoiceGroup id="certificate" legend={f.certificate} help={f.certificateHelp} error={err('certificate')}>
           <div className="flex gap-6">
-            <Choice type="radio" name="certificate" label={f.yes} checked={values.certificate} onChange={() => set('certificate', true)} />
+            <Choice type="radio" name="certificate" label={f.yes} checked={values.certificate} disabled={!canCertify} onChange={() => set('certificate', true)} />
             <Choice type="radio" name="certificate" label={f.no} checked={!values.certificate} onChange={() => set('certificate', false)} />
           </div>
         </ChoiceGroup>
-        {values.certificate && (
+        {!canCertify && <CertificateNotice>{losesCertificate ? f.certificateLost : f.certificateNeedsDays}</CertificateNotice>}
+        {values.certificate && canCertify && (
           <div className="grid gap-5 sm:grid-cols-[12rem_1fr]">
             <SelectInput id="idDocument.type" label={f.idType} value={values.idType} onChange={(e) => set('idType', e.target.value as FormValues['idType'])}>
               {ID_TYPES.map((type) => (
@@ -319,5 +332,14 @@ export function RegistrationForm({ email, sessions, ownSessionIds, initial, isUp
         {submitting ? t.submitting : isUpdate ? t.submitUpdate : t.submitCreate}
       </button>
     </form>
+  )
+}
+
+/** Aviso sobre el certificado (condición de los 2 días). */
+function CertificateNotice({ children }: { children: string }) {
+  return (
+    <p role="status" className="rounded-xl border border-borde p-4 text-sm">
+      {children}
+    </p>
   )
 }

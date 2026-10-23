@@ -9,7 +9,7 @@ export const legal = {
   controller: 'Organización del V Congreso de Museos de Canarias',
   contactEmail: 'vcongresodemuseosdecanarias@gmail.com',
   /** Fecha de la versión vigente de los textos legales. */
-  updated: '13 de octubre de 2026',
+  updated: '23 de octubre de 2026',
 }
 
 export const registrationText = {
@@ -68,6 +68,9 @@ export const registrationText = {
     remaining: (n: number) => (n === 1 ? 'Queda 1 plaza' : `Quedan ${n} plazas`),
     full: 'Completo',
     certificate: '¿Deseas certificado de asistencia?',
+    certificateHelp: 'Se emite a quienes asisten al menos a 2 días del congreso (las actividades complementarias no cuentan).',
+    certificateNeedsDays: 'Marca al menos 2 días del congreso para poder pedir el certificado de asistencia.',
+    certificateLost: 'Con menos de 2 días del congreso no hay certificado de asistencia: se quitará al guardar, junto con tu documento de identidad.',
     yes: 'Sí',
     no: 'No',
     idType: 'Tipo de documento',
@@ -380,7 +383,7 @@ export const privacyPage = {
     ],
     [
       'Finalidades',
-      'Gestionar tu inscripción y la organización del congreso (aforo, acreditaciones, catering y accesibilidad), comunicarnos contigo sobre el evento, emitir tu certificado de asistencia si lo pides y, solo si lo autorizas, difundir imágenes del congreso en las que aparezcas.',
+      'Gestionar tu inscripción y la organización del congreso (aforo, acreditaciones, catering y accesibilidad), comunicarnos contigo sobre el evento, emitir tu certificado de asistencia si lo pides (se emite a quienes asisten al menos a 2 días del congreso) y, solo si lo autorizas, difundir imágenes del congreso en las que aparezcas.',
     ],
     [
       'Base jurídica',

@@ -1,4 +1,4 @@
-import { registrationSchema } from '../shared/registration.js'
+import { CERTIFICATE_RULE, certificateAllowed, registrationSchema } from '../shared/registration.js'
 import { checkAppCheck } from './_lib/appCheck.js'
 import { requireUser } from './_lib/auth.js'
 import { cancellationMail, confirmationMail, organizerMail } from './_lib/emails.js'
@@ -43,12 +43,24 @@ export const POST = handler(async (request) => {
 
   const data = registrationSchema.parse(await readJson(request))
   const store = await getStore()
+  const sessions = await store.listSessions()
+
+  // Certificado: al menos 2 días del congreso (salvo las inscripciones que ya lo tenían).
+  if (data.certificate) {
+    const days = new Set(sessions.filter((s) => s.kind === 'day').map((s) => s.id))
+    const dayCount = (ids: readonly string[]) => ids.filter((id) => days.has(id)).length
+    const saved = await store.getRegistration(user.uid)
+    const before = saved && { certificate: saved.data.certificate, dayCount: dayCount(saved.data.sessionIds) }
+    if (!certificateAllowed(dayCount(data.sessionIds), before ?? undefined)) {
+      throw new HttpError(422, 'Datos no válidos', { fields: { certificate: CERTIFICATE_RULE } })
+    }
+  }
+
   const { registration, created, sessionsChanged } = await store.saveRegistration(user.uid, user.email, data)
 
   // Cambios menores (teléfono, alergias…) no generan correo.
   let emailSent: boolean | null = null
   if (sessionsChanged) {
-    const sessions = await store.listSessions()
     emailSent = await sendCapped(store, user.uid, confirmationMail(registration, sessions, created))
     const notice = organizerMail(registration, sessions, created ? 'nueva' : 'modificada')
     if (notice) await trySendMail(notice)

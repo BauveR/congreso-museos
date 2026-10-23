@@ -64,6 +64,19 @@ export const LIMITS = {
   maxSessions: 20,
 } as const
 
+/** Días del congreso (no actividades) necesarios para pedir certificado de asistencia. */
+export const CERTIFICATE_MIN_DAYS = 2
+export const CERTIFICATE_RULE = 'El certificado de asistencia se emite a quienes asisten al menos a 2 días del congreso'
+
+/**
+ * ¿Puede pedir certificado con estos días? `before`: lo guardado antes. Las
+ * inscripciones que ya lo tenían con menos días se respetan tal cual (la
+ * organización las atiende en persona); quien baja de 2 días lo pierde.
+ */
+export function certificateAllowed(dayCount: number, before?: { certificate: boolean; dayCount: number }): boolean {
+  return dayCount >= CERTIFICATE_MIN_DAYS || Boolean(before?.certificate && before.dayCount < CERTIFICATE_MIN_DAYS)
+}
+
 /** Quita caracteres de control y espacios repetidos. */
 export function cleanText(value: string): string {
   // eslint-disable-next-line no-control-regex

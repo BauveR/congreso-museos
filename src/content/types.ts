@@ -296,6 +296,8 @@ export interface ProgramContent {
   title: string
   /** Texto de los botones de día (móvil). */
   daysLabel: string
+  /** Descarga del programa en PDF (`short`: texto en móvil). */
+  download: { label: string; short: string; href: string }
   showTalks: (n: number) => string
   hideTalks: string
   days: ProgramDay[]

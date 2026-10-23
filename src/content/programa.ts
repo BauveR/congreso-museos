@@ -15,6 +15,12 @@ const t = (time: string, title: string, notes?: string[], extra: Partial<Program
 export const program: ProgramContent = {
   title: 'Programa',
   daysLabel: 'Elige el día',
+  download: {
+    label: 'Descargar programa (PDF)',
+    short: 'Descargar PDF',
+    // Google Drive: descarga directa (no el visor).
+    href: 'https://drive.google.com/uc?export=download&id=1_b8TYuHZsO5iiL108fyz6O9HDtQBtEV6',
+  },
   showTalks: (n) => `Ver comunicaciones (${n})`,
   hideTalks: 'Ocultar comunicaciones',
   days: [

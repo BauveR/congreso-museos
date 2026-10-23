@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Download } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useMotionEffect } from '../../../app/motion'
 import { scrollToTarget } from '../../../app/scrollTo'
@@ -161,9 +161,19 @@ export function Program() {
             className="sticky top-16 z-10 -mx-5 -mt-5 mb-8 rounded-t-3xl border-b border-acento-contraste/20 bg-salvia px-5 pt-5 pb-4 sm:-mx-8 sm:-mt-8 sm:px-8 sm:pt-8 lg:static lg:m-0 lg:mb-10 lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0"
           >
             {/* Título dentro de la tarjeta, en oscuro (el salvia no se vería sobre salvia). */}
-            <DisplayHeading color="text-acento-contraste" className="mb-4 lg:mb-0">
-              {program.title}
-            </DisplayHeading>
+            <div className="mb-4 flex items-center justify-between gap-4 lg:mb-0">
+              <DisplayHeading color="text-acento-contraste">{program.title}</DisplayHeading>
+              <a
+                href={program.download.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-acento-contraste px-4 text-xs font-bold tracking-wide text-salvia uppercase transition-colors hover:bg-acento-contraste/85 sm:px-5 sm:text-sm"
+              >
+                <Download aria-hidden className="size-4" />
+                <span className="sm:hidden">{program.download.short}</span>
+                <span className="max-sm:hidden">{program.download.label}</span>
+              </a>
+            </div>
             <div role="group" aria-label={program.daysLabel} className="grid grid-cols-3 gap-2 lg:hidden">
               {program.days.map((d, i) => (
                 <button

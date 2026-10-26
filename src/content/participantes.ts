@@ -61,6 +61,24 @@ export const participants: ParticipantsContent = {
           ],
         },
         {
+          kicker: 'Sesión especial',
+          org: 'Universidad de La Laguna / Leiden University',
+          authors: [
+            {
+              name: 'Jared Carballo Pérez',
+              bio: [
+                'Jared Carballo Pérez es doctor en Arqueología por la Universidad de La Laguna, con mención internacional, e investigador posdoctoral del programa Catalina Ruiz del Gobierno de Canarias, vinculado a la Universidad de La Laguna y a Leiden University. Su investigación se centra en la bioarqueología y la osteoarqueología humana, con especial atención a las condiciones de vida, la actividad física y las transformaciones sociales de las poblaciones del pasado. Ha desarrollado investigaciones en Canarias, la península ibérica, el norte de África y el valle del Nilo, participando en proyectos científicos nacionales e internacionales. Actualmente desarrolla el proyecto CORPUSCOLONIA, dedicado al estudio de las experiencias corporales y las desigualdades sociales en contextos coloniales del Atlántico. Es miembro de la coordinación científica del simposio internacional «Diásporas Patrimoniales».',
+              ],
+            },
+          ],
+          title: 'Compromiso con el Legado Canario Disperso. Lectura, debate y propuesta de ratificación institucional',
+          abstract: [
+            'El simposio internacional «Diásporas Patrimoniales», celebrado en Santa Cruz de Tenerife los días 12 y 13 de noviembre de 2026, ha servido como punto de partida para una reflexión colectiva sobre la dispersión del patrimonio cultural, las responsabilidades de las instituciones custodias y las posibilidades de cooperación, recuperación y restitución de los bienes patrimoniales.',
+            'Como continuidad de este encuentro, se presenta al V Congreso de Museos de Canarias el «Compromiso con el Legado Canario Disperso», una propuesta orientada a promover la colaboración entre administraciones, museos y centros de investigación para avanzar en la identificación, documentación, conservación y puesta en valor del patrimonio canario conservado fuera de sus contextos de procedencia.',
+            'La sesión incluirá la lectura del documento, un espacio de debate entre las instituciones participantes y la consideración de su posible ratificación como marco de colaboración y actuación futura.',
+          ],
+        },
+        {
           kicker: 'Conferencia de clausura',
           org: 'Museu del Calçat i de la Indústria, Ajuntament d’Inca',
           authors: [

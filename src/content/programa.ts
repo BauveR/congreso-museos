@@ -108,6 +108,16 @@ export const program: ProgramContent = {
                 },
               ],
             },
+            {
+              time: '20:00 h',
+              entries: [
+                {
+                  title: 'Concierto Pieles',
+                  notes: ['Plaza de la Parroquia de Nuestra Señora de la Asunción, San Sebastián de La Gomera'],
+                  activity: 'concierto',
+                },
+              ],
+            },
           ],
         },
       ],
@@ -164,7 +174,11 @@ export const program: ProgramContent = {
               },
             ),
             t('13:00 h', 'Presentación y defensa de los pósteres', ['Coordinadora: Milagros Álvarez Sosa']),
-            t('13:30 h', 'Almuerzo'),
+            t('13:30 h', 'Sesión especial: Compromiso con el Legado Canario Disperso', [
+              'Lectura, debate y propuesta de ratificación institucional',
+              'Presentación y dinamización: Jared Carballo Pérez (Universidad de La Laguna / Leiden University)',
+            ]),
+            t('14:00 h', 'Almuerzo'),
           ],
         },
         {
@@ -214,16 +228,6 @@ export const program: ProgramContent = {
               },
             ),
             t('19:30 h', 'Actividades en el centro de San Sebastián de La Gomera (visitas libres)'),
-            {
-              time: '20:00 h',
-              entries: [
-                {
-                  title: 'Concierto Pieles',
-                  notes: ['Plaza de la Parroquia de Nuestra Señora de la Asunción, San Sebastián de La Gomera'],
-                  activity: 'concierto',
-                },
-              ],
-            },
           ],
         },
       ],

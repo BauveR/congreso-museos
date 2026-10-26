@@ -22,8 +22,8 @@ import { onShowInProgram } from './showInProgram'
  * - Comunicaciones de cada mesa plegadas en todos los tamaños.
  */
 
-/** Actividades destacadas en blanco: alegatorios, mesas plenarias, conferencias y ponencias. */
-const HIGHLIGHT = /^(Alegatorio|Mesa plenaria|Conferencia|Ponencia)/
+/** Actividades destacadas en blanco: alegatorios, mesas plenarias, conferencias, ponencias y sesiones especiales. */
+const HIGHLIGHT = /^(Alegatorio|Mesa plenaria|Conferencia|Ponencia|Sesión especial)/
 
 /** Botón claro a la tarjeta (desplegada) de una actividad paralela. */
 function ActivityLink({ id, label }: { id: string; label: string }) {

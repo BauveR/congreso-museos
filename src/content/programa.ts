@@ -19,7 +19,7 @@ export const program: ProgramContent = {
     label: 'Descargar programa (PDF)',
     short: 'Descargar PDF',
     // Google Drive: descarga directa (no el visor).
-    href: 'https://drive.google.com/uc?export=download&id=1tVmlb7DR8lC98qpOWPaG3_mg-Mz5CLIZ',
+    href: 'https://drive.google.com/uc?export=download&id=1046w2ukzJ2HtXmMoOhHGITluxLc7u2Nl',
   },
   showTalks: (n) => `Ver comunicaciones (${n})`,
   hideTalks: 'Ocultar comunicaciones',

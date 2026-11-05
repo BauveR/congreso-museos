@@ -19,7 +19,7 @@ export const program: ProgramContent = {
     label: 'Descargar programa (PDF)',
     short: 'Descargar PDF',
     // Google Drive: descarga directa (no el visor).
-    href: 'https://drive.google.com/uc?export=download&id=1046w2ukzJ2HtXmMoOhHGITluxLc7u2Nl',
+    href: 'https://drive.google.com/uc?export=download&id=19BOpZTQAURhDLkV9KOFSYcu8D-VLWsb5',
   },
   showTalks: (n) => `Ver comunicaciones (${n})`,
   hideTalks: 'Ocultar comunicaciones',
@@ -94,20 +94,6 @@ export const program: ProgramContent = {
                 ],
               },
             ),
-            {
-              time: '19:30 h',
-              entries: [
-                {
-                  title: 'Actividades en el centro de San Sebastián de La Gomera (visitas libres)',
-                  list: [
-                    { label: 'Videoinstalación Yo, Guirre de Yapci Ramos (Cabildo de La Gomera)', activity: 'yapci-ramos' },
-                    { label: 'Exposición Arqueología de la mirada. La obra fotográfica de Luis Diego Cuscoy (Casa de Colón)', activity: 'cuscoy' },
-                    { label: 'Colección permanente Museo Arqueológico de La Gomera', activity: 'museo-arqueologico' },
-                    { label: 'Parroquia de Nuestra Señora de la Asunción', activity: 'parroquia' },
-                  ],
-                },
-              ],
-            },
             {
               time: '20:00 h',
               entries: [
@@ -227,7 +213,20 @@ export const program: ProgramContent = {
                 ],
               },
             ),
-            t('19:30 h', 'Actividades en el centro de San Sebastián de La Gomera (visitas libres)'),
+            {
+              time: '19:30 h',
+              entries: [
+                {
+                  title: 'Actividades en el centro de San Sebastián de La Gomera (visitas libres)',
+                  list: [
+                    { label: 'Videoinstalación Yo, Guirre de Yapci Ramos (Cabildo de La Gomera)', activity: 'yapci-ramos' },
+                    { label: 'Exposición Arqueología de la mirada. La obra fotográfica de Luis Diego Cuscoy (Casa de Colón)', activity: 'cuscoy' },
+                    { label: 'Colección permanente Museo Arqueológico de La Gomera', activity: 'museo-arqueologico' },
+                    { label: 'Parroquia de Nuestra Señora de la Asunción', activity: 'parroquia' },
+                  ],
+                },
+              ],
+            },
           ],
         },
       ],

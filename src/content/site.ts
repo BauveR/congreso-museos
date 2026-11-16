@@ -223,7 +223,6 @@ export const site: SiteContent = {
         {
           role: 'Coordinación general e institucional',
           members: [
-          { name: 'Guillermo J. de Diego Romero', affiliation: 'Jefe de Área de Cultura y Patrimonio Cultural, Gobierno de Canarias' },
           { name: 'Claudia Bethéncourt Bethéncourt', affiliation: 'Jefa de Servicio de Patrimonio Cultural, Gobierno de Canarias' },
           ],
         },

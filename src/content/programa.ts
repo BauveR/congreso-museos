@@ -19,7 +19,7 @@ export const program: ProgramContent = {
     label: 'Descargar programa (PDF)',
     short: 'Descargar PDF',
     // Google Drive: descarga directa (no el visor).
-    href: 'https://drive.google.com/uc?export=download&id=19BOpZTQAURhDLkV9KOFSYcu8D-VLWsb5',
+    href: 'https://drive.google.com/uc?export=download&id=1-tBlSJIC_pbxiTYBJSa7xZQXc8zlDQsw',
   },
   showTalks: (n) => `Ver comunicaciones (${n})`,
   hideTalks: 'Ocultar comunicaciones',
@@ -32,16 +32,17 @@ export const program: ProgramContent = {
         {
           title: 'Mañana',
           items: [
-            t('10:00 h', 'Recepción'),
-            t('10:45 h', 'Inauguración institucional', ['Gobierno de Canarias y Cabildo Insular de La Gomera']),
-            t('11:15 h', 'Ponencia inaugural', [
+            t('10:30 h', 'Recepción de participantes', ['Llegada y traslado en guagua desde el puerto']),
+            t('11:15 h', 'Inauguración institucional', ['Gobierno de Canarias y Cabildo Insular de La Gomera']),
+            t('11:45 h', 'Café de bienvenida'),
+            t('12:00 h', 'Ponencia inaugural', [
               'Beatriz Robledo Sanz (Museo de América, Madrid): Repensando el futuro. Líneas estratégicas para un nuevo programa expositivo en el Museo de América',
             ]),
-            t('11:45 h', 'Descanso'),
-            t('12:15 h', 'Presentación y explicación organizativa', [
+            t('12:30 h', 'Presentación y explicación organizativa', [
               'Juan Carlos Hernández Marrero (Cabildo, La Gomera): Un congreso sobre museos en La Gomera… ¿Qué hacemos aquí?',
             ]),
-            t('12:45 h', 'Conferencia', ['Javier E. Marrero Acosta (ULL): Construir, habitar y pensar la realidad de Museos y Centros Expositivos de Canarias']),
+            t('13:00 h', 'Conferencia', ['Javier E. Marrero Acosta (ULL): Construir, habitar y pensar la realidad de Museos y Centros Expositivos de Canarias']),
+            t('13:45 h', 'Exhibición de Silbo Gomero', ['Asociación Silbo Gomero. Duración: 15 minutos']),
             t('14:00 h', 'Almuerzo'),
           ],
         },

@@ -19,7 +19,7 @@ export const program: ProgramContent = {
     label: 'Descargar programa (PDF)',
     short: 'Descargar PDF',
     // Google Drive: descarga directa (no el visor).
-    href: 'https://drive.google.com/uc?export=download&id=1-tBlSJIC_pbxiTYBJSa7xZQXc8zlDQsw',
+    href: 'https://drive.google.com/uc?export=download&id=1upvbIMhSxpsiwyd5Lqx69mat8H9l88fv',
   },
   showTalks: (n) => `Ver comunicaciones (${n})`,
   hideTalks: 'Ocultar comunicaciones',
@@ -32,7 +32,7 @@ export const program: ProgramContent = {
         {
           title: 'Mañana',
           items: [
-            t('10:30 h', 'Recepción de participantes', ['Llegada y traslado en guagua desde el puerto']),
+            t('10:30 h', 'Recepción de participantes'),
             t('11:15 h', 'Inauguración institucional', ['Gobierno de Canarias y Cabildo Insular de La Gomera']),
             t('11:45 h', 'Café de bienvenida'),
             t('12:00 h', 'Ponencia inaugural', [
